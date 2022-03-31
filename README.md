@@ -2,7 +2,9 @@
 
 [Arab Term](http://www.arabterm.org/) is a set of multilingual technical dictionaries, organised per technical domains and industry sectors.
 
-This repository provides a full extract of arabterm.org dictionaries, in CSV files.
+This repository provides a full extract of [arabterm.org](http://www.arabterm.org/) dictionaries, in CSV files.
+
+The data extraction was performed on 2022-03-30, by web scraping [arabterm.org](http://www.arabterm.org/), using python and [Selenium](https://selenium-python.readthedocs.io/).
 
 
 ## CSV Columns
