@@ -5,6 +5,19 @@
 This repository provides a full extract of arabterm.org dictionaries, in CSV files.
 
 
+## CSV Columns
+
+- `id` *(integer)*: Entry unique id.
+- `english` *(string)*: English translation.
+- `arabic` *(string)*: Arabic translation.
+- `french` *(string)*: French translation.
+- `german` *(string)*: German translation. This column is not available for all files.
+- `vt` *(boolean)*: Validated term.
+- `uatv` *(boolean)*: Unified Arabic term, validated during the Arabization Congress organized by the [ALECSO](http://www.alecso.org/nsite/ar/).
+- `has_image` *(boolean)*: The term has image material in arabterm.org
+- `uri` *(URL)*: Link to the entry in the official Arab Term website.
+
+
 ## Dictionaries
 
 Click on the CSV link to see all technical terms of a given domain.
@@ -52,15 +65,3 @@ Click on the CSV link to see all technical terms of a given domain.
 | [783](http://arabterm.org/index.php?tx_3m5techdict_pi1[filterSubCategory]=783) | [language_literature.csv](data/language_literature.csv) | 3223 | Language and Literature | اللغة والأدب | Langue et Littérature | Sprache und Literatur |
 | [784](http://arabterm.org/index.php?tx_3m5techdict_pi1[filterSubCategory]=784) | [geography_history.csv](data/geography_history.csv) | 5724 | Geography and History | الجغرافيا والتاريخ | Géographie et Histoire | Geographie und Geschichte |
 
-
-## CSV Columns
-
-- `id` *(integer)*: Entry unique id.
-- `english` *(string)*: English translation.
-- `arabic` *(string)*: Arabic translation.
-- `french` *(string)*: French translation.
-- `german` *(string)*: German translation. This column is not available for all files.
-- `vt` *(boolean)*: Validated term.
-- `uatv` *(boolean)*: Unified Arabic term, validated during the Arabization Congress organized by the [ALECSO](http://www.alecso.org/nsite/ar/).
-- `has_image` *(boolean)*: The term has image material in arabterm.org
-- `uri` *(URL)*: Link to the entry in the official Arab Term website.
