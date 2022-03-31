@@ -7,6 +7,8 @@ This repository provides a full extract of arabterm.org dictionaries, in CSV fil
 
 ## Dictionaries
 
+Click on the CSV link to see all technical terms of a given domain.
+
 
 | ArabTerm page | Extract file | Number of entries | English | Arabic | French | German |
 | --- | --- | --- | --- | --- | --- | --- |
@@ -58,7 +60,7 @@ This repository provides a full extract of arabterm.org dictionaries, in CSV fil
 - `arabic` *(string)*: Arabic translation.
 - `french` *(string)*: French translation.
 - `german` *(string)*: German translation. This column is not available for all files.
-- `vt` *(boolean)*: Validated term
+- `vt` *(boolean)*: Validated term.
 - `uatv` *(boolean)*: Unified Arabic term, validated during the Arabization Congress organized by the [ALECSO](http://www.alecso.org/nsite/ar/).
-- `has_image` *(boolean)*: whether
+- `has_image` *(boolean)*: The term has image material in arabterm.org
 - `uri` *(URL)*: Link to the entry in the official Arab Term website.
