@@ -13,7 +13,7 @@
         "id": 2,
         "english": "Water Engineering",
         "type": "Category",
-        "french": "Téchnologie de l’eau",
+        "french": "Technologie de l’eau",
         "arabic": "هندسة المياه",
         "german": "Wassertechnik",
         "nbr_entries": 8644,
@@ -64,7 +64,7 @@
         "english": "Civil Engineering",
         "type": "Category",
         "french": "Génie Civil",
-        "arabic": "معجم الهندسة المدنية",
+        "arabic": "الهندسة المدنية",
         "german": "Bauingenieurwesen",
         "nbr_entries": 3943,
         "name": "civil_engineering"
@@ -74,17 +74,17 @@
         "english": "Information and Communication",
         "type": "Category",
         "french": "Technologie de l’Information",
-        "arabic": "معجم تقانة المعلومات",
+        "arabic": "تقانة المعلومات",
         "german": "Informationstechnologie",
         "nbr_entries": 1369,
-        "name": "information_communication_tech"
+        "name": "information_tech"
     },
     {
         "id": 51,
         "english": "Climate, Environment and Solid Waste management",
         "type": "Category",
         "french": "Climat, l’Environment, et la Gestion des déchets solides",
-        "arabic": "معجم المناخ و البيئة و إدارة النفايات الصلبة",
+        "arabic": "المناخ و البيئة و إدارة النفايات الصلبة",
         "german": "Klima, Umwelt und Abfallwirtschaft",
         "nbr_entries": 7040,
         "name": "climate_environment"
@@ -97,7 +97,7 @@
         "arabic": "التقنيات التربوية والحاسوبية",
         "german": "Pädagogik und Informatiktechniken",
         "nbr_entries": 1524,
-        "name": "educational_computer_techniques"
+        "name": "educational_techniques"
     },
     {
         "id": 645,
@@ -361,7 +361,7 @@
     },
     {
         "id": 782,
-        "english": "Arts , Recreation and Sports",
+        "english": "Arts, Recreation and Sports",
         "type": "SubCategory",
         "french": "Art, Divertissement et sports",
         "arabic": "الفن، التسلية والرياضة",
