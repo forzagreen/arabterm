@@ -1,3 +1,4 @@
+id,english,arabic,french,vt,uatv,has_image,uri
 130446,abacus,معداد,abaque,True,True,False,http://www.arabterm.org/index.php?id=40&L=1&tx_3m5techdict_pi1[id]=130446
 130452,abbreviation,اختصار,abréviation,True,True,False,http://www.arabterm.org/index.php?id=40&L=1&tx_3m5techdict_pi1[id]=130452
 130448,abbreviation of an expression,تبسيط عبارة,simplification d'une expression,True,True,False,http://www.arabterm.org/index.php?id=40&L=1&tx_3m5techdict_pi1[id]=130448
@@ -86,7 +87,6 @@
 133879,aerolith,حجر سماوي، حجر نيزكي,aérolithe,True,True,False,http://www.arabterm.org/index.php?id=40&L=1&tx_3m5techdict_pi1[id]=133879
 130523,affine function,دالة تآلفية,fonction affine,True,True,False,http://www.arabterm.org/index.php?id=40&L=1&tx_3m5techdict_pi1[id]=130523
 130524,affine geometry,هندسة تآلفية,géométrie affine,True,True,False,http://www.arabterm.org/index.php?id=40&L=1&tx_3m5techdict_pi1[id]=130524
-id,english,arabic,french,vt,uatv,has_image,uri
 130525,aggregation of terms,تجميع الحدود,assemblage des termes,True,True,False,http://www.arabterm.org/index.php?id=40&L=1&tx_3m5techdict_pi1[id]=130525
 133880,air glow,وهج هوائي,lueur atmosphérique,True,True,False,http://www.arabterm.org/index.php?id=40&L=1&tx_3m5techdict_pi1[id]=133880
 133881,albedo,عاكسية,albedo,True,True,False,http://www.arabterm.org/index.php?id=40&L=1&tx_3m5techdict_pi1[id]=133881
