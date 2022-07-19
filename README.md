@@ -27,11 +27,11 @@ It contains 2 tables: `category` and `entry`
 CSV files have the following columns:
 
 - `id` *(integer)*: Entry unique id.
-- `uri` *(URL)*: Link to the entry in [arabterm.org](http://www.arabterm.org/)
 - `english` *(string)*: English translation.
 - `arabic` *(string)*: Arabic translation.
 - `french` *(string)*: French translation.
 - `german` *(string)*: German translation. This column is not available for all files.
+- `uri` *(URL)*: Link to the entry in [arabterm.org](http://www.arabterm.org/)
 See `available_languages` in [categories.json](categories.json) for each category.
 - `description` *(string)*: Entry description in arabic (if exists).
 - `image_uri_remote` *(URL)*: Link to the image in arabterm.org (if the entry has one).
