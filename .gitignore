@@ -1,0 +1,5 @@
+
+.venv
+*.db-shm
+*.db-wal
+*backup*.db
