@@ -1,23 +1,42 @@
 # arabterm
 
-[Arab Term](http://www.arabterm.org/) is a set of multilingual technical dictionaries, organised per technical domains and industry sectors.
 
-This repository provides a full extract of [arabterm.org](http://www.arabterm.org/) dictionaries, in CSV files.
+[Arab Term](http://www.arabterm.org/) is a set of multilingual technical dictionaries, organised by technical domains and industry sectors.
 
-The data extraction was performed on 2022-03-30, by web scraping [arabterm.org](http://www.arabterm.org/), using python and [Selenium](https://selenium-python.readthedocs.io/).
+This repository provides a full extract of [arabterm.org](http://www.arabterm.org/) dictionaries, in CSV files and in a [SQLite](https://www.sqlite.org/) database.
+
+The data extraction was performed between March and July of 2022, by web scraping [arabterm.org](http://www.arabterm.org/), using python, [Selenium](https://selenium-python.readthedocs.io/), and [lxml](https://lxml.de/lxmlhtml.html).
 
 
-## CSV Columns
+- [arabterm](#arabterm)
+  - [SQLite database](#sqlite-database)
+  - [CSV files](#csv-files)
+  - [Dictionaries](#dictionaries)
+  - [References](#references)
+
+
+## SQLite database
+
+The full extract is in the SQLite database file [arabterm.db](arabterm.db).
+
+It contains 2 tables: `category` and `entry`
+
+
+## CSV files
+
+CSV files have the following columns:
 
 - `id` *(integer)*: Entry unique id.
+- `uri` *(URL)*: Link to the entry in [arabterm.org](http://www.arabterm.org/)
 - `english` *(string)*: English translation.
 - `arabic` *(string)*: Arabic translation.
 - `french` *(string)*: French translation.
 - `german` *(string)*: German translation. This column is not available for all files.
+See `available_languages` in [categories.json](categories.json) for each category.
+- `description` *(string)*: Entry description in arabic (if exists).
+- `image_uri_remote` *(URL)*: Link to the image in arabterm.org (if the entry has one).
 - `vt` *(boolean)*: Validated term.
 - `uatv` *(boolean)*: Unified Arabic term, validated during the Arabization Congress organized by the [ALECSO](http://www.alecso.org/nsite/ar/).
-- `has_image` *(boolean)*: The term has image material in arabterm.org
-- `uri` *(URL)*: Link to the entry in the official Arab Term website.
 
 
 ## Dictionaries
@@ -59,7 +78,7 @@ Click on the CSV link to see all technical terms of a given domain.
 | [721](http://arabterm.org/index.php?tx_3m5techdict_pi1[filterSubCategory]=721) | [gross_anatomy.csv](data/gross_anatomy.csv) | 5779 | Gross Anatomy | التشريح العياني | Anatomie Macroscopique | Mikroskopische Anatomie |  |
 | [727](http://arabterm.org/index.php?tx_3m5techdict_pi1[filterSubCategory]=727) | [masonry_carpentry.csv](data/masonry_carpentry.csv) | 3731 | Masonry - Carpentry | البناء - النجارة | Maçonnerie - Charpenterie | Maurerhandwerk - Zimmerhandwerk |  |
 | [728](http://arabterm.org/index.php?tx_3m5techdict_pi1[filterSubCategory]=728) | [printing_electricity.csv](data/printing_electricity.csv) | 2838 | Printing - Electricity | الطباعة - الكهرباء | Imprimerie - Electricité | Buchdruck - Elektrizität |  |
-| [729](http://arabterm.org/index.php?tx_3m5techdict_pi1[filterSubCategory]=729) | [nutrition_technologies.csv](data/nutrition_technologies.csv) | 2686 | Nutrition Technologies | تقانات الأغدية | Technologies Alimentaires | Nahrungsmitteltechnologie |  |
+| [729](http://arabterm.org/index.php?tx_3m5techdict_pi1[filterSubCategory]=729) | [nutrition_technologies.csv](data/nutrition_technologies.csv) | 2686 | Nutrition Technologies | تقانات الأغذية | Technologies Alimentaires | Nahrungsmitteltechnologie |  |
 | [780](http://arabterm.org/index.php?tx_3m5techdict_pi1[filterSubCategory]=780) | [information_communication.csv](data/information_communication.csv) | 6081 | Information and Communication | الإعلام والتواصل | Information et Communication | Information und Kommunikation |  |
 | [781](http://arabterm.org/index.php?tx_3m5techdict_pi1[filterSubCategory]=781) | [philosophy_psychology.csv](data/philosophy_psychology.csv) | 1350 | Philosophy and Psychology | الفلسفة وعلم النفس | Philosophie et Psychologie | Philosophie und Psychologie |  |
 | [782](http://arabterm.org/index.php?tx_3m5techdict_pi1[filterSubCategory]=782) | [arts_recreation_sports.csv](data/arts_recreation_sports.csv) | 5269 | Arts, Recreation and Sports | الفن، التسلية والرياضة | Art, Divertissement et sports | Kunst, Vergnügung und Sport | [scan](https://archive.org/details/Ara1992ENAR) |
