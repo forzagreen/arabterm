@@ -5,7 +5,7 @@
 
 This repository provides a full extract of [arabterm.org](http://www.arabterm.org/) dictionaries, in CSV files and in a [SQLite](https://www.sqlite.org/) database.
 
-The data extraction was performed between March and July of 2022, by web scraping [arabterm.org](http://www.arabterm.org/), using python, [Selenium](https://selenium-python.readthedocs.io/), and [lxml](https://lxml.de/lxmlhtml.html).
+The data extraction was performed between March and August of 2022, by web scraping [arabterm.org](http://www.arabterm.org/), using python, [Selenium](https://selenium-python.readthedocs.io/), and [lxml](https://lxml.de/lxmlhtml.html).
 
 
 - [arabterm](#arabterm)
@@ -24,19 +24,27 @@ It contains 2 tables: `category` and `entry`
 
 ## CSV files
 
-CSV files have the following columns:
+There is one CSV file per category in [data/](data/) folder.
+
+All CSV files have the following columns:
 
 - `id` *(integer)*: Entry unique id.
 - `english` *(string)*: English translation.
 - `arabic` *(string)*: Arabic translation.
 - `french` *(string)*: French translation.
-- `german` *(string)*: German translation. This column is not available for all files.
 - `uri` *(URL)*: Link to the entry in [arabterm.org](http://www.arabterm.org/)
-See `available_languages` in [categories.json](categories.json) for each category.
 - `description` *(string)*: Entry description in arabic (if exists).
-- `image_uri_remote` *(URL)*: Link to the image in arabterm.org (if the entry has one).
 - `vt` *(boolean)*: Validated term.
 - `uatv` *(boolean)*: Unified Arabic term, validated during the Arabization Congress organized by the [ALECSO](http://www.alecso.org/nsite/ar/).
+
+Some CSV files have these additional columns:
+
+- `german` *(string)*: German translation. Available for some categories.
+See `available_languages` fields in [categories.json](categories.json).
+- `image_uri_remote` *(URL)*: Link to the image in arabterm.org (if the entry has one).
+Available for categories 2, 22, and 34.
+- `image_uri_extract` *(URL)*: Link to the image in this repository (if the entry has one).
+Available for categories 2, 22, and 34.
 
 
 ## Dictionaries
