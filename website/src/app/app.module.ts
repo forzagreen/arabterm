@@ -7,12 +7,16 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { DictionaryEntitiesComponent } from './dictionary-entities/dictionary-entities.component';
 import { DictionaryListComponent } from './dictionary-list/dictionary-list.component';
+import { HeaderComponent } from './header/header.component';
+import { FooterComponent } from './footer/footer.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     DictionaryEntitiesComponent,
-    DictionaryListComponent
+    DictionaryListComponent,
+    HeaderComponent,
+    FooterComponent
   ],
   imports: [
     BrowserModule,

@@ -26,36 +26,37 @@
   </div>
   <hr>
   <h3>قائمة المعاجم</h3>
-  <table class="table table-striped text-center">
-    <thead>
-      <tr>
-        <th scope="col">المعجم</th>
-        <th scope="col">اسم المعجم بالإنجليزية والفرنسية والألمانية</th>
-        <th scope="col">اللغات المتوفرة</th>
-        <th scope="col">عدد المُدخلات</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr *ngFor="let dictionary of dictionaries">
-        <th>
-
+  <div class="table-responsive">
+    <table class="table table-striped text-center">
+      <thead>
+        <tr>
+          <th scope="col">المعجم</th>
+          <th scope="col">اسم المعجم بالإنجليزية والفرنسية والألمانية</th>
+          <th scope="col">اللغات المتوفرة</th>
+          <th scope="col">عدد المُدخلات</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let dictionary of dictionaries">
+          <th>
             <a class="text-decoration-none" [title]="dictionary.name + ' full'" [routerLink]="['/', dictionary.name]">
               {{ dictionary.arabic }}
             </a>
+          </th>
+          <td>
+            <div>{{ dictionary.english }}</div>
+            <div><small>{{ dictionary.french }}</small></div>
+            <div *ngIf="dictionary.german"><small>{{ dictionary.german }}</small></div>
+          </td>
+          <td>
+            عربي، إنجليزي، فرنسي<span *ngIf="dictionary.available_languages.includes('german')">، ألماني</span>
+          </td>
+          <td>{{ dictionary.nbr_entries }}</td>
+        </tr>
+      </tbody>
+    </table>
 
-        </th>
-        <td>
-          <div>{{ dictionary.english }}</div>
-          <div><small>{{ dictionary.french }}</small></div>
-          <div *ngIf="dictionary.german"><small>{{ dictionary.german }}</small></div>
-        </td>
-        <td>
-          عربي، إنجليزي، فرنسي<span *ngIf="dictionary.available_languages.includes('german')">، ألماني</span>
-        </td>
-        <td>{{ dictionary.nbr_entries }}</td>
-      </tr>
-    </tbody>
-  </table>
+  </div>
 
   <div>
     <h3>مراجع</h3>

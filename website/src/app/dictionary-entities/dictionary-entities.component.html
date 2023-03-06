@@ -4,6 +4,9 @@
   <h5 class="text-center display-5" *ngIf="dictionary">{{ dictionary.english | titlecase }}</h5>
   <h6 class="text-center display-6" *ngIf="dictionary">{{ dictionary.french | titlecase }}</h6>
   <h6 class="text-center display-6" *ngIf="dictionary && dictionary.available_languages.includes('german')">{{ dictionary.german | titlecase }}</h6>
+  <div class="text-center" *ngIf="dictionary">
+    (عربي - إنجليزي - فرنسي<span *ngIf="dictionary && dictionary.available_languages.includes('german')">- ألماني</span>)
+  </div>
 </div>
 
 <div class="container" style="max-width: 800px;" *ngFor="let entity of entities | async">
