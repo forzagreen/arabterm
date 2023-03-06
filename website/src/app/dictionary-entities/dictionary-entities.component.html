@@ -1,0 +1,22 @@
+
+<div class="px-4 py-5 my-5 text-center">
+  <h1 class="text-center display-1" *ngIf="dictionary">{{ dictionary.arabic }}</h1>
+  <h5 class="text-center display-5" *ngIf="dictionary">{{ dictionary.english | titlecase }}</h5>
+  <h6 class="text-center display-6" *ngIf="dictionary">{{ dictionary.french | titlecase }}</h6>
+  <h6 class="text-center display-6" *ngIf="dictionary && dictionary.available_languages.includes('german')">{{ dictionary.german | titlecase }}</h6>
+</div>
+
+<div class="container" style="max-width: 800px;" *ngFor="let entity of entities | async">
+
+  <div class="card border-light rounded-0">
+    <div class="card-body">
+      <!-- <div *ngIf="entity.id">id: {{ entity.id }}</div> -->
+      <div class="card-title fw-bold" *ngIf="entity.ar">{{ entity.ar }}</div>
+      <div class="card-title fw-bold" lang="en" dir="ltr" *ngIf="entity.en">{{ entity.en }}</div>
+      <div class="card-title text-muted" lang="fr" dir="ltr" *ngIf="entity.fr">{{ entity.fr }}</div>
+      <div class="card-title text-muted" lang="ge" dir="ltr" *ngIf="entity.ge">{{ entity.ge }}</div>
+      <div class="card-text" *ngIf="entity.d">{{ entity.d }}</div>
+
+    </div>
+  </div>
+</div>
