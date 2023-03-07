@@ -38,7 +38,7 @@ jobs:
         run: npm ci
       - name: Build
         working-directory: website
-        run: npm run build
+        run: npx ng build --base-href /arabterm/
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v1
         with:
