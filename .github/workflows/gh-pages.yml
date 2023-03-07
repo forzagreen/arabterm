@@ -27,7 +27,7 @@ jobs:
         uses: actions/setup-node@v3
         with:
           cache: 'npm'
-
+          cache-dependency-path: website/package-lock.json
       - name: Install npm dependencies
         working-directory: website
         run: npm ci
