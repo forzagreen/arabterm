@@ -11,9 +11,15 @@
 
 <div class="container" style="max-width: 800px;" *ngFor="let entity of entities | async">
 
+  <!-- TODO: Spinner before page is loaded -->
+  <!-- <div class="text-center">
+    <div class="spinner-border" role="status">
+      <span class="visually-hidden">Loading...</span>
+    </div>
+  </div> -->
+
   <div class="card border-light rounded-0">
     <div class="card-body">
-      <!-- <div *ngIf="entity.id">id: {{ entity.id }}</div> -->
       <div class="card-title fw-bold" *ngIf="entity.ar">{{ entity.ar }}</div>
       <div class="card-title fw-bold" lang="en" dir="ltr" *ngIf="entity.en">{{ entity.en }}</div>
       <div class="card-title text-muted" lang="fr" dir="ltr" *ngIf="entity.fr">{{ entity.fr }}</div>
