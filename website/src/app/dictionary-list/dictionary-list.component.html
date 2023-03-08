@@ -39,7 +39,7 @@
       <tbody>
         <tr *ngFor="let dictionary of dictionaries">
           <th>
-            <a class="text-decoration-none" [title]="dictionary.name + ' full'" [routerLink]="['/', dictionary.name]">
+            <a class="text-decoration-none" [title]="dictionary.arabic" [routerLink]="['/', dictionary.name]">
               {{ dictionary.arabic }}
             </a>
           </th>
