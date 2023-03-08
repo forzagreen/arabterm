@@ -39,6 +39,8 @@ jobs:
       - name: Build
         working-directory: website
         run: npx ng build --base-href /arabterm/
+      - name: Create 404.html file
+        run: cp website/dist/website/index.html website/dist/website/404.html
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v1
         with:
