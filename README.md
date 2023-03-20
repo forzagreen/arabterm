@@ -3,12 +3,13 @@
 
 [Arab Term](http://www.arabterm.org/) is a set of multilingual technical dictionaries, organised by technical domains and industry sectors.
 
-This repository provides a full extract of [arabterm.org](http://www.arabterm.org/) dictionaries, in CSV files and in a [SQLite](https://www.sqlite.org/) database.
+This repository provides a full extract of [arabterm.org](http://www.arabterm.org/) dictionaries, in a web interface: [https://forzagreen.github.io/arabterm/](https://forzagreen.github.io/arabterm/)
+
+The extracts are also available in CSV and JSON files, and as [SQLite](https://www.sqlite.org/) database.
 
 The data extraction was performed between March and August of 2022, by web scraping [arabterm.org](http://www.arabterm.org/), using python, [Selenium](https://selenium-python.readthedocs.io/), and [lxml](https://lxml.de/lxmlhtml.html).
 
 
-- [arabterm](#arabterm)
   - [SQLite database](#sqlite-database)
   - [CSV files](#csv-files)
   - [Dictionaries](#dictionaries)
@@ -46,56 +47,76 @@ Available for categories 2, 22, and 34.
 - `image_uri_extract` *(URL)*: Link to the image in this repository (if the entry has one).
 Available for categories 2, 22, and 34.
 
+## JSON files
+
+There is one JSON file per category in the folder [website/src/assets/](website/src/assets/)
+
+JSON fields:
+
+- `id` *(string)*: Entry unique id.
+- `en` *(string)*: English translation.
+- `ar` *(string)*: Arabic translation.
+- `fr` *(string)*: French translation.
+- `ge` *(string)*: German translation. Available for some categories.
+- `d` *(string)*: Entry description in arabic (if exists).
+
 
 ## Dictionaries
 
-Click on the CSV link to see all technical terms of a given domain.
+In the columns _Extracts_, you can click on the available formats.
 
-| ArabTerm page | Extract file | Number of entries | English | العربية | Français | Deutsch | Scan |
-|---|---|---|---|---:|---|---|---|
-| [1](http://arabterm.org/index.php?tx_3m5techdict_pi1[filterCategory]=1) | [automotive_engineering.csv](data/automotive_engineering.csv) | 4605 | Automotive Engineering | هندسة وتكنولوجيا السيارات | Technique automobile | Kfz-Technik |  |
-| [2](http://arabterm.org/index.php?tx_3m5techdict_pi1[filterCategory]=2) | [water_engineering.csv](data/water_engineering.csv) | 8644 | Water Engineering | هندسة المياه | Technologie de l’eau | Wassertechnik |  |
-| [22](http://arabterm.org/index.php?tx_3m5techdict_pi1[filterCategory]=22) | [renewable_energy.csv](data/renewable_energy.csv) | 7289 | Renewable Energy | الطاقات المتجددة | Energies Renouvelables | Erneuerbare Energien |  |
-| [26](http://arabterm.org/index.php?tx_3m5techdict_pi1[filterCategory]=26) | [electrical_engineering.csv](data/electrical_engineering.csv) | 2569 | Electrical Engineering | الهندسة الكهربائية | Génie Electrique | Elektrotechnik |  |
-| [30](http://arabterm.org/index.php?tx_3m5techdict_pi1[filterCategory]=30) | [transport_infrastructure.csv](data/transport_infrastructure.csv) | 5558 | Transport and Infrastructure | النقل والبنية التحتية | Transport et Infrastructure | Transport und Infrastruktur |  |
-| [34](http://arabterm.org/index.php?tx_3m5techdict_pi1[filterCategory]=34) | [textiles_industries.csv](data/textiles_industries.csv) | 4513 | Textiles Industries | صناعة النسيج | l’Industrie Textile | Textilindustrie |  |
-| [39](http://arabterm.org/index.php?tx_3m5techdict_pi1[filterCategory]=39) | [civil_engineering.csv](data/civil_engineering.csv) | 3943 | Civil Engineering | الهندسة المدنية | Génie Civil | Bauingenieurwesen |  |
-| [47](http://arabterm.org/index.php?tx_3m5techdict_pi1[filterCategory]=47) | [information_tech.csv](data/information_tech.csv) | 1369 | Information and Communication | تقانة المعلومات | Technologie de l’Information | Informationstechnologie | [scan](https://archive.org/details/ALECSO2011AREN) |
-| [51](http://arabterm.org/index.php?tx_3m5techdict_pi1[filterCategory]=51) | [climate_environment.csv](data/climate_environment.csv) | 7040 | Climate, Environment and Solid Waste management | المناخ والبيئة وإدارة النفايات الصلبة | Climat, l’Environment, et la Gestion des déchets solides | Klima, Umwelt und Abfallwirtschaft |  |
-| [644](http://arabterm.org/index.php?tx_3m5techdict_pi1[filterSubCategory]=644) | [educational_techniques.csv](data/educational_techniques.csv) | 1524 | Educational and Computer Techniques | التقنيات التربوية والحاسوبية | Techniques Pédagogiques et Informatiques | Pädagogik und Informatiktechniken |  |
-| [645](http://arabterm.org/index.php?tx_3m5techdict_pi1[filterSubCategory]=645) | [education.csv](data/education.csv) | 2988 | Education | التربية | Education | Erziehungswissenschaft |  |
-| [646](http://arabterm.org/index.php?tx_3m5techdict_pi1[filterSubCategory]=646) | [sociology_anthropology.csv](data/sociology_anthropology.csv) | 1261 | Sociology and Anthropology | علم الاجتماع والأنثروبولوجيا | Sociologie et Anthropologie | Soziologie und Anthropologie |  |
-| [647](http://arabterm.org/index.php?tx_3m5techdict_pi1[filterSubCategory]=647) | [economics.csv](data/economics.csv) | 2036 | Economics | الاقتصاد | Economie | Wirtschaft |  |
-| [648](http://arabterm.org/index.php?tx_3m5techdict_pi1[filterSubCategory]=648) | [commerce_accounting.csv](data/commerce_accounting.csv) | 8862 | Commerce and Accounting | التجارة والمحاسبة | Commerce et Comptabilité | Handel und Rechnungswesen |  |
-| [649](http://arabterm.org/index.php?tx_3m5techdict_pi1[filterSubCategory]=649) | [law.csv](data/law.csv) | 3218 | Law | القانون | Droit | Rechtswissenschaft |  |
-| [668](http://arabterm.org/index.php?tx_3m5techdict_pi1[filterSubCategory]=668) | [mathematics_astronomy.csv](data/mathematics_astronomy.csv) | 4068 | Mathematics and Astronomy | الرياضيات والفلك | Mathématiques et Astronomie | Mathematik und Astronomie |  |
-| [669](http://arabterm.org/index.php?tx_3m5techdict_pi1[filterSubCategory]=669) | [physics.csv](data/physics.csv) | 6315 | Physics | الفيزياء | Physique | Physik |  |
-| [670](http://arabterm.org/index.php?tx_3m5techdict_pi1[filterSubCategory]=670) | [chemistry.csv](data/chemistry.csv) | 4532 | Chemistry | الكيمياء | Chimie | Chemie |  |
-| [671](http://arabterm.org/index.php?tx_3m5techdict_pi1[filterSubCategory]=671) | [geology.csv](data/geology.csv) | 4623 | Geology | الجيولوجيا | Géologie | Geologie |  |
-| [672](http://arabterm.org/index.php?tx_3m5techdict_pi1[filterSubCategory]=672) | [seismology.csv](data/seismology.csv) | 4722 | Seismology | علم الزلازل | Séismologie | Seismologie |  |
-| [673](http://arabterm.org/index.php?tx_3m5techdict_pi1[filterSubCategory]=673) | [meteorology.csv](data/meteorology.csv) | 2031 | Meteorology | الأرصاد الجوية | Météorologie | Meteorologie |  |
-| [674](http://arabterm.org/index.php?tx_3m5techdict_pi1[filterSubCategory]=674) | [oceanology.csv](data/oceanology.csv) | 3913 | Oceanology | علوم البحار | Océanographie | Ozeanographie |  |
-| [675](http://arabterm.org/index.php?tx_3m5techdict_pi1[filterSubCategory]=675) | [petroleum.csv](data/petroleum.csv) | 6089 | Petroleum | النفط | Pétrole | Erdöl |  |
-| [676](http://arabterm.org/index.php?tx_3m5techdict_pi1[filterSubCategory]=676) | [biology.csv](data/biology.csv) | 6561 | Biology | علم الأحياء | Biologie | Biologie |  |
-| [677](http://arabterm.org/index.php?tx_3m5techdict_pi1[filterSubCategory]=677) | [hygienics_human_body.csv](data/hygienics_human_body.csv) | 2134 | Hygienics and Human Body | الصحة وجسم الإنسان | Santé et Corps Humain | Hygiene und Menschlicher Körper |  |
-| [678](http://arabterm.org/index.php?tx_3m5techdict_pi1[filterSubCategory]=678) | [genetics.csv](data/genetics.csv) | 2542 | Genetics | علم الوراثة | Génétique | Genetik |  |
-| [716](http://arabterm.org/index.php?tx_3m5techdict_pi1[filterSubCategory]=716) | [pharmacy.csv](data/pharmacy.csv) | 3686 | Pharmacy | علم الصيدلة | Pharmacie | Pharmazeutik |  |
-| [717](http://arabterm.org/index.php?tx_3m5techdict_pi1[filterSubCategory]=717) | [electronic_warfare.csv](data/electronic_warfare.csv) | 1021 | Electronic Warfare | الحرب الإلكترونية | Guerre éléctronique | Elektronische Kriegführung |  |
-| [718](http://arabterm.org/index.php?tx_3m5techdict_pi1[filterSubCategory]=718) | [remote_sensing.csv](data/remote_sensing.csv) | 1196 | Remote Sensing | الاستشعار عن بعد | Télédétection | Fernerkundung |  |
-| [720](http://arabterm.org/index.php?tx_3m5techdict_pi1[filterSubCategory]=720) | [veterinary_medicine.csv](data/veterinary_medicine.csv) | 2741 | Veterinary Medicine | الطب البيطري | Médecine Vétérinaire | Veterinärmedizin |  |
-| [721](http://arabterm.org/index.php?tx_3m5techdict_pi1[filterSubCategory]=721) | [gross_anatomy.csv](data/gross_anatomy.csv) | 5779 | Gross Anatomy | التشريح العياني | Anatomie Macroscopique | Mikroskopische Anatomie |  |
-| [727](http://arabterm.org/index.php?tx_3m5techdict_pi1[filterSubCategory]=727) | [masonry_carpentry.csv](data/masonry_carpentry.csv) | 3731 | Masonry - Carpentry | البناء - النجارة | Maçonnerie - Charpenterie | Maurerhandwerk - Zimmerhandwerk |  |
-| [728](http://arabterm.org/index.php?tx_3m5techdict_pi1[filterSubCategory]=728) | [printing_electricity.csv](data/printing_electricity.csv) | 2838 | Printing - Electricity | الطباعة - الكهرباء | Imprimerie - Electricité | Buchdruck - Elektrizität |  |
-| [729](http://arabterm.org/index.php?tx_3m5techdict_pi1[filterSubCategory]=729) | [nutrition_technologies.csv](data/nutrition_technologies.csv) | 2686 | Nutrition Technologies | تقانات الأغذية | Technologies Alimentaires | Nahrungsmitteltechnologie |  |
-| [780](http://arabterm.org/index.php?tx_3m5techdict_pi1[filterSubCategory]=780) | [information_communication.csv](data/information_communication.csv) | 6081 | Information and Communication | الإعلام والتواصل | Information et Communication | Information und Kommunikation |  |
-| [781](http://arabterm.org/index.php?tx_3m5techdict_pi1[filterSubCategory]=781) | [philosophy_psychology.csv](data/philosophy_psychology.csv) | 1350 | Philosophy and Psychology | الفلسفة وعلم النفس | Philosophie et Psychologie | Philosophie und Psychologie |  |
-| [782](http://arabterm.org/index.php?tx_3m5techdict_pi1[filterSubCategory]=782) | [arts_recreation_sports.csv](data/arts_recreation_sports.csv) | 5269 | Arts, Recreation and Sports | الفن، التسلية والرياضة | Art, Divertissement et sports | Kunst, Vergnügung und Sport | [scan](https://archive.org/details/Ara1992ENAR) |
-| [783](http://arabterm.org/index.php?tx_3m5techdict_pi1[filterSubCategory]=783) | [language_literature.csv](data/language_literature.csv) | 3223 | Language and Literature | اللغة والأدب | Langue et Littérature | Sprache und Literatur | [scan](https://archive.org/details/20200723_20200723_1608) |
-| [784](http://arabterm.org/index.php?tx_3m5techdict_pi1[filterSubCategory]=784) | [geography_history.csv](data/geography_history.csv) | 5724 | Geography and History | الجغرافيا والتاريخ | Géographie et Histoire | Geographie und Geschichte |  |
 
+| Title in English/French/German | العربية | Entries | Extracts | ArabTerm page |
+|:---:|:---:|:---:|:---:|:---:|
+| Automotive Engineering<br />Technique automobile<br />Kfz-Technik | هندسة وتكنولوجيا السيارات | 4605 | [web](https://forzagreen.github.io/arabterm/automotive_engineering), [csv](data/automotive_engineering.csv), [json](website/src/assets/automotive_engineering.json) | [1](http://arabterm.org/index.php?tx_3m5techdict_pi1[filterCategory]=1) |
+| Water Engineering<br />Technologie de l’eau<br />Wassertechnik | هندسة المياه | 8644 | [web](https://forzagreen.github.io/arabterm/water_engineering), [csv](data/water_engineering.csv), [json](website/src/assets/water_engineering.json) | [2](http://arabterm.org/index.php?tx_3m5techdict_pi1[filterCategory]=2) |
+| Renewable Energy<br />Energies Renouvelables<br />Erneuerbare Energien | الطاقات المتجددة | 7289 | [web](https://forzagreen.github.io/arabterm/renewable_energy), [csv](data/renewable_energy.csv), [json](website/src/assets/renewable_energy.json) | [22](http://arabterm.org/index.php?tx_3m5techdict_pi1[filterCategory]=22) |
+| Electrical Engineering<br />Génie Electrique<br />Elektrotechnik | الهندسة الكهربائية | 2569 | [web](https://forzagreen.github.io/arabterm/electrical_engineering), [csv](data/electrical_engineering.csv), [json](website/src/assets/electrical_engineering.json) | [26](http://arabterm.org/index.php?tx_3m5techdict_pi1[filterCategory]=26) |
+| Transport and Infrastructure<br />Transport et Infrastructure<br />Transport und Infrastruktur | النقل والبنية التحتية | 5558 | [web](https://forzagreen.github.io/arabterm/transport_infrastructure), [csv](data/transport_infrastructure.csv), [json](website/src/assets/transport_infrastructure.json) | [30](http://arabterm.org/index.php?tx_3m5techdict_pi1[filterCategory]=30) |
+| Textiles Industries<br />l’Industrie Textile<br />Textilindustrie | صناعة النسيج | 4513 | [web](https://forzagreen.github.io/arabterm/textiles_industries), [csv](data/textiles_industries.csv), [json](website/src/assets/textiles_industries.json) | [34](http://arabterm.org/index.php?tx_3m5techdict_pi1[filterCategory]=34) |
+| Civil Engineering<br />Génie Civil<br />Bauingenieurwesen | الهندسة المدنية | 3943 | [web](https://forzagreen.github.io/arabterm/civil_engineering), [csv](data/civil_engineering.csv), [json](website/src/assets/civil_engineering.json) | [39](http://arabterm.org/index.php?tx_3m5techdict_pi1[filterCategory]=39) |
+| Information and Communication<br />Technologie de l’Information<br />Informationstechnologie | تقانة المعلومات | 1369 | [web](https://forzagreen.github.io/arabterm/information_tech), [csv](data/information_tech.csv), [json](website/src/assets/information_tech.json), [scan](https://archive.org/details/ALECSO2011AREN) | [47](http://arabterm.org/index.php?tx_3m5techdict_pi1[filterCategory]=47) |
+| Climate, Environment and Solid Waste management<br />Climat, l’Environment, et la Gestion des déchets solides<br />Klima, Umwelt und Abfallwirtschaft | المناخ والبيئة وإدارة النفايات الصلبة | 7040 | [web](https://forzagreen.github.io/arabterm/climate_environment), [csv](data/climate_environment.csv), [json](website/src/assets/climate_environment.json) | [51](http://arabterm.org/index.php?tx_3m5techdict_pi1[filterCategory]=51) |
+| Educational and Computer Techniques<br />Techniques Pédagogiques et Informatiques<br />Pädagogik und Informatiktechniken | التقنيات التربوية والحاسوبية | 1524 | [web](https://forzagreen.github.io/arabterm/educational_techniques), [csv](data/educational_techniques.csv), [json](website/src/assets/educational_techniques.json) | [644](http://arabterm.org/index.php?tx_3m5techdict_pi1[filterSubCategory]=644) |
+| Education<br />Education<br />Erziehungswissenschaft | التربية | 2988 | [web](https://forzagreen.github.io/arabterm/education), [csv](data/education.csv), [json](website/src/assets/education.json) | [645](http://arabterm.org/index.php?tx_3m5techdict_pi1[filterSubCategory]=645) |
+| Sociology and Anthropology<br />Sociologie et Anthropologie<br />Soziologie und Anthropologie | علم الاجتماع والأنثروبولوجيا | 1261 | [web](https://forzagreen.github.io/arabterm/sociology_anthropology), [csv](data/sociology_anthropology.csv), [json](website/src/assets/sociology_anthropology.json) | [646](http://arabterm.org/index.php?tx_3m5techdict_pi1[filterSubCategory]=646) |
+| Economics<br />Economie<br />Wirtschaft | الاقتصاد | 2036 | [web](https://forzagreen.github.io/arabterm/economics), [csv](data/economics.csv), [json](website/src/assets/economics.json) | [647](http://arabterm.org/index.php?tx_3m5techdict_pi1[filterSubCategory]=647) |
+| Commerce and Accounting<br />Commerce et Comptabilité<br />Handel und Rechnungswesen | التجارة والمحاسبة | 8862 | [web](https://forzagreen.github.io/arabterm/commerce_accounting), [csv](data/commerce_accounting.csv), [json](website/src/assets/commerce_accounting.json) | [648](http://arabterm.org/index.php?tx_3m5techdict_pi1[filterSubCategory]=648) |
+| Law<br />Droit<br />Rechtswissenschaft | القانون | 3218 | [web](https://forzagreen.github.io/arabterm/law), [csv](data/law.csv), [json](website/src/assets/law.json) | [649](http://arabterm.org/index.php?tx_3m5techdict_pi1[filterSubCategory]=649) |
+| Mathematics and Astronomy<br />Mathématiques et Astronomie<br />Mathematik und Astronomie | الرياضيات والفلك | 4068 | [web](https://forzagreen.github.io/arabterm/mathematics_astronomy), [csv](data/mathematics_astronomy.csv), [json](website/src/assets/mathematics_astronomy.json), [scan](https://archive.org/details/ARA1990ENAR) | [668](http://arabterm.org/index.php?tx_3m5techdict_pi1[filterSubCategory]=668) |
+| Physics<br />Physique<br />Physik | الفيزياء | 6315 | [web](https://forzagreen.github.io/arabterm/physics), [csv](data/physics.csv), [json](website/src/assets/physics.json), [scan](https://archive.org/details/Ara1989ENFRAR) | [669](http://arabterm.org/index.php?tx_3m5techdict_pi1[filterSubCategory]=669) |
+| Chemistry<br />Chimie<br />Chemie | الكيمياء | 4532 | [web](https://forzagreen.github.io/arabterm/chemistry), [csv](data/chemistry.csv), [json](website/src/assets/chemistry.json) | [670](http://arabterm.org/index.php?tx_3m5techdict_pi1[filterSubCategory]=670) |
+| Geology<br />Géologie<br />Geologie | الجيولوجيا | 4623 | [web](https://forzagreen.github.io/arabterm/geology), [csv](data/geology.csv), [json](website/src/assets/geology.json) | [671](http://arabterm.org/index.php?tx_3m5techdict_pi1[filterSubCategory]=671) |
+| Seismology<br />Séismologie<br />Seismologie | علم الزلازل | 4722 | [web](https://forzagreen.github.io/arabterm/seismology), [csv](data/seismology.csv), [json](website/src/assets/seismology.json) | [672](http://arabterm.org/index.php?tx_3m5techdict_pi1[filterSubCategory]=672) |
+| Meteorology<br />Météorologie<br />Meteorologie | الأرصاد الجوية | 2031 | [web](https://forzagreen.github.io/arabterm/meteorology), [csv](data/meteorology.csv), [json](website/src/assets/meteorology.json) | [673](http://arabterm.org/index.php?tx_3m5techdict_pi1[filterSubCategory]=673) |
+| Oceanology<br />Océanographie<br />Ozeanographie | علوم البحار | 3913 | [web](https://forzagreen.github.io/arabterm/oceanology), [csv](data/oceanology.csv), [json](website/src/assets/oceanology.json) | [674](http://arabterm.org/index.php?tx_3m5techdict_pi1[filterSubCategory]=674) |
+| Petroleum<br />Pétrole<br />Erdöl | النفط | 6089 | [web](https://forzagreen.github.io/arabterm/petroleum), [csv](data/petroleum.csv), [json](website/src/assets/petroleum.json) | [675](http://arabterm.org/index.php?tx_3m5techdict_pi1[filterSubCategory]=675) |
+| Biology<br />Biologie<br />Biologie | علم الأحياء | 6561 | [web](https://forzagreen.github.io/arabterm/biology), [csv](data/biology.csv), [json](website/src/assets/biology.json) | [676](http://arabterm.org/index.php?tx_3m5techdict_pi1[filterSubCategory]=676) |
+| Hygienics and Human Body<br />Santé et Corps Humain<br />Hygiene und Menschlicher Körper | الصحة وجسم الإنسان | 2134 | [web](https://forzagreen.github.io/arabterm/hygienics_human_body), [csv](data/hygienics_human_body.csv), [json](website/src/assets/hygienics_human_body.json), [scan](https://archive.org/details/BUR1992ENFRAR) | [677](http://arabterm.org/index.php?tx_3m5techdict_pi1[filterSubCategory]=677) |
+| Genetics<br />Génétique<br />Genetik | علم الوراثة | 2542 | [web](https://forzagreen.github.io/arabterm/genetics), [csv](data/genetics.csv), [json](website/src/assets/genetics.json) | [678](http://arabterm.org/index.php?tx_3m5techdict_pi1[filterSubCategory]=678) |
+| Pharmacy<br />Pharmacie<br />Pharmazeutik | علم الصيدلة | 3686 | [web](https://forzagreen.github.io/arabterm/pharmacy), [csv](data/pharmacy.csv), [json](website/src/assets/pharmacy.json) | [716](http://arabterm.org/index.php?tx_3m5techdict_pi1[filterSubCategory]=716) |
+| Electronic Warfare<br />Guerre éléctronique<br />Elektronische Kriegführung | الحرب الإلكترونية | 1021 | [web](https://forzagreen.github.io/arabterm/electronic_warfare), [csv](data/electronic_warfare.csv), [json](website/src/assets/electronic_warfare.json) | [717](http://arabterm.org/index.php?tx_3m5techdict_pi1[filterSubCategory]=717) |
+| Remote Sensing<br />Télédétection<br />Fernerkundung | الاستشعار عن بعد | 1196 | [web](https://forzagreen.github.io/arabterm/remote_sensing), [csv](data/remote_sensing.csv), [json](website/src/assets/remote_sensing.json) | [718](http://arabterm.org/index.php?tx_3m5techdict_pi1[filterSubCategory]=718) |
+| Veterinary Medicine<br />Médecine Vétérinaire<br />Veterinärmedizin | الطب البيطري | 2741 | [web](https://forzagreen.github.io/arabterm/veterinary_medicine), [csv](data/veterinary_medicine.csv), [json](website/src/assets/veterinary_medicine.json) | [720](http://arabterm.org/index.php?tx_3m5techdict_pi1[filterSubCategory]=720) |
+| Gross Anatomy<br />Anatomie Macroscopique<br />Mikroskopische Anatomie | التشريح العياني | 5779 | [web](https://forzagreen.github.io/arabterm/gross_anatomy), [csv](data/gross_anatomy.csv), [json](website/src/assets/gross_anatomy.json) | [721](http://arabterm.org/index.php?tx_3m5techdict_pi1[filterSubCategory]=721) |
+| Masonry - Carpentry<br />Maçonnerie - Charpenterie<br />Maurerhandwerk - Zimmerhandwerk | البناء - النجارة | 3731 | [web](https://forzagreen.github.io/arabterm/masonry_carpentry), [csv](data/masonry_carpentry.csv), [json](website/src/assets/masonry_carpentry.json) | [727](http://arabterm.org/index.php?tx_3m5techdict_pi1[filterSubCategory]=727) |
+| Printing - Electricity<br />Imprimerie - Electricité<br />Buchdruck - Elektrizität | الطباعة - الكهرباء | 2838 | [web](https://forzagreen.github.io/arabterm/printing_electricity), [csv](data/printing_electricity.csv), [json](website/src/assets/printing_electricity.json) | [728](http://arabterm.org/index.php?tx_3m5techdict_pi1[filterSubCategory]=728) |
+| Nutrition Technologies<br />Technologies Alimentaires<br />Nahrungsmitteltechnologie | تقانات الأغذية | 2686 | [web](https://forzagreen.github.io/arabterm/nutrition_technologies), [csv](data/nutrition_technologies.csv), [json](website/src/assets/nutrition_technologies.json) | [729](http://arabterm.org/index.php?tx_3m5techdict_pi1[filterSubCategory]=729) |
+| Information and Communication<br />Information et Communication<br />Information und Kommunikation | الإعلام والتواصل | 6081 | [web](https://forzagreen.github.io/arabterm/information_communication), [csv](data/information_communication.csv), [json](website/src/assets/information_communication.json) | [780](http://arabterm.org/index.php?tx_3m5techdict_pi1[filterSubCategory]=780) |
+| Philosophy and Psychology<br />Philosophie et Psychologie<br />Philosophie und Psychologie | الفلسفة وعلم النفس | 1350 | [web](https://forzagreen.github.io/arabterm/philosophy_psychology), [csv](data/philosophy_psychology.csv), [json](website/src/assets/philosophy_psychology.json) | [781](http://arabterm.org/index.php?tx_3m5techdict_pi1[filterSubCategory]=781) |
+| Arts, Recreation and Sports<br />Art, Divertissement et sports<br />Kunst, Vergnügung und Sport | الفن، التسلية والرياضة | 5269 | [web](https://forzagreen.github.io/arabterm/arts_recreation_sports), [csv](data/arts_recreation_sports.csv), [json](website/src/assets/arts_recreation_sports.json), [scan](https://archive.org/details/Ara1992ENAR) | [782](http://arabterm.org/index.php?tx_3m5techdict_pi1[filterSubCategory]=782) |
+| Language and Literature<br />Langue et Littérature<br />Sprache und Literatur | اللغة والأدب | 3223 | [web](https://forzagreen.github.io/arabterm/language_literature), [csv](data/language_literature.csv), [json](website/src/assets/language_literature.json), [scan](https://archive.org/details/20200723_20200723_1608) | [783](http://arabterm.org/index.php?tx_3m5techdict_pi1[filterSubCategory]=783) |
+| Geography and History<br />Géographie et Histoire<br />Geographie und Geschichte | الجغرافيا والتاريخ | 5724 | [web](https://forzagreen.github.io/arabterm/geography_history), [csv](data/geography_history.csv), [json](website/src/assets/geography_history.json), [scan](https://archive.org/details/BUR1994ENFRAR) | [784](http://arabterm.org/index.php?tx_3m5techdict_pi1[filterSubCategory]=784) |
+
+<!-- 
+782 (arts_recreation_sports) => موسيقى
+783 (language_literature) => لسانيات
+784 (geography_history) => جغرافيا
+ -->
 
 ## References
 
+- [https://forzagreen.github.io/arabterm/](https://forzagreen.github.io/arabterm/)
 - [arabterm.org](http://www.arabterm.org)
 - [مكتب تنسيق التعريب](http://www.arabization.org.ma/)
 - [ويكيبيديا:مصادر موثوقة/معاجم وقواميس وأطالس](https://ar.wikipedia.org/wiki/%D9%88%D9%8A%D9%83%D9%8A%D8%A8%D9%8A%D8%AF%D9%8A%D8%A7:%D9%85%D8%B5%D8%A7%D8%AF%D8%B1_%D9%85%D9%88%D8%AB%D9%88%D9%82%D8%A9/%D9%85%D8%B9%D8%A7%D8%AC%D9%85_%D9%88%D9%82%D9%88%D8%A7%D9%85%D9%8A%D8%B3_%D9%88%D8%A3%D8%B7%D8%A7%D9%84%D8%B3)
