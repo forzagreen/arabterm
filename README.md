@@ -114,6 +114,17 @@ In the columns _Extracts_, you can click on the available formats.
 784 (geography_history) => جغرافيا
  -->
 
+## Other datasets
+
+### Electropedia
+
+[Electropedia](https://www.electropedia.org/iev/iev.nsf/welcome) is produced by the International Electrotechnical Commission (IEC), the organization that publishes International Standards for all electrical, electronic and related technologies – collectively known as "electrotechnology".
+It contains more than 22 000 terminological entries.
+
+The extracts can be found on [data_electropedia/](data_electropedia/) as individual CSV files, each corresponding to a specific section.
+Additionally, you can access consolidated data for all sections and languages through the files [data_electropedia/all_languages.csv](data_electropedia/all_languages.csv) and [data_electropedia/all_languages.xlsx](data_electropedia/all_languages.xlsx)
+
+
 ## References
 
 - [https://forzagreen.github.io/arabterm/](https://forzagreen.github.io/arabterm/)
