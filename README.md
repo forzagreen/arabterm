@@ -12,7 +12,9 @@ The data extraction was performed between March and August of 2022, by web scrap
 
   - [SQLite database](#sqlite-database)
   - [CSV files](#csv-files)
+  - [JSON files](#json-files)
   - [Dictionaries](#dictionaries)
+  - [Other datasets](#other-datasets)
   - [References](#references)
 
 
@@ -131,4 +133,5 @@ Additionally, you can access consolidated data for all sections and languages th
 - [arabterm.org](http://www.arabterm.org)
 - [مكتب تنسيق التعريب](http://www.arabization.org.ma/)
 - [ويكيبيديا:مصادر موثوقة/معاجم وقواميس وأطالس](https://ar.wikipedia.org/wiki/%D9%88%D9%8A%D9%83%D9%8A%D8%A8%D9%8A%D8%AF%D9%8A%D8%A7:%D9%85%D8%B5%D8%A7%D8%AF%D8%B1_%D9%85%D9%88%D8%AB%D9%88%D9%82%D8%A9/%D9%85%D8%B9%D8%A7%D8%AC%D9%85_%D9%88%D9%82%D9%88%D8%A7%D9%85%D9%8A%D8%B3_%D9%88%D8%A3%D8%B7%D8%A7%D9%84%D8%B3)
+- [Electropedia](https://www.electropedia.org/iev/iev.nsf/welcome)
  
