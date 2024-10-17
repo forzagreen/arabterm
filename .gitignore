@@ -3,3 +3,6 @@
 *.db-shm
 *.db-wal
 *backup*.db
+__pycache__
+samples/
+exports/
