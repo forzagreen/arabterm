@@ -1,0 +1,23 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "arabterm"
+version = "2.0.0"
+description = "A collection of Arabic terminology"
+authors = [
+    { name = "forzagreen" },
+]
+readme = "README.md"
+requires-python = ">=3.8"
+dependencies = [
+    "sqlalchemy>=2.0.0",
+    "pymysql",
+]
+
+[project.urls]
+Repository = "https://github.com/forzagreen/myrepo"
+
+[tool.setuptools]
+packages = ["arabterm"]
