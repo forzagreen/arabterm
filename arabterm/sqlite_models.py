@@ -1,7 +1,12 @@
+import datetime
 from typing import List, Optional
+
 from sqlalchemy import DateTime, ForeignKey, Integer, String, text
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column, relationship
-import datetime
+
+
+def utc_now() -> datetime.datetime:
+    return datetime.datetime.now(datetime.UTC).replace(tzinfo=None)
 
 
 class Base(DeclarativeBase):
@@ -9,7 +14,7 @@ class Base(DeclarativeBase):
 
 
 class Dictionary(Base):
-    __tablename__ = 'dictionary'
+    __tablename__ = "dictionary"
 
     id: Mapped[int] = mapped_column(Integer, primary_key=True)
     name_arabic: Mapped[Optional[str]] = mapped_column(String)
@@ -19,14 +24,18 @@ class Dictionary(Base):
     nbr_entries: Mapped[Optional[int]] = mapped_column(Integer)
     name_tech: Mapped[str] = mapped_column(String, unique=True, nullable=False)
     wikidata_id: Mapped[Optional[str]] = mapped_column(String)
-    created_at: Mapped[datetime.datetime] = mapped_column(DateTime, server_default=text('CURRENT_TIMESTAMP'))
-    updated_at: Mapped[Optional[datetime.datetime]] = mapped_column(DateTime)
+    created_at: Mapped[datetime.datetime] = mapped_column(
+        DateTime, server_default=text("CURRENT_TIMESTAMP")
+    )
+    updated_at: Mapped[Optional[datetime.datetime]] = mapped_column(
+        DateTime, onupdate=utc_now
+    )
 
-    term: Mapped[List['Term']] = relationship('Term', back_populates='dictionary')
+    term: Mapped[List["Term"]] = relationship("Term", back_populates="dictionary")
 
 
 class Term(Base):
-    __tablename__ = 'term'
+    __tablename__ = "term"
 
     id: Mapped[int] = mapped_column(Integer, primary_key=True)
     arabic: Mapped[Optional[str]] = mapped_column(String)
@@ -34,10 +43,14 @@ class Term(Base):
     french: Mapped[Optional[str]] = mapped_column(String)
     german: Mapped[Optional[str]] = mapped_column(String)
     description: Mapped[Optional[str]] = mapped_column(String)
-    dictionary_id: Mapped[int] = mapped_column(ForeignKey('dictionary.id'))
+    dictionary_id: Mapped[int] = mapped_column(ForeignKey("dictionary.id"))
     page: Mapped[Optional[int]] = mapped_column(Integer)
     uri: Mapped[Optional[str]] = mapped_column(String)
-    created_at: Mapped[datetime.datetime] = mapped_column(DateTime, server_default=text('CURRENT_TIMESTAMP'))
-    updated_at: Mapped[Optional[datetime.datetime]] = mapped_column(DateTime)
+    created_at: Mapped[datetime.datetime] = mapped_column(
+        DateTime, server_default=text("CURRENT_TIMESTAMP")
+    )
+    updated_at: Mapped[Optional[datetime.datetime]] = mapped_column(
+        DateTime, onupdate=utc_now
+    )
 
-    dictionary: Mapped['Dictionary'] = relationship('Dictionary', back_populates='term')
+    dictionary: Mapped["Dictionary"] = relationship("Dictionary", back_populates="term")
