@@ -16,6 +16,11 @@ dependencies = [
     "pymysql",
 ]
 
+[project.optional-dependencies]
+dev = [
+    "ruff",
+]
+
 [project.urls]
 Repository = "https://github.com/forzagreen/myrepo"
 
