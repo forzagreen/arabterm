@@ -1,0 +1,2 @@
+include arabterm/db/mariadb/arabterm.sql
+include arabterm/db/sqlite/arabterm.sql
