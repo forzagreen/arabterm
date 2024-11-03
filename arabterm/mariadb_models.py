@@ -1,8 +1,18 @@
 import datetime
+import os
 from typing import List, Optional
 
-from sqlalchemy import DateTime, ForeignKey, Index, Integer, String, Text, text
-from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column, relationship
+from sqlalchemy import (
+    DateTime,
+    ForeignKey,
+    Index,
+    Integer,
+    String,
+    Text,
+    create_engine,
+    text,
+)
+from sqlalchemy.orm import DeclarativeBase, Mapped, Session, mapped_column, relationship
 
 
 class Base(DeclarativeBase):
@@ -54,11 +64,14 @@ class Term(Base):
     dictionary_id: Mapped[int] = mapped_column(ForeignKey("dictionary.id"))
     page: Mapped[Optional[int]] = mapped_column(Integer)
     uri: Mapped[Optional[str]] = mapped_column(String(255))
-    created_at: Mapped[datetime.datetime] = mapped_column(
-        DateTime, server_default=text("CURRENT_TIMESTAMP")
-    )
-    updated_at: Mapped[Optional[datetime.datetime]] = mapped_column(
-        DateTime, server_default=text("CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP")
-    )
 
     dictionary: Mapped["Dictionary"] = relationship("Dictionary", back_populates="term")
+
+
+def get_mariadb_connection():
+    """Create MariaDB connection"""
+    MARIADB_URL = os.environ["MARIADB_URL"]
+    engine = create_engine(MARIADB_URL)
+    # Create tables if they don't exist
+    Base.metadata.create_all(engine)
+    return Session(engine)
