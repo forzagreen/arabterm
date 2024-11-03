@@ -1,8 +1,9 @@
 import datetime
+import os
 from typing import List, Optional
 
-from sqlalchemy import DateTime, ForeignKey, Integer, String, text
-from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column, relationship
+from sqlalchemy import DateTime, ForeignKey, Integer, String, create_engine, text
+from sqlalchemy.orm import DeclarativeBase, Mapped, Session, mapped_column, relationship
 
 
 def utc_now() -> datetime.datetime:
@@ -54,3 +55,10 @@ class Term(Base):
     )
 
     dictionary: Mapped["Dictionary"] = relationship("Dictionary", back_populates="term")
+
+
+def get_sqlite_connection():
+    """Create SQLite connection"""
+    SQLITE_URL = os.environ.get("SQLITE_URL", "sqlite:///arabterm.db")
+    engine = create_engine(SQLITE_URL)
+    return Session(engine)
