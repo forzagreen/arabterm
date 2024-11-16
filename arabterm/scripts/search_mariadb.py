@@ -14,11 +14,11 @@ def search_terms_mariadb(session, query_text) -> list[dict]:
             t.*,
             d.name_arabic as dictionary_name_arabic,
             d.wikidata_id as dictionary_wikidata_id,
-            MATCH(t.arabic, t.english, t.french, t.description) 
+            MATCH(t.arabic, t.english, t.french, t.description)
             AGAINST(:query IN NATURAL LANGUAGE MODE) as relevance
         FROM term t
         JOIN dictionary d ON t.dictionary_id = d.id
-        WHERE MATCH(t.arabic, t.english, t.french, t.description) 
+        WHERE MATCH(t.arabic, t.english, t.french, t.description)
         AGAINST(:query IN NATURAL LANGUAGE MODE)
         ORDER BY relevance DESC
     """),

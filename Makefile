@@ -27,11 +27,11 @@ search:
 	python arabterm/scripts/search_mariadb.py $(term)
 
 dump_sqlite:
-	sqlite3 arabterm.db ".output arabterm/db/sqlite/arabterm.sql" .dump
+	sqlite3 arabterm.db ".output db/sqlite/arabterm.sql" .dump
 
 dump_mariadb:
 	docker exec mariadb sh -c "mariadb-dump --password=${MARIADB_PASSWORD} arabterm > /mnt/arabterm.sql"
-	docker cp mariadb:/mnt/arabterm.sql arabterm/db/mariadb/arabterm.sql
+	docker cp mariadb:/mnt/arabterm.sql db/mariadb/arabterm.sql
 
 dump: dump_sqlite dump_mariadb
 
