@@ -10,11 +10,15 @@ format:
 	ruff format arabterm
 
 init_mariadb:
-	docker run -d --name mariadb \
-		-e MARIADB_DATABASE=arabterm \
-		-e MARIADB_ROOT_PASSWORD=${MARIADB_PASSWORD} \
-		-e MARIADB_USER=arabterm \
-		-p 3306:3306 mariadb:latest
+	@if [ $$(docker ps -a -q -f name=mariadb) ]; then \
+		docker start mariadb; \
+	else \
+		docker run -d --name mariadb \
+			-e MARIADB_DATABASE=arabterm \
+			-e MARIADB_ROOT_PASSWORD=${MARIADB_PASSWORD} \
+			-e MARIADB_USER=arabterm \
+			-p 3306:3306 mariadb:latest; \
+	fi
 
 delete_mariadb:
 	python arabterm/scripts/delete_mariadb.py
