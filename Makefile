@@ -32,10 +32,12 @@ search:
 
 dump_sqlite:
 	sqlite3 arabterm.db ".output db/sqlite/arabterm.sql" .dump
+	gzip --force db/sqlite/arabterm.sql
 
 dump_mariadb:
 	docker exec mariadb sh -c "mariadb-dump --password=${MARIADB_PASSWORD} arabterm > /mnt/arabterm.sql"
 	docker cp mariadb:/mnt/arabterm.sql db/mariadb/arabterm.sql
+	gzip --force db/mariadb/arabterm.sql
 
 dump: dump_sqlite dump_mariadb
 
