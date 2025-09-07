@@ -39,12 +39,11 @@ def main():
 
     with get_mariadb_connection() as mariadb_session:
         results = search_terms_mariadb(mariadb_session, args.term)
-        # breakpoint()
         results = [dict(row) for row in results]
         for row in results:
             keys = list(row.keys())
             for key in keys:
-                if key not in ["id", "arabic", "english", "french"]:
+                if key not in ["id", "arabic", "english", "french", "dictionary_name_arabic"]:
                     row.pop(key)
 
         print(json.dumps(results, ensure_ascii=False, indent=2))
