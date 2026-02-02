@@ -10,7 +10,7 @@ authors = [
     { name = "forzagreen" },
 ]
 readme = "README.md"
-requires-python = ">=3.8"
+requires-python = ">=3.10"
 dependencies = [
     "pymysql",
     "sqlalchemy>=2.0.0",

@@ -17,7 +17,7 @@ init_mariadb:
 			-e MARIADB_DATABASE=arabterm \
 			-e MARIADB_ROOT_PASSWORD=${MARIADB_PASSWORD} \
 			-e MARIADB_USER=arabterm \
-			-p 3306:3306 mariadb:latest; \
+			-p 3306:3306 mariadb:11.8; \
 	fi
 
 delete_mariadb:
