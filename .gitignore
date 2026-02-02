@@ -9,3 +9,5 @@ exports/
 *.egg-info/
 dist/
 .env
+playground/
+*.ipynb
