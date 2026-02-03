@@ -15,6 +15,7 @@ export interface Entity {
 
 @Component({
   selector: 'app-dictionary-entities',
+  standalone: false,
   templateUrl: './dictionary-entities.component.html',
   styleUrls: ['./dictionary-entities.component.css']
 })

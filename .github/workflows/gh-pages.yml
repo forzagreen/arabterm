@@ -25,12 +25,13 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
       - name: Setup Pages
-        uses: actions/configure-pages@v3
+        uses: actions/configure-pages@v5
       - name: Setup Node.js
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
+          node-version: '22'
           cache: 'npm'
           cache-dependency-path: website/package-lock.json
       - name: Install npm dependencies
@@ -40,11 +41,11 @@ jobs:
         working-directory: website
         run: npx ng build --base-href /arabterm/
       - name: Create 404.html file
-        run: cp website/dist/website/index.html website/dist/website/404.html
+        run: cp website/dist/website/browser/index.html website/dist/website/browser/404.html
       - name: Upload artifact
-        uses: actions/upload-pages-artifact@v1
+        uses: actions/upload-pages-artifact@v3
         with:
-          path: website/dist/website/
+          path: website/dist/website/browser/
 
   # Deployment job
   deploy:
@@ -56,4 +57,4 @@ jobs:
     steps:
       - name: Deploy to GitHub Pages
         id: deployment
-        uses: actions/deploy-pages@v1
+        uses: actions/deploy-pages@v4

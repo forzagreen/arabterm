@@ -4,6 +4,7 @@ import { Dictionary, dictionaries } from '../dictionaries';
 
 @Component({
   selector: 'app-dictionary-list',
+  standalone: false,
   templateUrl: './dictionary-list.component.html',
   styleUrls: ['./dictionary-list.component.css']
 })
