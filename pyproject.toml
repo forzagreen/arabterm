@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "arabterm"
-version = "2.0.1"
+version = "2.1.0"
 description = "A collection of Arabic terminology"
 authors = [
     { name = "forzagreen" },
@@ -23,7 +23,7 @@ dev = [
 ]
 
 [project.urls]
-Repository = "https://github.com/forzagreen/myrepo"
+Repository = "https://github.com/forzagreen/arabterm"
 
 [tool.setuptools]
 packages = ["arabterm"]
