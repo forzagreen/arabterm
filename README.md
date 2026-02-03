@@ -25,7 +25,6 @@ It contains 2 tables: `dictionary` and `term`.
 | `name_arabic` | VARCHAR | Dictionary name in Arabic |
 | `name_english` | VARCHAR | Dictionary name in English |
 | `name_french` | VARCHAR | Dictionary name in French |
-| `name_german` | VARCHAR | Dictionary name in German |
 | `nbr_entries` | INTEGER | Number of terms in the dictionary |
 | `name_tech` | VARCHAR | Technical/slug name (unique) |
 | `wikidata_id` | VARCHAR | Wikidata item ID for the dictionary |
@@ -40,7 +39,6 @@ It contains 2 tables: `dictionary` and `term`.
 | `arabic` | VARCHAR | Term in Arabic |
 | `english` | VARCHAR | Term in English |
 | `french` | VARCHAR | Term in French |
-| `german` | VARCHAR | Term in German |
 | `description` | VARCHAR | Term description (usually in Arabic) |
 | `dictionary_id` | INTEGER | Foreign key to `dictionary.id` |
 | `page` | INTEGER | Page number in source document (if applicable) |

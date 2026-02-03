@@ -43,7 +43,13 @@ def main():
         for row in results:
             keys = list(row.keys())
             for key in keys:
-                if key not in ["id", "arabic", "english", "french", "dictionary_name_arabic"]:
+                if key not in [
+                    "id",
+                    "arabic",
+                    "english",
+                    "french",
+                    "dictionary_name_arabic",
+                ]:
                     row.pop(key)
 
         print(json.dumps(results, ensure_ascii=False, indent=2))
