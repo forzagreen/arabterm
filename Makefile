@@ -26,8 +26,8 @@ delete_mariadb:
 migrate_to_mariadb:
 	python arabterm/scripts/migrate_to_mariadb.py
 
-# Usage: make search term="telescope"
-search:
+# Usage: make search_mariadb term="telescope"
+search_mariadb:
 	python arabterm/scripts/search_mariadb.py $(term)
 
 dump_sqlite:

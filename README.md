@@ -104,6 +104,20 @@ It contains 2 tables: `dictionary` and `term`.
 | معجم المصطلحات الطبية (ج.3، 1997) | | 3098 | [Q124465892](https://www.wikidata.org/wiki/Q124465892) |
 
 
+## Generating database dumps
+
+This is an internal development workflow for generating the SQL dumps in [db/](db/) for SQLite and MariaDB. This requires Docker and a python venv.
+
+```sh
+make init_mariadb                    # start or create container
+make delete_mariadb                  # tear down the MariaDB container
+make migrate_to_mariadb              # copy data from SQLite to MariaDB
+make search_mariadb term="telescope" # make sure search works in MariaDB:
+
+# generate database dumps, SQLite and MariaDB:
+make dump
+```
+
 ## History
 
 This project started in 2022 as a web scraping effort to extract dictionaries from [arabterm.org](http://www.arabterm.org/), a set of multilingual technical dictionaries organized by technical domains and industry sectors. The extraction was performed using Python, [Selenium](https://selenium-python.readthedocs.io/), and [lxml](https://lxml.de/lxmlhtml.html).
