@@ -96,6 +96,7 @@ It contains 2 tables: `dictionary` and `term`.
 | المعجم الطبي الموحد (2009) | The Unified Medical Dictionary<br />Le dictionnaire médical unifié | 132975 | [Q113466993](https://www.wikidata.org/wiki/Q113466993) |
 | المعجم الموحد لمصطلحات الحكامة التربوية (2020) | The unified dictionary of educational governance terms<br />Dictionnaire terminologique unifié de la gouvernance éducative | 490 | [Q116431458](https://www.wikidata.org/wiki/Q116431458) |
 | المعجم الموحد لمصطلحات الإشراف التربوي (2020) | The unified dictionary of educational supervision terms<br />Dictionnaire terminologique unifié de la supervision pédagogique | 340 | [Q116437316](https://www.wikidata.org/wiki/Q116437316) |
+| المعجم الموحد لمصطلحات التعدين (2026) | The unified dictionary of mining terms | 1853 | [Q138820643](https://www.wikidata.org/wiki/Q138820643) |
 | المعجم الموحد لمصطلحات النقل (2010) | Transport and Infrastructure<br />Transport et Infrastructure | 5558 | [Q116214837](https://www.wikidata.org/wiki/Q116214837) |
 | المعجم الموحد لمصطلحات الطب البيطري (2010) | Veterinary Medicine<br />Médecine Vétérinaire | 2741 | [Q116213330](https://www.wikidata.org/wiki/Q116213330) |
 | المعجم الموحد لمصطلحات المياه (2000) | Water Engineering<br />Technologie de l'eau | 8644 | [Q116167054](https://www.wikidata.org/wiki/Q116167054) |
