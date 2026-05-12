@@ -1,0 +1,19 @@
+name: Notify wikitermbase of dump change
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'db/mariadb/arabterm.sql.gz'
+
+jobs:
+  notify:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Dispatch to wikitermbase
+        env:
+          GH_TOKEN: ${{ secrets.WIKITERMBASE_DISPATCH_PAT }}
+        run: |
+          gh api repos/forzagreen/wikitermbase/dispatches \
+            -f event_type=arabterm-data-updated \
+            -F client_payload[arabterm_sha]=${{ github.sha }}
