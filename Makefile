@@ -41,3 +41,10 @@ dump_mariadb:
 
 dump: dump_sqlite dump_mariadb
 
+regenerate_dumps:
+	$(MAKE) init_mariadb
+	$(MAKE) delete_mariadb
+	$(MAKE) migrate_to_mariadb
+	$(MAKE) search_mariadb term="telescope"
+	$(MAKE) dump
+

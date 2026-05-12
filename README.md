@@ -53,6 +53,7 @@ It contains 2 tables: `dictionary` and `term`.
 |:---|:---|---:|:---:|
 | المورد الحديث (2008) | Al-Mawrid Al-Hadeeth | 62266 | [Q112315598](https://www.wikidata.org/wiki/Q112315598) |
 | المَكنَز الزراعي متعدد اللغات | AGROVOC | 22212 | [Q292649](https://www.wikidata.org/wiki/Q292649) |
+| عرب آيز | Arabeyes | 3885 | [Q2859359](https://www.wikidata.org/wiki/Q2859359) |
 | مسرد الفن، التسلية والرياضة، المنظمة العربية للتربية والثقافة والعلوم (موقع ArabTerm) | Arts, Recreation and Sports<br />Art, Divertissement et sports | 5269 | |
 | مسرد هندسة وتكنولوجيا السيارات، المنظمة العربية للتربية والثقافة والعلوم (موقع ArabTerm) | Automotive Engineering<br />Technique automobile | 4605 | |
 | المعجم الموحد لمصطلحات علم الأحياء (1993) | Biology<br />Biologie | 6561 | [Q114972534](https://www.wikidata.org/wiki/Q114972534) |
@@ -109,14 +110,10 @@ It contains 2 tables: `dictionary` and `term`.
 
 This is an internal development workflow for generating the SQL dumps in [db/](db/) for SQLite and MariaDB. This requires Docker and a python venv.
 
-```sh
-make init_mariadb                    # start or create container
-make delete_mariadb                  # tear down the MariaDB container
-make migrate_to_mariadb              # copy data from SQLite to MariaDB
-make search_mariadb term="telescope" # make sure search works in MariaDB:
+Run the full pipeline (start MariaDB, migrate from SQLite, verify search, and write the SQL dumps for both engines):
 
-# generate database dumps, SQLite and MariaDB:
-make dump
+```sh
+make regenerate_dumps
 ```
 
 When a PR touching `db/mariadb/arabterm.sql.gz` is merged to `main`, [`.github/workflows/notify-wikitermbase.yml`](.github/workflows/notify-wikitermbase.yml) dispatches an event to [forzagreen/wikitermbase](https://github.com/forzagreen/wikitermbase), which auto-opens a PR there with the regenerated `db/arabterm.sql`. Merging that PR triggers the automated `mariadb` import on Toolforge.
