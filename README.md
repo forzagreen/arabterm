@@ -119,6 +119,8 @@ make search_mariadb term="telescope" # make sure search works in MariaDB:
 make dump
 ```
 
+When a PR touching `db/mariadb/arabterm.sql.gz` is merged to `main`, [`.github/workflows/notify-wikitermbase.yml`](.github/workflows/notify-wikitermbase.yml) dispatches an event to [forzagreen/wikitermbase](https://github.com/forzagreen/wikitermbase), which auto-opens a PR there with the regenerated `db/arabterm.sql`. Merging that PR triggers the automated `mariadb` import on Toolforge.
+
 ## History
 
 This project started in 2022 as a web scraping effort to extract dictionaries from [arabterm.org](http://www.arabterm.org/), a set of multilingual technical dictionaries organized by technical domains and industry sectors. The extraction was performed using Python, [Selenium](https://selenium-python.readthedocs.io/), and [lxml](https://lxml.de/lxmlhtml.html).
