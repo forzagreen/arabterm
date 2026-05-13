@@ -6,6 +6,8 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 `arabterm` is a curated SQLite database of Arabic/English/French multilingual dictionaries (~400k terms across ~50 dictionaries). It is the upstream data source for [Wiki Term Base](https://wikitermbase.toolforge.org/). The Python package is a thin layer over SQLAlchemy models and migration scripts — there is no application, library API, or test suite. Most "work" in this repo is producing the SQL dumps in [db/](db/) from the canonical `arabterm.db`.
 
+A small Astro static site under [website/](website/) is also derived from `arabterm.db` at build time and deployed to GitHub Pages — see "Website" below.
+
 ## Common commands
 
 ```sh
@@ -44,8 +46,16 @@ The FULLTEXT index is the *reason* MariaDB exists in this project: SQLite has no
 
 [`.github/workflows/notify-wikitermbase.yml`](.github/workflows/notify-wikitermbase.yml) fires only when `db/mariadb/arabterm.sql.gz` changes on `main`. It uses the `WIKITERMBASE_DISPATCH_PAT` secret to dispatch an `arabterm-data-updated` repository_dispatch event to `forzagreen/wikitermbase`, which auto-opens a PR there. SQLite-only changes do *not* trigger the notification — if you intend to publish a data change, regenerate **both** dumps.
 
+### Website
+
+[website/](website/) is an [Astro](https://astro.build/) static site (deployed to <https://forzagreen.github.io/arabterm/>) that reads `arabterm.db` at build time via `better-sqlite3` and emits one HTML page per dictionary (paginated 1000 terms / page) plus a per-dict JSON download. It's a third derived view of the DB alongside the SQLite and MariaDB dumps — no JSON is committed.
+
+Legacy unprefixed URLs from the original Angular site (e.g. `/water_engineering/`) are preserved as static HTML redirects to the canonical `name_tech` URL (`/arabterm_water_engineering/`). The legacy slug list lives in `LEGACY_SLUGS` in [website/src/lib/db.ts](website/src/lib/db.ts) — never remove a legacy slug from this list, even if its underlying dictionary changes.
+
+[`.github/workflows/gh-pages.yml`](.github/workflows/gh-pages.yml) runs `npm run build` inside `website/` on every push to `main` and uploads `website/dist/` to GitHub Pages.
+
 ## Conventions
 
-- Adding a new dictionary: insert into the `dictionary` table with a unique `name_tech` slug, then bulk-insert terms with the matching `dictionary_id`. Run `make regenerate_dumps` before opening a PR so the MariaDB dump is in sync.
-- The repo contains large notebooks (`V2.ipynb`, `MigrateDB.ipynb`, etc.) and scratch directories (`playground/`, `data/`, `exports/`, `samples/`) used for historical scraping/ingestion. They are not part of the published pipeline — don't edit them as part of routine changes.
+- Adding a new dictionary: insert into the `dictionary` table with a unique `name_tech` slug, then bulk-insert terms with the matching `dictionary_id`. Run `make regenerate_dumps` before opening a PR so the MariaDB dump is in sync. The website will pick up the new dictionary automatically on the next deploy.
+- The repo contains large notebooks (`V2.ipynb`, `MigrateDB.ipynb`, etc.) and scratch directories (`playground/`, `samples/`) used for historical scraping/ingestion. They are not part of the published pipeline — don't edit them as part of routine changes.
 - Python 3.10+, SQLAlchemy 2.x style (`Mapped[...]`, `mapped_column`).

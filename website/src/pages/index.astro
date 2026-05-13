@@ -1,0 +1,32 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import DictionaryTable from '../components/DictionaryTable.astro';
+import { getAllDictionaries } from '../lib/db';
+
+const all = getAllDictionaries();
+const totalTerms = all.reduce((sum, d) => sum + d.term_count, 0);
+const base = import.meta.env.BASE_URL;
+---
+<BaseLayout title="arabterm">
+  <section class="hero">
+    <h1>قاموس المصطلحات التقنية</h1>
+    <p class="lead">
+      مجموعة منسّقة من القواميس العربية / الإنجليزية / الفرنسية، تضمّ
+      <strong>{all.length}</strong> قاموساً و
+      <strong>{totalTerms}</strong> مصطلحاً.
+    </p>
+  </section>
+
+  <div class="banner">
+    <div class="banner-text">
+      <strong>تبحث عن مصطلح؟</strong>
+      للبحث المباشر في جميع القواميس استخدم مسرد الويكي.
+    </div>
+    <a class="btn-primary" href="https://wikitermbase.toolforge.org/" target="_blank" rel="noopener">
+      افتح مسرد الويكي
+    </a>
+  </div>
+
+  <p class="muted small">مرتّبة حسب عدد المصطلحات.</p>
+  <DictionaryTable dictionaries={all} base={base} />
+</BaseLayout>

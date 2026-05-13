@@ -1,0 +1,32 @@
+---
+import type { Term } from '../lib/db';
+
+interface Props {
+  terms: Term[];
+  startIndex: number; // 1-based index of first row on this page
+}
+
+const { terms, startIndex } = Astro.props;
+---
+<table class="terms">
+  <thead>
+    <tr>
+      <th style="width: 4rem">#</th>
+      <th>العربية</th>
+      <th>English</th>
+      <th>Français</th>
+      <th>تعريف / Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    {terms.map((t, i) => (
+      <tr>
+        <td class="id">{startIndex + i}</td>
+        <td lang="ar" dir="rtl">{t.arabic ?? ''}</td>
+        <td lang="en" dir="ltr">{t.english ?? ''}</td>
+        <td lang="fr" dir="ltr">{t.french ?? ''}</td>
+        <td class="desc">{t.description ?? ''}</td>
+      </tr>
+    ))}
+  </tbody>
+</table>

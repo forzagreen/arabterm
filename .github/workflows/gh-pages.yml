@@ -39,13 +39,11 @@ jobs:
         run: npm ci
       - name: Build
         working-directory: website
-        run: npx ng build --base-href /arabterm/
-      - name: Create 404.html file
-        run: cp website/dist/website/browser/index.html website/dist/website/browser/404.html
+        run: npm run build
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: website/dist/website/browser/
+          path: website/dist/
 
   # Deployment job
   deploy:
