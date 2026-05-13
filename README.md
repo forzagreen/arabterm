@@ -7,7 +7,9 @@ The dictionaries are available as an [SQLite](https://www.sqlite.org/) database 
 
   - [SQLite database](#sqlite-database)
   - [Dictionaries](#dictionaries)
-  - [Other datasets](#other-datasets)
+  - [Website](#website)
+  - [Generating database dumps](#generating-database-dumps)
+  - [History](#history)
   - [References](#references)
 
 
@@ -105,6 +107,12 @@ It contains 2 tables: `dictionary` and `term`.
 | معجم المصطلحات الطبية (ج.2، 2003) | | 4383 | [Q124465865](https://www.wikidata.org/wiki/Q124465865) |
 | معجم المصطلحات الطبية (ج.3، 1997) | | 3098 | [Q124465892](https://www.wikidata.org/wiki/Q124465892) |
 
+
+## Website
+
+A static reference site is published at [forzagreen.github.io/arabterm](https://forzagreen.github.io/arabterm/), with one page per dictionary. Live search is delegated to [Wikitermbase](https://wikitermbase.toolforge.org/); the site itself is purely a static index plus paginated term tables and per-dictionary JSON downloads.
+
+The site is built with [Astro](https://astro.build/) and reads `arabterm.db` directly at build time, so it stays in sync with the data on every push. See [website/README.md](website/README.md) for the build setup.
 
 ## Generating database dumps
 

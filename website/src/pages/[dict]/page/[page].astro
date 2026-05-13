@@ -1,0 +1,48 @@
+---
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import TermTable from '../../../components/TermTable.astro';
+import Pagination from '../../../components/Pagination.astro';
+import {
+  getAllDictionaries,
+  getTermsPage,
+  totalPages,
+  PER_PAGE,
+  type Dictionary,
+} from '../../../lib/db';
+
+export function getStaticPaths() {
+  const dicts = getAllDictionaries();
+  const paths: { params: { dict: string; page: string }; props: { dict: Dictionary; page: number } }[] = [];
+  for (const d of dicts) {
+    const total = totalPages(d.term_count, PER_PAGE);
+    for (let p = 2; p <= total; p++) {
+      paths.push({ params: { dict: d.name_tech, page: String(p) }, props: { dict: d, page: p } });
+    }
+  }
+  return paths;
+}
+
+const { dict, page } = Astro.props;
+const base = import.meta.env.BASE_URL;
+const total = totalPages(dict.term_count, PER_PAGE);
+const terms = getTermsPage(dict.name_tech, page, PER_PAGE);
+const detailBase = `${base}${dict.name_tech}/`;
+const startIndex = (page - 1) * PER_PAGE + 1;
+const description = `قاموس ${dict.name_arabic} — الصفحة ${page} من ${total}.`;
+---
+<BaseLayout title={`${dict.name_arabic} (صفحة ${page})`} description={description}>
+  <p class="small muted">
+    <a href={base}>كلّ القواميس</a>
+    &nbsp;›&nbsp;
+    <a href={detailBase}>{dict.name_arabic}</a>
+  </p>
+  <h1>{dict.name_arabic}</h1>
+  <p class="muted">
+    الصفحة {page} من {total} —
+    المصطلحات من {startIndex} إلى {startIndex + terms.length - 1}
+    من أصل {dict.term_count}.
+  </p>
+
+  <TermTable terms={terms} startIndex={startIndex} />
+  <Pagination base={detailBase} current={page} total={total} />
+</BaseLayout>

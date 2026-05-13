@@ -1,0 +1,73 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+
+const base = import.meta.env.BASE_URL;
+---
+<BaseLayout title="عن المشروع" description="نبذة عن مشروع arabterm وقاعدة بياناته متعددة اللغات.">
+  <h1>عن مشروع arabterm</h1>
+
+  <p>
+    <strong>arabterm</strong> هو مستودع مفتوح المصدر يجمع قواعد بيانات قواميس عربية متعدّدة اللغات
+    (عربي / إنجليزي / فرنسي)، يضمّ نحو <strong>53</strong> قاموساً و<strong>423000+</strong> مصطلحاً.
+    قاعدة البيانات الرئيسية ملف SQLite منشور علناً ضمن المستودع، وتُعدّ المصدر الرسمي للبيانات
+    التي يستهلكها محرّك البحث
+    <a href="https://wikitermbase.toolforge.org/" target="_blank" rel="noopener">مسرد الويكي (Wikitermbase)</a>.
+  </p>
+
+  <h2>الجذور التاريخية</h2>
+  <p>
+    بدأ المشروع كأرشيف لمجلّدات
+    <a href="https://arabterm.org/" target="_blank" rel="noopener">arabterm.org</a>
+    (39 قاموساً تقنياً نشرها <em>المركز العربي للتعريب</em>)، ثم توسّع تدريجياً ليشمل قواميس أخرى
+    من مصادر مفتوحة مثل: <em>المورد الحديث</em>، <em>القاموس الطبي الموحّد</em>،
+    <em>Agrovoc</em>، <em>Electropedia</em>، وغيرها.
+  </p>
+
+  <h2>طبقات المشروع</h2>
+  <ul>
+    <li>
+      <strong>قاعدة البيانات</strong> — ملف
+      <a href="https://github.com/forzagreen/arabterm/blob/main/arabterm.db" target="_blank" rel="noopener">
+        arabterm.db
+      </a>
+      (SQLite) — المصدر الوحيد للحقيقة.
+    </li>
+    <li>
+      <strong>محرّك البحث</strong> —
+      <a href="https://wikitermbase.toolforge.org/" target="_blank" rel="noopener">مسرد الويكي</a>
+      مستضاف على Toolforge ويستهلك نسخة MariaDB المُولَّدة آلياً مع كلّ تحديث.
+    </li>
+    <li>
+      <strong>الموقع الحالي</strong> — صفحة مرجعية ثابتة لكل قاموس، تُبنى من قاعدة البيانات في كلّ
+      نشر إلى GitHub Pages.
+    </li>
+  </ul>
+
+  <h2>التنزيلات</h2>
+  <ul>
+    <li>
+      نسخة SQLite كاملة:
+      <a href="https://github.com/forzagreen/arabterm/raw/main/db/sqlite/arabterm.sql.gz" target="_blank" rel="noopener">
+        db/sqlite/arabterm.sql.gz
+      </a>
+    </li>
+    <li>
+      نسخة MariaDB كاملة:
+      <a href="https://github.com/forzagreen/arabterm/raw/main/db/mariadb/arabterm.sql.gz" target="_blank" rel="noopener">
+        db/mariadb/arabterm.sql.gz
+      </a>
+    </li>
+    <li>JSON لكلّ قاموس: متوفّر داخل صفحة القاموس عبر زر «تنزيل JSON».</li>
+  </ul>
+
+  <h2>المصدر والمساهمة</h2>
+  <p>
+    المشروع مفتوح المصدر على
+    <a href="https://github.com/forzagreen/arabterm" target="_blank" rel="noopener">GitHub</a>.
+    لإضافة قاموس جديد أو الإبلاغ عن خطأ، افتح Issue أو Pull Request.
+  </p>
+
+  <p class="small muted">
+    <a href={base}>← العودة إلى الرئيسية</a>
+  </p>
+</BaseLayout>

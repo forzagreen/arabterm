@@ -1,0 +1,119 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import TermTable from '../../components/TermTable.astro';
+import Pagination from '../../components/Pagination.astro';
+import {
+  getAllDictionaries,
+  getTermsPage,
+  totalPages,
+  PER_PAGE,
+  LEGACY_SLUGS,
+  legacyToNameTech,
+  type Dictionary,
+} from '../../lib/db';
+
+export function getStaticPaths() {
+  const dicts = getAllDictionaries();
+  const dictPaths = dicts.map((d) => ({
+    params: { dict: d.name_tech },
+    props: { kind: 'dict' as const, dict: d },
+  }));
+  const redirectPaths = LEGACY_SLUGS.map((slug) => ({
+    params: { dict: slug },
+    props: { kind: 'redirect' as const, slug },
+  }));
+  return [...dictPaths, ...redirectPaths];
+}
+
+type Props =
+  | { kind: 'dict'; dict: Dictionary }
+  | { kind: 'redirect'; slug: string };
+
+const props = Astro.props as Props;
+const base = import.meta.env.BASE_URL;
+
+let dict: Dictionary | null = null;
+let terms: ReturnType<typeof getTermsPage> = [];
+let total = 1;
+let detailBase = '';
+let wikidataUrl: string | null = null;
+let description = '';
+let redirectTarget = '';
+
+if (props.kind === 'redirect') {
+  redirectTarget = `${base}${legacyToNameTech(props.slug)}/`;
+} else {
+  dict = props.dict;
+  total = totalPages(dict.term_count, PER_PAGE);
+  terms = getTermsPage(dict.name_tech, 1, PER_PAGE);
+  detailBase = `${base}${dict.name_tech}/`;
+  wikidataUrl = dict.wikidata_id ? `https://www.wikidata.org/wiki/${dict.wikidata_id}` : null;
+  description = `قاموس ${dict.name_arabic} — ${dict.term_count} مصطلحاً.`;
+}
+---
+{props.kind === 'redirect' ? (
+  <html lang="ar" dir="rtl">
+    <head>
+      <meta charset="utf-8" />
+      <title>Redirecting…</title>
+      <meta name="robots" content="noindex" />
+      <link rel="canonical" href={redirectTarget} />
+      <meta http-equiv="refresh" content={`0; url=${redirectTarget}`} />
+      <script is:inline define:vars={{ redirectTarget }}>
+        location.replace(redirectTarget);
+      </script>
+    </head>
+    <body>
+      <p>Redirecting to <a href={redirectTarget}>{redirectTarget}</a>…</p>
+    </body>
+  </html>
+) : (
+  <BaseLayout title={dict!.name_arabic} description={description}>
+    <p class="small muted"><a href={base}>← كلّ القواميس</a></p>
+    <h1>{dict!.name_arabic}</h1>
+
+    <dl class="meta-grid">
+      {dict!.name_english && (
+        <div>
+          <dt>الاسم الإنجليزي</dt>
+          <dd lang="en" dir="ltr">{dict!.name_english}</dd>
+        </div>
+      )}
+      {dict!.name_french && (
+        <div>
+          <dt>الاسم الفرنسي</dt>
+          <dd lang="fr" dir="ltr">{dict!.name_french}</dd>
+        </div>
+      )}
+      <div>
+        <dt>الاسم التقني</dt>
+        <dd><code>{dict!.name_tech}</code></dd>
+      </div>
+      <div>
+        <dt>عدد المصطلحات</dt>
+        <dd>{dict!.term_count}</dd>
+      </div>
+      {wikidataUrl && (
+        <div>
+          <dt>ويكي‌بيانات</dt>
+          <dd><a href={wikidataUrl} target="_blank" rel="noopener">{dict!.wikidata_id}</a></dd>
+        </div>
+      )}
+    </dl>
+
+    <div class="actions">
+      <a href={`${base}${dict!.name_tech}.json`} download>تنزيل JSON</a>
+      <a class="secondary" href="https://wikitermbase.toolforge.org/" target="_blank" rel="noopener">
+        بحث في مسرد الويكي
+      </a>
+    </div>
+
+    <p class="small muted">
+      الصفحة 1 من {total} — تعرض {Math.min(PER_PAGE, dict!.term_count)} مصطلحاً
+      من أصل {dict!.term_count}.
+    </p>
+
+    <TermTable terms={terms} startIndex={1} />
+    <Pagination base={detailBase} current={1} total={total} />
+  </BaseLayout>
+)}

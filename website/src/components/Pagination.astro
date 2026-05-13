@@ -1,0 +1,43 @@
+---
+interface Props {
+  base: string; // e.g. "/arabterm/arabterm_water_engineering/"
+  current: number;
+  total: number;
+}
+
+const { base, current, total } = Astro.props;
+
+function pageUrl(p: number): string {
+  return p === 1 ? base : `${base}page/${p}/`;
+}
+
+function buildPageNumbers(current: number, total: number): (number | 'ellipsis')[] {
+  const out: (number | 'ellipsis')[] = [];
+  const window = 2;
+  const showFrom = Math.max(2, current - window);
+  const showTo = Math.min(total - 1, current + window);
+  out.push(1);
+  if (showFrom > 2) out.push('ellipsis');
+  for (let p = showFrom; p <= showTo; p++) out.push(p);
+  if (showTo < total - 1) out.push('ellipsis');
+  if (total > 1) out.push(total);
+  return out;
+}
+
+const pages = total <= 1 ? [] : buildPageNumbers(current, total);
+---
+{total > 1 && (
+  <nav class="pagination" aria-label="ترقيم الصفحات">
+    {current > 1 && <a href={pageUrl(current - 1)} rel="prev">السابقة</a>}
+    {pages.map((p) =>
+      p === 'ellipsis' ? (
+        <span class="ellipsis">…</span>
+      ) : p === current ? (
+        <span class="current" aria-current="page">{p}</span>
+      ) : (
+        <a href={pageUrl(p)}>{p}</a>
+      )
+    )}
+    {current < total && <a href={pageUrl(current + 1)} rel="next">التالية</a>}
+  </nav>
+)}

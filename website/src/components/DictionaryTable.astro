@@ -1,0 +1,33 @@
+---
+import type { Dictionary } from '../lib/db';
+
+interface Props {
+  dictionaries: Dictionary[];
+  base: string;
+}
+
+const { dictionaries, base } = Astro.props;
+---
+<table class="dicts">
+  <thead>
+    <tr>
+      <th>القاموس</th>
+      <th>English</th>
+      <th>Français</th>
+      <th style="text-align: end">عدد المصطلحات</th>
+    </tr>
+  </thead>
+  <tbody>
+    {dictionaries.map((d) => (
+      <tr>
+        <td>
+          <a href={`${base}${d.name_tech}/`}>{d.name_arabic}</a>
+          <div class="small muted">{d.name_tech}</div>
+        </td>
+        <td lang="en" dir="ltr">{d.name_english ?? ''}</td>
+        <td lang="fr" dir="ltr">{d.name_french ?? ''}</td>
+        <td class="count" style="text-align: end">{d.term_count}</td>
+      </tr>
+    ))}
+  </tbody>
+</table>
