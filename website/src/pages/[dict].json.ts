@@ -1,5 +1,5 @@
 import type { APIRoute, GetStaticPaths } from 'astro';
-import { getAllDictionaries, getAllTerms } from '../../lib/db';
+import { getAllDictionaries, getAllTerms } from '../lib/db';
 
 export const getStaticPaths: GetStaticPaths = () => {
   const dicts = getAllDictionaries();
@@ -23,7 +23,6 @@ export const GET: APIRoute = ({ props }) => {
   return new Response(JSON.stringify(payload), {
     headers: {
       'content-type': 'application/json; charset=utf-8',
-      'content-disposition': `attachment; filename="${name_tech}.json"`,
     },
   });
 };
