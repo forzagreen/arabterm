@@ -116,7 +116,7 @@ The site is built with [Astro](https://astro.build/) and reads `arabterm.db` dir
 
 ## Generating database dumps
 
-This is an internal development workflow for generating the SQL dumps in [db/](db/) for SQLite and MariaDB. This requires Docker and a python venv.
+This is an internal development workflow for generating the SQL dumps in [db/](db/) for SQLite and MariaDB. This requires Docker and [uv](https://docs.astral.sh/uv/). Copy `example.env` to `.env` and set `MARIADB_PASSWORD` — the Make targets pass `.env` to `uv run` so no manual sourcing is needed.
 
 Run the full pipeline (start MariaDB, migrate from SQLite, verify search, and write the SQL dumps for both engines):
 

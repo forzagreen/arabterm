@@ -11,15 +11,15 @@ A small Astro static site under [website/](website/) is also derived from `arabt
 ## Common commands
 
 ```sh
-make init                  # pip install -e ".[dev]" (ruff + pip extras)
-make format                # ruff check --select I --fix + ruff format
+make init                  # uv sync --all-extras
+make format                # ruff check --select I --fix + ruff format (via uv run)
 make regenerate_dumps      # full pipeline: see "Dump regeneration" below
 make dump                  # just re-dump SQLite + MariaDB without re-migrating
 ```
 
 Granular Make targets (composed by `regenerate_dumps`): `init_mariadb`, `delete_mariadb`, `migrate_to_mariadb`, `search_mariadb term="..."`, `dump_sqlite`, `dump_mariadb`. No test runner — there are no tests.
 
-Environment: copy `example.env` to `.env` and set `MARIADB_PASSWORD`. The Make targets and scripts read `SQLITE_URL`, `MARIADB_URL`, and `MARIADB_PASSWORD` from the environment.
+Environment: copy `example.env` to `.env` and set `MARIADB_PASSWORD`. Python recipes invoke `uv run --env-file .env`, which loads `SQLITE_URL`, `MARIADB_URL`, and `MARIADB_PASSWORD` for the script. The two shell-only recipes that need `MARIADB_PASSWORD` (`init_mariadb`, `dump_mariadb`) source `.env` inline. No manual `source .env` is needed.
 
 ## Architecture
 
