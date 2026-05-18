@@ -29,7 +29,7 @@ npm run preview        # serve ./dist/ for verification
 
 ## Legacy URLs
 
-The original site used unprefixed slugs (e.g. `/water_engineering/`). These now redirect to the canonical `name_tech` URL (`/arabterm_water_engineering/`). The map lives in `LEGACY_SLUGS` in [src/lib/db.ts](src/lib/db.ts).
+The original site used unprefixed slugs (e.g. `/water_engineering/`). These now redirect to the canonical `name_tech` URL (`/at_water_engineering/`). The map lives in `LEGACY_SLUGS` in [src/lib/db.ts](src/lib/db.ts).
 
 ## Deployment
 
