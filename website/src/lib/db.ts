@@ -95,7 +95,7 @@ export function totalPages(termCount: number, perPage: number = PER_PAGE): numbe
 }
 
 // Legacy unprefixed slugs from the previous Angular site. Every legacy slug
-// maps to `arabterm_<slug>` in the current DB.
+// maps to `at_<slug>` in the current DB.
 export const LEGACY_SLUGS = [
   'automotive_engineering',
   'water_engineering',
@@ -139,5 +139,5 @@ export const LEGACY_SLUGS = [
 ] as const;
 
 export function legacyToNameTech(slug: string): string {
-  return `arabterm_${slug}`;
+  return `at_${slug}`;
 }

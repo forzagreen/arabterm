@@ -50,7 +50,7 @@ The FULLTEXT index is the *reason* MariaDB exists in this project: SQLite has no
 
 [website/](website/) is an [Astro](https://astro.build/) static site (deployed to <https://forzagreen.github.io/arabterm/>) that reads `arabterm.db` at build time via `better-sqlite3` and emits one HTML page per dictionary (paginated 1000 terms / page) plus a per-dict JSON download. It's a third derived view of the DB alongside the SQLite and MariaDB dumps — no JSON is committed.
 
-Legacy unprefixed URLs from the original Angular site (e.g. `/water_engineering/`) are preserved as static HTML redirects to the canonical `name_tech` URL (`/arabterm_water_engineering/`). The legacy slug list lives in `LEGACY_SLUGS` in [website/src/lib/db.ts](website/src/lib/db.ts) — never remove a legacy slug from this list, even if its underlying dictionary changes.
+Legacy unprefixed URLs from the original Angular site (e.g. `/water_engineering/`) are preserved as static HTML redirects to the canonical `name_tech` URL (`/at_water_engineering/`). The legacy slug list lives in `LEGACY_SLUGS` in [website/src/lib/db.ts](website/src/lib/db.ts) — never remove a legacy slug from this list, even if its underlying dictionary changes.
 
 [`.github/workflows/gh-pages.yml`](.github/workflows/gh-pages.yml) runs `npm run build` inside `website/` on every push to `main` and uploads `website/dist/` to GitHub Pages.
 
