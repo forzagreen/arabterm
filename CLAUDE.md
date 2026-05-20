@@ -15,9 +15,10 @@ make init                  # uv sync --all-extras
 make format                # ruff check --select I --fix + ruff format (via uv run)
 make regenerate_dumps      # full pipeline: see "Dump regeneration" below
 make dump                  # just re-dump SQLite + MariaDB without re-migrating
+make readme                # regenerate the Dictionaries table in README.md from arabterm.db
 ```
 
-Granular Make targets (composed by `regenerate_dumps`): `init_mariadb`, `delete_mariadb`, `migrate_to_mariadb`, `search_mariadb term="..."`, `dump_sqlite`, `dump_mariadb`. No test runner — there are no tests.
+Granular Make targets (composed by `regenerate_dumps`): `init_mariadb`, `delete_mariadb`, `migrate_to_mariadb`, `search_mariadb term="..."`, `dump_sqlite`, `dump_mariadb`, `readme`. No test runner — there are no tests.
 
 Environment: copy `example.env` to `.env` and set `MARIADB_PASSWORD`. Python recipes invoke `uv run --env-file .env`, which loads `SQLITE_URL`, `MARIADB_URL`, and `MARIADB_PASSWORD` for the script. The two shell-only recipes that need `MARIADB_PASSWORD` (`init_mariadb`, `dump_mariadb`) source `.env` inline. No manual `source .env` is needed.
 
@@ -41,6 +42,7 @@ The FULLTEXT index is the *reason* MariaDB exists in this project: SQLite has no
 3. `migrate_to_mariadb` — [arabterm/scripts/migrate_to_mariadb.py](arabterm/scripts/migrate_to_mariadb.py). Commits dictionaries before terms to satisfy the FK; preserves SQLite PKs.
 4. `search_mariadb term="telescope"` — smoke test that FULLTEXT search returns results.
 5. `dump` → `dump_sqlite` + `dump_mariadb`. SQLite dumps via `sqlite3 ... .dump`; MariaDB dumps via `docker exec mariadb-dump` then `docker cp`. Both are gzipped into `db/sqlite/` and `db/mariadb/`.
+6. `readme` — [arabterm/scripts/update_readme.py](arabterm/scripts/update_readme.py). Regenerates the Dictionaries table in [README.md](README.md) (between the `DICTIONARIES_TABLE_START`/`_END` HTML comment markers) from the current `dictionary` table. Sorted most-recently-added first (`created_at DESC, id DESC`). Never hand-edit that block.
 
 ### Downstream notification
 
@@ -56,6 +58,12 @@ Legacy unprefixed URLs from the original Angular site (e.g. `/water_engineering/
 
 ## Conventions
 
-- Adding a new dictionary: insert into the `dictionary` table with a unique `name_tech` slug, then bulk-insert terms with the matching `dictionary_id`. Run `make regenerate_dumps` before opening a PR so the MariaDB dump is in sync. The website will pick up the new dictionary automatically on the next deploy.
+- Adding a new dictionary — full checklist:
+  1. **Back up first**: `cp arabterm.db arabterm.db.bak` (gitignored). A botched insert into the canonical SQLite is the only real failure mode here.
+  2. **Resolve the Wikidata labels** if the dictionary has a QID — fetch `https://www.wikidata.org/wiki/Special:EntityData/<QID>.json` and use the official `ar`/`en`/`fr` labels. Append the publication year in parentheses to `name_arabic` to match the existing series (e.g. `... (2020)`). Wikidata sometimes uses ALL CAPS or typos in the English/French labels — match the style of existing entries (sentence case for French, no typos).
+  3. **Pick a `name_tech` slug**: follow the existing series naming. The 2020 educational series uses `topic_NN` (e.g. `educational_supervision_47`); older ArabTerm-website entries use the `at_` prefix (e.g. `at_water_engineering`). `samples/NN_topic_…/` folder names flip to `topic_NN` slugs.
+  4. **Insert** the `dictionary` row (set `nbr_entries` to the actual row count) **and** the `term` rows in a single SQLite transaction. Pre-check that the slug and `wikidata_id` aren't already taken. Use the `Dictionary.id` returned by `lastrowid` as the `term.dictionary_id`.
+  5. **Run `make regenerate_dumps`** — that single target now also rewrites the Dictionaries table in `README.md`. Commit the resulting `arabterm.db`, `db/sqlite/arabterm.sql.gz`, `db/mariadb/arabterm.sql.gz`, and `README.md` together. The website will pick up the new dictionary automatically on the next deploy.
+  6. Per the user's `feedback_conventional_commits` memory: branch `feat/...`, commit `feat: ...`.
 - The repo contains large notebooks (`V2.ipynb`, `MigrateDB.ipynb`, etc.) and scratch directories (`playground/`, `samples/`) used for historical scraping/ingestion. They are not part of the published pipeline — don't edit them as part of routine changes.
 - Python 3.10+, SQLAlchemy 2.x style (`Mapped[...]`, `mapped_column`).
