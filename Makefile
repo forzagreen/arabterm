@@ -41,9 +41,13 @@ dump_mariadb:
 
 dump: dump_sqlite dump_mariadb
 
+readme:
+	uv run --env-file .env python arabterm/scripts/update_readme.py
+
 regenerate_dumps:
 	$(MAKE) init_mariadb
 	$(MAKE) delete_mariadb
 	$(MAKE) migrate_to_mariadb
 	$(MAKE) search_mariadb term="telescope"
 	$(MAKE) dump
+	$(MAKE) readme
