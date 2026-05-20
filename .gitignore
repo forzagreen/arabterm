@@ -3,6 +3,7 @@
 *.db-shm
 *.db-wal
 *backup*.db
+*.db.bak
 __pycache__
 samples/
 exports/
