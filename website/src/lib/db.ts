@@ -42,7 +42,7 @@ export function getAllDictionaries(): Dictionary[] {
               d.nbr_entries, d.wikidata_id,
               (SELECT COUNT(*) FROM term WHERE dictionary_id = d.id) AS term_count
          FROM dictionary d
-         ORDER BY term_count DESC`
+         ORDER BY d.created_at DESC, d.id DESC`
     )
     .all() as Dictionary[];
 }
