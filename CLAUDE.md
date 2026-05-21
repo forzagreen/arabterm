@@ -16,6 +16,10 @@ make format                # ruff check --select I --fix + ruff format (via uv r
 make regenerate_dumps      # full pipeline: see "Dump regeneration" below
 make dump                  # just re-dump SQLite + MariaDB without re-migrating
 make readme                # regenerate the Dictionaries table in README.md from arabterm.db
+make website_init          # npm install inside website/ (first time only)
+make website_dev           # astro dev server (HMR) at http://localhost:4321/arabterm/
+make website_build         # build website/dist/ for production
+make website_preview       # serve the built dist/ — use this to test the prod bundle
 ```
 
 Granular Make targets (composed by `regenerate_dumps`): `init_mariadb`, `delete_mariadb`, `migrate_to_mariadb`, `search_mariadb term="..."`, `dump_sqlite`, `dump_mariadb`, `readme`. No test runner — there are no tests.

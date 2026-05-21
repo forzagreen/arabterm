@@ -51,3 +51,15 @@ regenerate_dumps:
 	$(MAKE) search_mariadb term="telescope"
 	$(MAKE) dump
 	$(MAKE) readme
+
+website_init:
+	cd website && npm install
+
+website_dev:
+	cd website && npm run dev
+
+website_build:
+	cd website && npm run build
+
+website_preview:
+	cd website && npm run preview
