@@ -1,9 +1,8 @@
 import Database from 'better-sqlite3';
-import { fileURLToPath } from 'node:url';
-import { dirname, resolve } from 'node:path';
+import { resolve } from 'node:path';
 
-const __dirname = dirname(fileURLToPath(import.meta.url));
-const DB_PATH = resolve(__dirname, '../../../arabterm.db');
+// astro is always invoked from website/, so the DB sits one level up.
+const DB_PATH = resolve(process.cwd(), '../arabterm.db');
 
 export const PER_PAGE = 1000;
 
