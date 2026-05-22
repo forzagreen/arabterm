@@ -93,17 +93,17 @@ const { dictionaries, base } = Astro.props;
     headers.forEach((h) => {
       const key = h.dataset.sort;
       if (!key) return;
+      const first: Dir = h.dataset.type === 'num' ? 'desc' : 'asc';
+      const second: Dir = first === 'asc' ? 'desc' : 'asc';
       h.addEventListener('click', () => {
-        if (state.key !== key) {
+        if (state.key !== key || state.dir === 'none') {
           state.key = key;
-          state.dir = h.dataset.type === 'num' ? 'desc' : 'asc';
-        } else if (state.dir === 'asc') {
-          state.dir = 'desc';
-        } else if (state.dir === 'desc') {
+          state.dir = first;
+        } else if (state.dir === first) {
+          state.dir = second;
+        } else {
           state.key = null;
           state.dir = 'none';
-        } else {
-          state.dir = h.dataset.type === 'num' ? 'desc' : 'asc';
         }
         applySort();
       });
