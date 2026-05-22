@@ -8,18 +8,31 @@ interface Props {
 
 const { dictionaries, base } = Astro.props;
 ---
-<table class="dicts">
+<table class="dicts sortable" id="dicts-table">
   <thead>
     <tr>
-      <th>القاموس</th>
-      <th>English</th>
-      <th>Français</th>
-      <th style="text-align: end">عدد المصطلحات</th>
+      <th data-sort="ar" data-type="text" aria-sort="none">
+        <button type="button" class="sort-btn">القاموس<span class="sort-ind" aria-hidden="true"></span></button>
+      </th>
+      <th data-sort="en" data-type="text" aria-sort="none">
+        <button type="button" class="sort-btn">English<span class="sort-ind" aria-hidden="true"></span></button>
+      </th>
+      <th data-sort="fr" data-type="text" aria-sort="none">
+        <button type="button" class="sort-btn">Français<span class="sort-ind" aria-hidden="true"></span></button>
+      </th>
+      <th data-sort="count" data-type="num" style="text-align: end" aria-sort="none">
+        <button type="button" class="sort-btn">عدد المصطلحات<span class="sort-ind" aria-hidden="true"></span></button>
+      </th>
     </tr>
   </thead>
   <tbody>
     {dictionaries.map((d) => (
-      <tr>
+      <tr
+        data-ar={d.name_arabic ?? ''}
+        data-en={d.name_english ?? ''}
+        data-fr={d.name_french ?? ''}
+        data-count={d.term_count}
+      >
         <td>
           <a href={`${base}${d.name_tech}/`}>{d.name_arabic}</a>
           <div class="small muted">{d.name_tech}</div>
@@ -31,3 +44,111 @@ const { dictionaries, base } = Astro.props;
     ))}
   </tbody>
 </table>
+
+<script>
+  const table = document.getElementById('dicts-table') as HTMLTableElement | null;
+  if (table) {
+    const tbody = table.tBodies[0];
+    const originalRows = Array.from(tbody.rows);
+    const headers = Array.from(table.tHead!.rows[0].cells) as HTMLTableCellElement[];
+
+    type Dir = 'asc' | 'desc' | 'none';
+    const state: { key: string | null; dir: Dir } = { key: null, dir: 'none' };
+
+    const collators: Record<string, Intl.Collator> = {
+      ar: new Intl.Collator('ar'),
+      en: new Intl.Collator('en'),
+      fr: new Intl.Collator('fr'),
+    };
+
+    function applySort() {
+      const { key, dir } = state;
+      if (!key || dir === 'none') {
+        tbody.replaceChildren(...originalRows);
+      } else {
+        const header = headers.find((h) => h.dataset.sort === key)!;
+        const type = header.dataset.type ?? 'text';
+        const sign = dir === 'asc' ? 1 : -1;
+        const sorted = [...originalRows].sort((a, b) => {
+          const av = a.dataset[key] ?? '';
+          const bv = b.dataset[key] ?? '';
+          if (type === 'num') {
+            return (Number(av) - Number(bv)) * sign;
+          }
+          const collator = collators[key] ?? collators.en;
+          return collator.compare(av, bv) * sign;
+        });
+        tbody.replaceChildren(...sorted);
+      }
+      headers.forEach((h) => {
+        const hk = h.dataset.sort;
+        if (hk === key && dir !== 'none') {
+          h.setAttribute('aria-sort', dir === 'asc' ? 'ascending' : 'descending');
+        } else {
+          h.setAttribute('aria-sort', 'none');
+        }
+      });
+    }
+
+    headers.forEach((h) => {
+      const key = h.dataset.sort;
+      if (!key) return;
+      const first: Dir = h.dataset.type === 'num' ? 'desc' : 'asc';
+      const second: Dir = first === 'asc' ? 'desc' : 'asc';
+      h.addEventListener('click', () => {
+        if (state.key !== key || state.dir === 'none') {
+          state.key = key;
+          state.dir = first;
+        } else if (state.dir === first) {
+          state.dir = second;
+        } else {
+          state.key = null;
+          state.dir = 'none';
+        }
+        applySort();
+      });
+    });
+  }
+</script>
+
+<style>
+  table.sortable th {
+    padding: 0;
+  }
+  table.sortable th .sort-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    width: 100%;
+    padding: 0.6rem 0.75rem;
+    background: none;
+    border: 0;
+    font: inherit;
+    color: inherit;
+    text-transform: inherit;
+    letter-spacing: inherit;
+    text-align: start;
+    cursor: pointer;
+  }
+  table.sortable th[style*="end"] .sort-btn {
+    justify-content: flex-end;
+  }
+  table.sortable th .sort-btn:hover {
+    color: var(--accent);
+  }
+  table.sortable th .sort-ind::before {
+    content: '⇅';
+    opacity: 0.35;
+    font-size: 0.85em;
+  }
+  table.sortable th[aria-sort="ascending"] .sort-ind::before {
+    content: '▲';
+    opacity: 1;
+    color: var(--accent);
+  }
+  table.sortable th[aria-sort="descending"] .sort-ind::before {
+    content: '▼';
+    opacity: 1;
+    color: var(--accent);
+  }
+</style>

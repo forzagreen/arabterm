@@ -1,9 +1,8 @@
 import Database from 'better-sqlite3';
-import { fileURLToPath } from 'node:url';
-import { dirname, resolve } from 'node:path';
+import { resolve } from 'node:path';
 
-const __dirname = dirname(fileURLToPath(import.meta.url));
-const DB_PATH = resolve(__dirname, '../../../arabterm.db');
+// astro is always invoked from website/, so the DB sits one level up.
+const DB_PATH = resolve(process.cwd(), '../arabterm.db');
 
 export const PER_PAGE = 1000;
 
@@ -42,7 +41,7 @@ export function getAllDictionaries(): Dictionary[] {
               d.nbr_entries, d.wikidata_id,
               (SELECT COUNT(*) FROM term WHERE dictionary_id = d.id) AS term_count
          FROM dictionary d
-         ORDER BY term_count DESC`
+         ORDER BY d.created_at DESC, d.id DESC`
     )
     .all() as Dictionary[];
 }
