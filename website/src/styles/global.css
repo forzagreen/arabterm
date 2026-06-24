@@ -5,10 +5,25 @@
   --border: #e5e7eb;
   --accent: #0f766e;
   --accent-hover: #115e59;
+  --on-accent: #ffffff;
   --surface: #f9fafb;
   --row-alt: #f8fafc;
   --max-width: 1100px;
+  color-scheme: light;
   font-family: 'Noto Naskh Arabic', 'Segoe UI', system-ui, -apple-system, sans-serif;
+}
+
+:root[data-theme='dark'] {
+  --bg: #0f1115;
+  --fg: #e6e8eb;
+  --muted: #9aa3af;
+  --border: #2a2f3a;
+  --accent: #2dd4bf;
+  --accent-hover: #5eead4;
+  --on-accent: #0b0e13;
+  --surface: #171a21;
+  --row-alt: #161922;
+  color-scheme: dark;
 }
 
 * {
@@ -73,6 +88,48 @@ header.site-header nav a {
 header.site-header nav a:hover {
   color: var(--accent);
   text-decoration: none;
+}
+header.site-header .header-right {
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+  flex-wrap: wrap;
+}
+
+.theme-switch {
+  display: inline-flex;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  overflow: hidden;
+  background: var(--bg);
+}
+.theme-switch button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2rem;
+  height: 1.9rem;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: var(--muted);
+  cursor: pointer;
+  line-height: 0;
+}
+.theme-switch button + button {
+  border-inline-start: 1px solid var(--border);
+}
+.theme-switch button:hover {
+  color: var(--fg);
+}
+.theme-switch button[aria-pressed='true'] {
+  background: var(--accent);
+  color: var(--on-accent);
+}
+.theme-switch svg {
+  width: 1.05rem;
+  height: 1.05rem;
+  display: block;
 }
 
 footer.site-footer {
@@ -216,7 +273,7 @@ table.terms td.desc {
   display: inline-block;
   padding: 0.5rem 0.9rem;
   background: var(--accent);
-  color: #fff;
+  color: var(--on-accent);
   border-radius: 6px;
   font-weight: 500;
   font-size: 0.95rem;
@@ -251,7 +308,7 @@ nav.pagination span {
   border-radius: 4px;
   font-size: 0.9rem;
   color: var(--fg);
-  background: #fff;
+  background: var(--bg);
 }
 nav.pagination a:hover {
   border-color: var(--accent);
@@ -260,7 +317,7 @@ nav.pagination a:hover {
 }
 nav.pagination span.current {
   background: var(--accent);
-  color: #fff;
+  color: var(--on-accent);
   border-color: var(--accent);
   font-weight: 600;
 }
