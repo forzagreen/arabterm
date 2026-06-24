@@ -4,11 +4,65 @@ const base = import.meta.env.BASE_URL;
 <header class="site-header">
   <div class="container">
     <a href={base} class="brand">arabterm</a>
-    <nav>
-      <a href={base}>الرئيسية</a>
-      <a href={`${base}about/`}>عن المشروع</a>
-      <a href="https://wikitermbase.toolforge.org/" target="_blank" rel="noopener">مسرد الويكي</a>
-      <a href="https://github.com/forzagreen/arabterm" target="_blank" rel="noopener">GitHub</a>
-    </nav>
+    <div class="header-right">
+      <nav>
+        <a href={base}>الرئيسية</a>
+        <a href={`${base}about/`}>عن المشروع</a>
+        <a href="https://wikitermbase.toolforge.org/" target="_blank" rel="noopener">مسرد الويكي</a>
+        <a href="https://github.com/forzagreen/arabterm" target="_blank" rel="noopener">GitHub</a>
+      </nav>
+      <div class="theme-switch" role="group" aria-label="نمط العرض">
+        <button type="button" data-theme-value="auto" aria-pressed="false" title="تلقائي" aria-label="تلقائي">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect x="2" y="4" width="20" height="14" rx="2" />
+            <path d="M8 21h8M12 18v3" />
+          </svg>
+        </button>
+        <button type="button" data-theme-value="light" aria-pressed="false" title="فاتح" aria-label="فاتح">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <circle cx="12" cy="12" r="4" />
+            <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41" />
+          </svg>
+        </button>
+        <button type="button" data-theme-value="dark" aria-pressed="false" title="داكن" aria-label="داكن">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
+          </svg>
+        </button>
+      </div>
+    </div>
   </div>
 </header>
+
+<script is:inline>
+  (function () {
+    var root = document.documentElement;
+    var media = window.matchMedia('(prefers-color-scheme: dark)');
+    var buttons = document.querySelectorAll('.theme-switch button[data-theme-value]');
+
+    function apply(pref) {
+      var resolved = pref === 'dark' || (pref === 'auto' && media.matches) ? 'dark' : 'light';
+      root.dataset.themePref = pref;
+      root.dataset.theme = resolved;
+      buttons.forEach(function (b) {
+        b.setAttribute('aria-pressed', b.dataset.themeValue === pref ? 'true' : 'false');
+      });
+    }
+
+    var stored;
+    try { stored = localStorage.getItem('theme'); } catch (e) {}
+    apply(stored || 'auto');
+
+    buttons.forEach(function (b) {
+      b.addEventListener('click', function () {
+        var pref = b.dataset.themeValue;
+        try { localStorage.setItem('theme', pref); } catch (e) {}
+        apply(pref);
+      });
+    });
+
+    media.addEventListener('change', function () {
+      if ((root.dataset.themePref || 'auto') === 'auto') apply('auto');
+    });
+  })();
+</script>

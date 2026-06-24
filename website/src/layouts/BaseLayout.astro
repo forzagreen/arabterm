@@ -16,7 +16,22 @@ const meta = description ?? 'قاعدة بيانات للقواميس العرب
 <html lang="ar" dir="rtl">
   <head>
     <meta charset="utf-8" />
+    <!-- Apply the saved theme before first paint to avoid a flash of the wrong theme. -->
+    <script is:inline>
+      (function () {
+        try {
+          var pref = localStorage.getItem('theme') || 'auto';
+          var sysDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+          var resolved = pref === 'dark' || (pref === 'auto' && sysDark) ? 'dark' : 'light';
+          var root = document.documentElement;
+          root.dataset.themePref = pref;
+          root.dataset.theme = resolved;
+        } catch (e) {}
+      })();
+    </script>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#0f1115" media="(prefers-color-scheme: dark)" />
     <title>{fullTitle}</title>
     <meta name="description" content={meta} />
     <link rel="icon" type="image/x-icon" href={`${import.meta.env.BASE_URL}favicon.ico`} />
