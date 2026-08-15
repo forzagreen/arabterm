@@ -2,6 +2,7 @@ import datetime
 import sys
 from typing import Any, Dict
 
+from sqlalchemy import null
 from sqlalchemy.orm import Session
 
 from arabterm.mariadb_models import Dictionary as DictionaryMariaDB
@@ -25,7 +26,11 @@ def migrate_dictionary(sqlite_dict: DictionarySQLite) -> Dict[str, Any]:
         "dict_type": sqlite_dict.dict_type,
         "tier": sqlite_dict.tier,
         "created_at": sqlite_dict.created_at or datetime.datetime.now(),
-        "updated_at": sqlite_dict.updated_at,
+        # A plain `None` here is indistinguishable to SQLAlchemy from "no value
+        # given" and gets silently dropped from the INSERT, letting MariaDB's
+        # `DEFAULT CURRENT_TIMESTAMP` stamp the row with now() on every re-run.
+        # `null()` forces an explicit SQL NULL to be written instead.
+        "updated_at": sqlite_dict.updated_at if sqlite_dict.updated_at is not None else null(),
     }
 
 
