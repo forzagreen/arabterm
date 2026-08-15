@@ -22,6 +22,8 @@ def migrate_dictionary(sqlite_dict: DictionarySQLite) -> Dict[str, Any]:
         "nbr_entries": sqlite_dict.nbr_entries,
         "name_tech": sqlite_dict.name_tech,
         "wikidata_id": sqlite_dict.wikidata_id,
+        "dict_type": sqlite_dict.dict_type,
+        "tier": sqlite_dict.tier,
         "created_at": sqlite_dict.created_at or datetime.datetime.now(),
         "updated_at": sqlite_dict.updated_at,
     }

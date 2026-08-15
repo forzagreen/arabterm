@@ -30,6 +30,8 @@ class Dictionary(Base):
     nbr_entries: Mapped[Optional[int]] = mapped_column(Integer)
     name_tech: Mapped[str] = mapped_column(String(255), unique=True, nullable=False)
     wikidata_id: Mapped[Optional[str]] = mapped_column(String(255))
+    dict_type: Mapped[Optional[str]] = mapped_column(String(255))
+    tier: Mapped[Optional[int]] = mapped_column(Integer)
     created_at: Mapped[datetime.datetime] = mapped_column(
         DateTime, server_default=text("CURRENT_TIMESTAMP")
     )
