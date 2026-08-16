@@ -82,11 +82,11 @@ It contains 2 tables: `dictionary` and `term`.
 | المعجم الطبي الموحد (2009) | The Unified Medical Dictionary<br />Le dictionnaire médical unifié | 132975 | [Q113466993](https://www.wikidata.org/wiki/Q113466993) |
 | معجم مصطلحات المعلوماتية (2000) | Dictionary of Information Technology Terms | 7031 | [Q108408025](https://www.wikidata.org/wiki/Q108408025) |
 | موسوعة الكهرباء (IEC 60050) | Electropedia | 20611 | [Q1667710](https://www.wikidata.org/wiki/Q1667710) |
-| مسرد الجغرافيا والتاريخ، المنظمة العربية للتربية والثقافة والعلوم (موقع ArabTerm) | Geography and History<br />Géographie et Histoire | 5724 |  |
+| مسرد الجغرافيا والتاريخ (الألكسو) | Geography and History (ALECSO)<br />Géographie et Histoire (ALECSO) | 5724 | [Q141044804](https://www.wikidata.org/wiki/Q141044804) |
 | المعجم الموحد لمصطلحات اللسانيات (2002) | Language and Literature<br />Langue et Littérature | 3223 | [Q108756680](https://www.wikidata.org/wiki/Q108756680) |
-| مسرد الفن، التسلية والرياضة، المنظمة العربية للتربية والثقافة والعلوم (موقع ArabTerm) | Arts, Recreation and Sports<br />Art, Divertissement et sports | 5269 |  |
-| مسرد الفلسفة وعلم النفس، المنظمة العربية للتربية والثقافة والعلوم (موقع ArabTerm) | Philosophy and Psychology<br />Philosophie et Psychologie | 1350 |  |
-| مسرد الإعلام والتواصل، المنظمة العربية للتربية والثقافة والعلوم (موقع ArabTerm) | Information and Communication<br />Information et Communication | 6081 |  |
+| مسرد الفن، التسلية والرياضة (الألكسو) | Arts, Recreation and Sports (ALECSO)<br />Art, Divertissement et sports (ALECSO) | 5269 | [Q141104930](https://www.wikidata.org/wiki/Q141104930) |
+| مسرد الفلسفة وعلم النفس (الألكسو) | Philosophy and Psychology (ALECSO)<br />Philosophie et Psychologie (ALECSO) | 1350 | [Q141104937](https://www.wikidata.org/wiki/Q141104937) |
+| مسرد الإعلام والتواصل (الألكسو) | Information and Communication (ALECSO)<br />Information et Communication (ALECSO) | 6081 | [Q141104936](https://www.wikidata.org/wiki/Q141104936) |
 | المعجم الموحد لمصطلحات تقانات الأغذية (2004) | Nutrition Technologies<br />Technologies Alimentaires | 2686 | [Q116186863](https://www.wikidata.org/wiki/Q116186863) |
 | المعجم الموحد للمصطلحات المهنية والتقنية ج. 1: طباعة - كهرباء (1996) | Printing - Electricity<br />Imprimerie - Electricité | 2838 | [Q115776451](https://www.wikidata.org/wiki/Q115776451) |
 | المعجم الموحد للمصطلحات المهنية والتقنية ج. 2: بناء - تجارة (1999) | Masonry - Carpentry<br />Maçonnerie - Charpenterie | 3731 | [Q115776448](https://www.wikidata.org/wiki/Q115776448) |
@@ -109,18 +109,18 @@ It contains 2 tables: `dictionary` and `term`.
 | المعجم الموحد لمصطلحات القانون (2017) | Law<br />Droit | 3218 | [Q115934214](https://www.wikidata.org/wiki/Q115934214) |
 | المعجم الموحد لمصطلحات التجارة والمحاسبة (1995) | Commerce and Accounting<br />Commerce et Comptabilité | 8862 | [Q115770013](https://www.wikidata.org/wiki/Q115770013) |
 | المعجم الموحد لمصطلحات الاقتصاد (2000) | Economics<br />Economie | 2036 | [Q115944244](https://www.wikidata.org/wiki/Q115944244) |
-| مسرد علم الاجتماع والأنثروبولوجيا، المنظمة العربية للتربية والثقافة والعلوم (موقع ArabTerm) | Sociology and Anthropology<br />Sociologie et Anthropologie | 1261 |  |
-| مسرد التربية، المنظمة العربية للتربية والثقافة والعلوم (موقع ArabTerm) | Education | 2988 |  |
+| مسرد علم الاجتماع والأنثروبولوجيا (الألكسو) | Sociology and Anthropology (ALECSO)<br />Sociologie et Anthropologie (ALECSO) | 1261 | [Q141104938](https://www.wikidata.org/wiki/Q141104938) |
+| مسرد التربية (الألكسو) | Education (ALECSO) | 2988 | [Q141104933](https://www.wikidata.org/wiki/Q141104933) |
 | المعجم الموحد لمصطلحات التقنيات التربوية (1999) | Educational and Computer Techniques<br />Techniques Pédagogiques et Informatiques | 1524 | [Q116036314](https://www.wikidata.org/wiki/Q116036314) |
-| مسرد المناخ والبيئة وإدارة النفايات الصلبة، المنظمة العربية للتربية والثقافة والعلوم (موقع ArabTerm) | Climate, Environment and Solid Waste management<br />Climat, l’Environment, et la Gestion des déchets solides | 7040 |  |
+| مسرد المناخ والبيئة وإدارة النفايات الصلبة (الألكسو) | Climate, Environment and Solid Waste management (ALECSO)<br />Climat, l’Environment, et la Gestion des déchets solides (ALECSO) | 7040 | [Q141104932](https://www.wikidata.org/wiki/Q141104932) |
 | المعجم الموحد لمصطلحات تقانة (تكنولوجيا) المعلومات (2011) | Information and Communication<br />Technologie de l’Information | 1369 | [Q111267300](https://www.wikidata.org/wiki/Q111267300) |
 | المعجم الموحد لمصطلحات الهندسة المدنية (2012) | Civil Engineering<br />Génie Civil | 3943 | [Q116255030](https://www.wikidata.org/wiki/Q116255030) |
-| مسرد صناعة النسيج، المنظمة العربية للتربية والثقافة والعلوم (موقع ArabTerm) | Textiles Industries<br />l’Industrie Textile | 4513 |  |
+| مسرد صناعة النسيج (الألكسو) | Textiles Industries (ALECSO)<br />l’Industrie Textile (ALECSO) | 4513 | [Q141104939](https://www.wikidata.org/wiki/Q141104939) |
 | المعجم الموحد لمصطلحات النقل (2010) | Transport and Infrastructure<br />Transport et Infrastructure | 5558 | [Q116214837](https://www.wikidata.org/wiki/Q116214837) |
-| مسرد الهندسة الكهربائية، المنظمة العربية للتربية والثقافة والعلوم (موقع ArabTerm) | Electrical Engineering<br />Génie Electrique | 2569 |  |
+| مسرد الهندسة الكهربائية (الألكسو) | Electrical Engineering (ALECSO)<br />Génie Electrique (ALECSO) | 2569 | [Q141104934](https://www.wikidata.org/wiki/Q141104934) |
 | المعجم الموحد لمصطلحات الطاقة المتجددة (1996) | Renewable Energy<br />Energies Renouvelables | 7289 | [Q115770286](https://www.wikidata.org/wiki/Q115770286) |
 | المعجم الموحد لمصطلحات المياه (2000) | Water Engineering<br />Technologie de l’eau | 8644 | [Q116167054](https://www.wikidata.org/wiki/Q116167054) |
-| مسرد هندسة وتكنولوجيا السيارات، المنظمة العربية للتربية والثقافة والعلوم (موقع ArabTerm) | Automotive Engineering<br />Technique automobile | 4605 |  |
+| مسرد هندسة وتكنولوجيا السيارات (الألكسو) | Automotive Engineering (ALECSO)<br />Technique automobile (ALECSO) | 4605 | [Q141104931](https://www.wikidata.org/wiki/Q141104931) |
 <!-- DICTIONARIES_TABLE_END -->
 
 
