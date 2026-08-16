@@ -101,7 +101,7 @@ It contains 2 tables: `dictionary` and `term`.
 | المعجم الموحد لمصطلحات النفط (1999) | Petroleum<br />Pétrole | 6089 | [Q115957618](https://www.wikidata.org/wiki/Q115957618) |
 | المعجم الموحد لمصطلحات علوم البحار (2000) | Oceanology<br />Océanographie | 3913 | [Q116174633](https://www.wikidata.org/wiki/Q116174633) |
 | المعجم الموحد لمصطلحات الأرصاد الجوية (1999) | Meteorology<br />Météorologie | 2031 | [Q116153637](https://www.wikidata.org/wiki/Q116153637) |
-| المعجم الموحد لمصطلحات علوم الزلازل (1999) | Seismology<br />Séismologie | 4722 | [Q115933629](https://www.wikidata.org/wiki/Q115933629) |
+| مسرد علوم الزلازل (الألكسو) | Seismology (ALECSO)<br />Séismologie (ALECSO) | 4722 | [Q141105349](https://www.wikidata.org/wiki/Q141105349) |
 | المعجم الموحد لمصطلحات الجيولوجيا (2000) | Geology<br />Géologie | 4623 | [Q115944157](https://www.wikidata.org/wiki/Q115944157) |
 | المعجم الموحد لمصطلحات الكيمياء (1992) | Chemistry<br />Chimie | 4532 | [Q114804479](https://www.wikidata.org/wiki/Q114804479) |
 | المعجم الموحد لمصطلحات الفيزياء العامة والنووية (1989) | Physics<br />Physique | 6315 | [Q113987323](https://www.wikidata.org/wiki/Q113987323) |
@@ -118,7 +118,7 @@ It contains 2 tables: `dictionary` and `term`.
 | مسرد صناعة النسيج (الألكسو) | Textiles Industries (ALECSO)<br />l’Industrie Textile (ALECSO) | 4513 | [Q141104939](https://www.wikidata.org/wiki/Q141104939) |
 | المعجم الموحد لمصطلحات النقل (2010) | Transport and Infrastructure<br />Transport et Infrastructure | 5558 | [Q116214837](https://www.wikidata.org/wiki/Q116214837) |
 | مسرد الهندسة الكهربائية (الألكسو) | Electrical Engineering (ALECSO)<br />Génie Electrique (ALECSO) | 2569 | [Q141104934](https://www.wikidata.org/wiki/Q141104934) |
-| المعجم الموحد لمصطلحات الطاقة المتجددة (1996) | Renewable Energy<br />Energies Renouvelables | 7289 | [Q115770286](https://www.wikidata.org/wiki/Q115770286) |
+| مسرد الطاقات المتجددة (الألكسو) | Renewable Energy (ALECSO)<br />Energies Renouvelables (ALECSO) | 7289 | [Q141105348](https://www.wikidata.org/wiki/Q141105348) |
 | المعجم الموحد لمصطلحات المياه (2000) | Water Engineering<br />Technologie de l’eau | 8644 | [Q116167054](https://www.wikidata.org/wiki/Q116167054) |
 | مسرد هندسة وتكنولوجيا السيارات (الألكسو) | Automotive Engineering (ALECSO)<br />Technique automobile (ALECSO) | 4605 | [Q141104931](https://www.wikidata.org/wiki/Q141104931) |
 <!-- DICTIONARIES_TABLE_END -->
