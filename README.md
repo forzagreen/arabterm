@@ -119,7 +119,7 @@ It contains 2 tables: `dictionary` and `term`.
 | المعجم الموحد لمصطلحات النقل (2010) | Transport and Infrastructure<br />Transport et Infrastructure | 5558 | [Q116214837](https://www.wikidata.org/wiki/Q116214837) |
 | مسرد الهندسة الكهربائية (الألكسو) | Electrical Engineering (ALECSO)<br />Génie Electrique (ALECSO) | 2569 | [Q141104934](https://www.wikidata.org/wiki/Q141104934) |
 | مسرد الطاقات المتجددة (الألكسو) | Renewable Energy (ALECSO)<br />Energies Renouvelables (ALECSO) | 7289 | [Q141105348](https://www.wikidata.org/wiki/Q141105348) |
-| المعجم الموحد لمصطلحات المياه (2000) | Water Engineering<br />Technologie de l’eau | 8644 | [Q116167054](https://www.wikidata.org/wiki/Q116167054) |
+| مسرد هندسة المياه (الألكسو) | Water Engineering (ALECSO)<br />Technologie de l’eau (ALECSO) | 8644 | [Q141137252](https://www.wikidata.org/wiki/Q141137252) |
 | مسرد هندسة وتكنولوجيا السيارات (الألكسو) | Automotive Engineering (ALECSO)<br />Technique automobile (ALECSO) | 4605 | [Q141104931](https://www.wikidata.org/wiki/Q141104931) |
 <!-- DICTIONARIES_TABLE_END -->
 
