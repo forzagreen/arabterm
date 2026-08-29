@@ -113,7 +113,7 @@ if (props.kind === 'redirect') {
       من أصل {dict!.term_count}.
     </p>
 
-    <TermTable terms={terms} startIndex={1} />
+    <TermTable terms={terms} startIndex={1} cols={dict!.cols} />
     <Pagination base={detailBase} current={1} total={total} />
   </BaseLayout>
 )}
