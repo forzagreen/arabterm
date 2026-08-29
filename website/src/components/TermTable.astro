@@ -1,32 +1,45 @@
 ---
-import type { Term } from '../lib/db';
+import type { Term, TermColumns } from '../lib/db';
 
 interface Props {
   terms: Term[];
   startIndex: number; // 1-based index of first row on this page
+  cols: TermColumns;
 }
 
-const { terms, startIndex } = Astro.props;
+const { terms, startIndex, cols } = Astro.props;
 ---
-<table class="terms">
-  <thead>
-    <tr>
-      <th style="width: 4rem">#</th>
-      <th>العربية</th>
-      <th>English</th>
-      <th>Français</th>
-      <th>تعريف / Description</th>
-    </tr>
-  </thead>
-  <tbody>
-    {terms.map((t, i) => (
+<div class="table-wrap">
+  <table class="terms">
+    <thead>
       <tr>
-        <td class="id">{startIndex + i}</td>
-        <td lang="ar" dir="rtl">{t.arabic ?? ''}</td>
-        <td lang="en" dir="ltr">{t.english ?? ''}</td>
-        <td lang="fr" dir="ltr">{t.french ?? ''}</td>
-        <td class="desc">{t.description ?? ''}</td>
+        <th class="col-id">#</th>
+        {cols.arabic && <th>العربية</th>}
+        {cols.english && <th lang="en" dir="ltr">English</th>}
+        {cols.french && <th lang="fr" dir="ltr">Français</th>}
+        {cols.description && <th>التعريف</th>}
+        {cols.page && <th class="col-page">الصفحة</th>}
+        {cols.uri && <th class="col-uri"><span class="visually-hidden">المصدر</span></th>}
       </tr>
-    ))}
-  </tbody>
-</table>
+    </thead>
+    <tbody>
+      {terms.map((t, i) => (
+          <tr>
+            <td class="id">{startIndex + i}</td>
+            {cols.arabic && <td lang="ar" dir="rtl">{t.arabic ?? ''}</td>}
+            {cols.english && <td lang="en" dir="ltr">{t.english ?? ''}</td>}
+            {cols.french && <td lang="fr" dir="ltr">{t.french ?? ''}</td>}
+            {cols.description && <td class="desc">{t.description ?? ''}</td>}
+            {cols.page && <td class="page">{t.page ?? ''}</td>}
+            {cols.uri && (
+              <td class="uri">
+                {t.uri && (
+                  <a class="ext" href={t.uri} target="_blank" rel="noopener" aria-label="المصدر"></a>
+                )}
+              </td>
+            )}
+          </tr>
+      ))}
+    </tbody>
+  </table>
+</div>

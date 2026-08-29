@@ -43,6 +43,6 @@ const description = `قاموس ${dict.name_arabic} — الصفحة ${page} م�
     من أصل {dict.term_count}.
   </p>
 
-  <TermTable terms={terms} startIndex={startIndex} />
+  <TermTable terms={terms} startIndex={startIndex} cols={dict.cols} />
   <Pagination base={detailBase} current={page} total={total} />
 </BaseLayout>

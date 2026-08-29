@@ -25,7 +25,16 @@ npm run preview        # serve ./dist/ for verification
 | `src/pages/about.astro` | Project description |
 | `src/pages/[dict]/index.astro` | Dictionary page 1 + redirect handler for legacy unprefixed slugs |
 | `src/pages/[dict]/page/[page].astro` | Paginated terms (page 2..N) |
-| `src/pages/[dict]/terms.json.ts` | Per-dictionary JSON download |
+| `src/pages/[dict].json.ts` | Per-dictionary JSON download |
+
+## Term table columns
+
+A term column is rendered only when at least one row in the **whole** dictionary
+fills it — `al_mawrid_al_hadeeth` has no Arabic column, `dstt_1` no French or
+description, `agrovoc` no page or description. The flags are computed in one
+grouped query in `src/lib/db.ts` (`Dictionary.cols`) and passed down to
+`TermTable`. Column order: `#`, العربية, English, Français, تعريف, صفحة, source
+link.
 
 ## Legacy URLs
 

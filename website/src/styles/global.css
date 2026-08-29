@@ -9,6 +9,7 @@
   --surface: #f9fafb;
   --row-alt: #f8fafc;
   --max-width: 1100px;
+  --ext-icon: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6'/%3E%3Cpolyline points='15 3 21 3 21 9'/%3E%3Cline x1='10' y1='14' x2='21' y2='3'/%3E%3C/svg%3E");
   color-scheme: light;
   font-family: 'Noto Naskh Arabic', 'Segoe UI', system-ui, -apple-system, sans-serif;
 }
@@ -224,8 +225,6 @@ table.terms th {
   font-weight: 600;
   font-size: 0.9rem;
   color: var(--muted);
-  text-transform: uppercase;
-  letter-spacing: 0.03em;
 }
 table.dicts tr:nth-child(even),
 table.terms tr:nth-child(even) {
@@ -240,6 +239,58 @@ table.terms td.id {
 table.terms td.desc {
   color: var(--muted);
   font-size: 0.9rem;
+}
+
+/* Wide tables scroll inside their own box instead of stretching the page. */
+.table-wrap {
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+}
+.table-wrap > table.terms {
+  min-width: 42rem;
+}
+
+table.terms th.col-id,
+table.terms td.id {
+  width: 4rem;
+}
+table.terms th.col-page,
+table.terms td.page {
+  width: 4.5rem;
+  color: var(--muted);
+  font-variant-numeric: tabular-nums;
+  text-align: end;
+  white-space: nowrap;
+}
+
+table.terms th.col-uri,
+table.terms td.uri {
+  width: 2.75rem;
+  text-align: center;
+}
+/* The icon is drawn from CSS so the 200k+ source links cost no extra markup. */
+a.ext {
+  display: inline-block;
+  width: 1rem;
+  height: 1rem;
+  vertical-align: -0.15em;
+  background-color: var(--muted);
+  -webkit-mask: var(--ext-icon) center / contain no-repeat;
+  mask: var(--ext-icon) center / contain no-repeat;
+}
+a.ext:hover {
+  background-color: var(--accent);
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
 }
 
 .section-title {
