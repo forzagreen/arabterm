@@ -83,7 +83,7 @@ It contains 2 tables: `dictionary` and `term`.
 | معجم مصطلحات المعلوماتية (2000) | Dictionary of Information Technology Terms | 7031 | [Q108408025](https://www.wikidata.org/wiki/Q108408025) |
 | موسوعة الكهرباء (IEC 60050) | Electropedia | 20611 | [Q1667710](https://www.wikidata.org/wiki/Q1667710) |
 | مسرد الجغرافيا والتاريخ (الألكسو) | Geography and History (ALECSO)<br />Géographie et Histoire (ALECSO) | 5724 | [Q141044804](https://www.wikidata.org/wiki/Q141044804) |
-| المعجم الموحد لمصطلحات اللسانيات (2002) | Language and Literature<br />Langue et Littérature | 3223 | [Q108756680](https://www.wikidata.org/wiki/Q108756680) |
+| المعجم الموحد لمصطلحات اللسانيات (2002) | Language and Literature<br />Langue et Littérature | 3223 | [Q114600110](https://www.wikidata.org/wiki/Q114600110) |
 | مسرد الفن، التسلية والرياضة (الألكسو) | Arts, Recreation and Sports (ALECSO)<br />Art, Divertissement et sports (ALECSO) | 5269 | [Q141104930](https://www.wikidata.org/wiki/Q141104930) |
 | مسرد الفلسفة وعلم النفس (الألكسو) | Philosophy and Psychology (ALECSO)<br />Philosophie et Psychologie (ALECSO) | 1350 | [Q141104937](https://www.wikidata.org/wiki/Q141104937) |
 | مسرد الإعلام والتواصل (الألكسو) | Information and Communication (ALECSO)<br />Information et Communication (ALECSO) | 6081 | [Q141104936](https://www.wikidata.org/wiki/Q141104936) |
@@ -116,7 +116,7 @@ It contains 2 tables: `dictionary` and `term`.
 | المعجم الموحد لمصطلحات تقانة (تكنولوجيا) المعلومات (2011) | Information and Communication<br />Technologie de l’Information | 1369 | [Q111267300](https://www.wikidata.org/wiki/Q111267300) |
 | المعجم الموحد لمصطلحات الهندسة المدنية (2012) | Civil Engineering<br />Génie Civil | 3943 | [Q116255030](https://www.wikidata.org/wiki/Q116255030) |
 | مسرد صناعة النسيج (الألكسو) | Textiles Industries (ALECSO)<br />l’Industrie Textile (ALECSO) | 4513 | [Q141104939](https://www.wikidata.org/wiki/Q141104939) |
-| المعجم الموحد لمصطلحات النقل (2010) | Transport and Infrastructure<br />Transport et Infrastructure | 5558 | [Q116214837](https://www.wikidata.org/wiki/Q116214837) |
+| مسرد النقل والبنية التحتية (الألكسو) | Transport and Infrastructure (ALECSO)<br />Transport et Infrastructure (ALECSO) | 5558 | [Q141215921](https://www.wikidata.org/wiki/Q141215921) |
 | مسرد الهندسة الكهربائية (الألكسو) | Electrical Engineering (ALECSO)<br />Génie Electrique (ALECSO) | 2569 | [Q141104934](https://www.wikidata.org/wiki/Q141104934) |
 | مسرد الطاقات المتجددة (الألكسو) | Renewable Energy (ALECSO)<br />Energies Renouvelables (ALECSO) | 7289 | [Q141105348](https://www.wikidata.org/wiki/Q141105348) |
 | مسرد هندسة المياه (الألكسو) | Water Engineering (ALECSO)<br />Technologie de l’eau (ALECSO) | 8644 | [Q141137252](https://www.wikidata.org/wiki/Q141137252) |
