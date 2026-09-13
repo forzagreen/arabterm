@@ -1,10 +1,10 @@
 # arabterm website
 
-Static site for [arabterm.db](../arabterm.db), deployed to <https://forzagreen.github.io/arabterm/>.
+Static site for [arabterm.db](../arabterm.db.gz), deployed to <https://forzagreen.github.io/arabterm/>.
 
 ## Stack
 
-[Astro](https://astro.build/) static site generator. The build reads `arabterm.db` directly via `better-sqlite3` and emits one HTML page per dictionary (paginated 1000 terms / page), plus a per-dictionary JSON download. No data is checked in; everything is derived from the DB at build time.
+[Astro](https://astro.build/) static site generator. The build reads `arabterm.db` directly via `better-sqlite3` (run `make db` at the repo root first — the database is committed compressed) and emits one HTML page per dictionary (paginated 1000 terms / page), plus a per-dictionary JSON download. No data is checked in; everything is derived from the DB at build time.
 
 ## Commands
 

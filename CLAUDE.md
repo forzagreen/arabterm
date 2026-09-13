@@ -11,6 +11,7 @@ A small Astro static site under [website/](website/) is also derived from `arabt
 ## Common commands
 
 ```sh
+make db                    # unpack arabterm.db from the committed arabterm.db.gz (do this first)
 make init                  # uv sync --all-extras
 make format                # ruff check --select I --fix + ruff format (via uv run)
 make regenerate_dumps      # full pipeline: see "Dump regeneration" below
@@ -30,7 +31,9 @@ Environment: copy `example.env` to `.env` and set `MARIADB_PASSWORD`. Python rec
 
 ### Two parallel models, one source of truth
 
-The canonical data lives in [arabterm.db](arabterm.db) (SQLite, checked into git). MariaDB is a *derived* format, regenerated from SQLite. This is why two near-identical SQLAlchemy model files exist:
+The canonical data lives in `arabterm.db` (SQLite). MariaDB is a *derived* format, regenerated from SQLite.
+
+`arabterm.db` itself is **gitignored**: at ~110 MiB it is past GitHub's hard 100 MiB per-file limit. What is committed is [arabterm.db.gz](arabterm.db.gz) (~30 MiB), and `make db` unpacks it. `make db` refuses to overwrite an existing `arabterm.db`, so it can never clobber local edits; every target that reads the database depends on `require_db`, which fails with a pointer to `make db` rather than a confusing SQLite error. `make dump` recompresses it (`gzip -n`, so an unchanged database produces an unchanged file rather than a fresh 30 MB blob), which means the archive cannot go stale as long as changes go through `make regenerate_dumps`. Note that `db/sqlite/arabterm.sql.gz` carries the same content again in `.dump` form — the redundancy is deliberate for now, but it is the obvious thing to drop if repo size becomes pressing. This is why two near-identical SQLAlchemy model files exist:
 
 - [arabterm/sqlite_models.py](arabterm/sqlite_models.py) — typed columns without lengths; uses `onupdate=utc_now` Python-side for `updated_at`.
 - [arabterm/mariadb_models.py](arabterm/mariadb_models.py) — same shape, but `String(255)`, `mysql_engine="InnoDB"`, server-side `ON UPDATE CURRENT_TIMESTAMP`, and a critical `FULLTEXT` index on `term(arabic, english, french, description)`.
@@ -45,7 +48,7 @@ The FULLTEXT index is the *reason* MariaDB exists in this project: SQLite has no
 2. `delete_mariadb` — runs [arabterm/scripts/delete_mariadb.py](arabterm/scripts/delete_mariadb.py). Despite the README phrasing, this drops the **tables**, not the container — it gives migration a clean slate inside the running container.
 3. `migrate_to_mariadb` — [arabterm/scripts/migrate_to_mariadb.py](arabterm/scripts/migrate_to_mariadb.py). Commits dictionaries before terms to satisfy the FK; preserves SQLite PKs.
 4. `search_mariadb term="telescope"` — smoke test that FULLTEXT search returns results.
-5. `dump` → `dump_sqlite` + `dump_mariadb`. SQLite dumps via `sqlite3 ... .dump`; MariaDB dumps via `docker exec mariadb-dump` then `docker cp`. Both are gzipped into `db/sqlite/` and `db/mariadb/`.
+5. `dump` → `dump_db` + `dump_sqlite` + `dump_mariadb`. `dump_db` recompresses `arabterm.db` into `arabterm.db.gz`. SQLite dumps via `sqlite3 ... .dump`; MariaDB dumps via `docker exec mariadb-dump` then `docker cp`. Both are gzipped into `db/sqlite/` and `db/mariadb/`.
 6. `readme` — [arabterm/scripts/update_readme.py](arabterm/scripts/update_readme.py). Regenerates the Dictionaries table in [README.md](README.md) (between the `DICTIONARIES_TABLE_START`/`_END` HTML comment markers) from the current `dictionary` table. Sorted most-recently-added first (`created_at DESC, id DESC`). Never hand-edit that block.
 
 ### Downstream notification
@@ -54,7 +57,7 @@ The FULLTEXT index is the *reason* MariaDB exists in this project: SQLite has no
 
 ### Website
 
-[website/](website/) is an [Astro](https://astro.build/) static site (deployed to <https://forzagreen.github.io/arabterm/>) that reads `arabterm.db` at build time via `better-sqlite3` and emits one HTML page per dictionary (paginated 1000 terms / page) plus a per-dict JSON download. It's a third derived view of the DB alongside the SQLite and MariaDB dumps — no JSON is committed.
+[website/](website/) is an [Astro](https://astro.build/) static site (deployed to <https://forzagreen.github.io/arabterm/>) that reads `arabterm.db` at build time (the gh-pages workflow runs `make db` first, since the unpacked file is not in the checkout) via `better-sqlite3` and emits one HTML page per dictionary (paginated 1000 terms / page) plus a per-dict JSON download. It's a third derived view of the DB alongside the SQLite and MariaDB dumps — no JSON is committed.
 
 Legacy unprefixed URLs from the original Angular site (e.g. `/water_engineering/`) are preserved as static HTML redirects to the canonical `name_tech` URL (`/at_water_engineering/`). The legacy slug list lives in `LEGACY_SLUGS` in [website/src/lib/db.ts](website/src/lib/db.ts) — never remove a legacy slug from this list, even if its underlying dictionary changes.
 
@@ -67,7 +70,7 @@ Legacy unprefixed URLs from the original Angular site (e.g. `/water_engineering/
   2. **Resolve the Wikidata labels** if the dictionary has a QID — fetch `https://www.wikidata.org/wiki/Special:EntityData/<QID>.json` and use the official `ar`/`en`/`fr` labels. Append the publication year in parentheses to `name_arabic` to match the existing series (e.g. `... (2020)`). Wikidata sometimes uses ALL CAPS or typos in the English/French labels — match the style of existing entries (sentence case for French, no typos).
   3. **Pick a `name_tech` slug**: follow the existing series naming. The 2020 educational series uses `topic_NN` (e.g. `educational_supervision_47`); older ArabTerm-website entries use the `at_` prefix (e.g. `at_water_engineering`). `samples/NN_topic_…/` folder names flip to `topic_NN` slugs.
   4. **Insert** the `dictionary` row (set `nbr_entries` to the actual row count) **and** the `term` rows in a single SQLite transaction. Pre-check that the slug and `wikidata_id` aren't already taken. Use the `Dictionary.id` returned by `lastrowid` as the `term.dictionary_id`.
-  5. **Run `make regenerate_dumps`** — that single target now also rewrites the Dictionaries table in `README.md`. Commit the resulting `arabterm.db`, `db/sqlite/arabterm.sql.gz`, `db/mariadb/arabterm.sql.gz`, and `README.md` together. The website will pick up the new dictionary automatically on the next deploy.
+  5. **Run `make regenerate_dumps`** — that single target now also rewrites the Dictionaries table in `README.md`. Commit the resulting `arabterm.db.gz`, `db/sqlite/arabterm.sql.gz`, `db/mariadb/arabterm.sql.gz`, and `README.md` together. `arabterm.db` is gitignored and is never committed. The website will pick up the new dictionary automatically on the next deploy.
   6. Per the user's `feedback_conventional_commits` memory: branch `feat/...`, commit `feat: ...`.
 - The repo contains large notebooks (`V2.ipynb`, `MigrateDB.ipynb`, etc.) and scratch directories (`playground/`, `samples/`) used for historical scraping/ingestion. They are not part of the published pipeline — don't edit them as part of routine changes.
 - Python 3.10+, SQLAlchemy 2.x style (`Mapped[...]`, `mapped_column`).
