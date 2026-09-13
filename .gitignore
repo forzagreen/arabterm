@@ -1,5 +1,7 @@
 
 .venv
+# The database is committed compressed (arabterm.db.gz); `make db` unpacks it.
+arabterm.db
 *.db-shm
 *.db-wal
 *backup*.db
