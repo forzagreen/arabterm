@@ -170,11 +170,6 @@
       "al_mawrid_al_hadeeth"
     ],
     "dictionary_wikidata_id_invalid": [],
-    "dictionary_wikidata_id_duplicate": [],
-    "wikidata_entity_missing": [],
-    "wikidata_year_mismatch": [
-      "medical_terms_2",
-      "ta3din"
-    ]
+    "dictionary_wikidata_id_duplicate": []
   }
 }
