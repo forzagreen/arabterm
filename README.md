@@ -86,7 +86,7 @@ It contains 2 tables: `dictionary` and `term`.
 | المعجم الموحد لمصطلحات المناهج وطرائق التدريس (2020) | The unified dictionary of curricula and teaching methods terms<br />Dictionnaire terminologique unifié des programmes scolaires et des méthodes d'enseignement | 383 | [Q116390963](https://www.wikidata.org/wiki/Q116390963) |
 | عرب آيز | Arabeyes | 3885 | [Q2859359](https://www.wikidata.org/wiki/Q2859359) |
 | المعجم الموحد لمصطلحات التعدين (2026) | The unified dictionary of mining terms | 1853 | [Q138820643](https://www.wikidata.org/wiki/Q138820643) |
-| معجم البيانات والذكاء الاصطناعي (2024) | Data and AI Glossary | 1241 | [Q111421033](https://www.wikidata.org/wiki/Q111421033) |
+| معجم البيانات والذكاء الاصطناعي (الإصدار الثالث، 2026) | Data and AI Glossary | 1423 | [Q111421033](https://www.wikidata.org/wiki/Q111421033) |
 | المَكنَز الزراعي متعدد اللغات | AGROVOC | 22212 | [Q292649](https://www.wikidata.org/wiki/Q292649) |
 | معجم المصطلحات الطبية (ج.3، 1997) |  | 3098 | [Q124465892](https://www.wikidata.org/wiki/Q124465892) |
 | معجم المصطلحات الطبية (ج.2، 2003) |  | 4383 | [Q124465865](https://www.wikidata.org/wiki/Q124465865) |
