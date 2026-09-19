@@ -1,0 +1,30 @@
+name: Validate the database
+
+on:
+  pull_request:
+    paths:
+      - 'arabterm.db.gz'
+      - 'arabterm/scripts/validate_db.py'
+      - 'arabterm/scripts/validation_baseline.json'
+      - '.github/workflows/validate-db.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'arabterm.db.gz'
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+      - name: Unpack the database
+        run: make db
+      - name: Validate the database
+        run: make validate

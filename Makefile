@@ -1,4 +1,4 @@
-.PHONY: init build format init_mariadb delete_mariadb migrate_to_mariadb search_mariadb db require_db dump_db dump_sqlite dump_mariadb dump readme regenerate_dumps website_init website_dev website_build website_preview
+.PHONY: init build format init_mariadb delete_mariadb migrate_to_mariadb search_mariadb db require_db dump_db dump_sqlite dump_mariadb dump readme validate validate_update_baseline regenerate_dumps website_init website_dev website_build website_preview
 
 
 init:
@@ -62,7 +62,18 @@ dump: dump_db dump_sqlite dump_mariadb
 readme: require_db
 	uv run --env-file .env python arabterm/scripts/update_readme.py
 
+# Data invariants of arabterm.db (see arabterm/scripts/validate_db.py). Plain
+# python3, not `uv run`: the script is stdlib-only, so that CI can run it
+# without installing anything.
+validate: require_db
+	python3 arabterm/scripts/validate_db.py
+
+# Record the current violations as accepted. Review the diff before committing.
+validate_update_baseline: require_db
+	python3 arabterm/scripts/validate_db.py --update-baseline
+
 regenerate_dumps:
+	$(MAKE) validate
 	$(MAKE) init_mariadb
 	$(MAKE) delete_mariadb
 	$(MAKE) migrate_to_mariadb

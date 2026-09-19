@@ -17,13 +17,14 @@ make format                # ruff check --select I --fix + ruff format (via uv r
 make regenerate_dumps      # full pipeline: see "Dump regeneration" below
 make dump                  # just re-dump SQLite + MariaDB without re-migrating
 make readme                # regenerate the Dictionaries table in README.md from arabterm.db
+make validate              # check the data invariants of arabterm.db (also run in CI)
 make website_init          # npm install inside website/ (first time only)
 make website_dev           # astro dev server (HMR) at http://localhost:4321/arabterm/
 make website_build         # build website/dist/ for production
 make website_preview       # serve the built dist/ — use this to test the prod bundle
 ```
 
-Granular Make targets (composed by `regenerate_dumps`): `init_mariadb`, `delete_mariadb`, `migrate_to_mariadb`, `search_mariadb term="..."`, `dump_sqlite`, `dump_mariadb`, `readme`. No test runner — there are no tests.
+Granular Make targets (composed by `regenerate_dumps`): `init_mariadb`, `delete_mariadb`, `migrate_to_mariadb`, `search_mariadb term="..."`, `validate`, `dump_sqlite`, `dump_mariadb`, `readme`. No test runner — there are no code tests; `make validate` tests the *data*.
 
 Environment: copy `example.env` to `.env` and set `MARIADB_PASSWORD`. Python recipes invoke `uv run --env-file .env`, which loads `SQLITE_URL`, `MARIADB_URL`, and `MARIADB_PASSWORD` for the script. The two shell-only recipes that need `MARIADB_PASSWORD` (`init_mariadb`, `dump_mariadb`) source `.env` inline. No manual `source .env` is needed.
 
@@ -44,12 +45,21 @@ The FULLTEXT index is the *reason* MariaDB exists in this project: SQLite has no
 
 `make regenerate_dumps` chains targets via `$(MAKE)` (not as prerequisites) to enforce strict ordering:
 
+0. `validate` — see "Data validation" below. Runs first so that bad data fails in seconds, before any dump is produced.
 1. `init_mariadb` — `docker start mariadb` if it exists, else `docker run` a fresh `mariadb:11.8` container with DB `arabterm` on port 3306.
 2. `delete_mariadb` — runs [arabterm/scripts/delete_mariadb.py](arabterm/scripts/delete_mariadb.py). Despite the README phrasing, this drops the **tables**, not the container — it gives migration a clean slate inside the running container.
 3. `migrate_to_mariadb` — [arabterm/scripts/migrate_to_mariadb.py](arabterm/scripts/migrate_to_mariadb.py). Commits dictionaries before terms to satisfy the FK; preserves SQLite PKs.
 4. `search_mariadb term="telescope"` — smoke test that FULLTEXT search returns results.
 5. `dump` → `dump_db` + `dump_sqlite` + `dump_mariadb`. `dump_db` recompresses `arabterm.db` into `arabterm.db.gz`. SQLite dumps via `sqlite3 ... .dump`; MariaDB dumps via `docker exec mariadb-dump` then `docker cp`. Both are gzipped into `db/sqlite/` and `db/mariadb/`.
 6. `readme` — [arabterm/scripts/update_readme.py](arabterm/scripts/update_readme.py). Regenerates the Dictionaries table in [README.md](README.md) (between the `DICTIONARIES_TABLE_START`/`_END` HTML comment markers) from the current `dictionary` table. Sorted most-recently-added first (`created_at DESC, id DESC`). Never hand-edit that block.
+
+### Data validation
+
+[arabterm/scripts/validate_db.py](arabterm/scripts/validate_db.py) (`make validate`) checks the invariants of `arabterm.db`: every term has an Arabic and an English value, no orphan terms, `nbr_entries` equals the real row count, every `wikidata_id` is a well-formed and unique QID. It also cross-checks Wikidata over the network: the item must exist and not be a redirect, and the year in `name_arabic` must match the item's publication date (P577) — this is what catches a QID pointing at another edition of the same work. If Wikidata is unreachable those two checks are skipped with a warning; `--offline` skips them on purpose. The script is stdlib-only on purpose, so CI runs it with plain `python3`.
+
+Existing violations are recorded in [arabterm/scripts/validation_baseline.json](arabterm/scripts/validation_baseline.json) (term ids / `name_tech` slugs per check, plus `exempt` for whole dictionaries such as `al_mawrid_al_hadeeth`, which has no Arabic column). The baseline is a ratchet: a violation not in it fails, and so does a baseline entry that is no longer a violation — after fixing data, run `make validate_update_baseline` and commit the shrunken file. Never use `validate_update_baseline` to silence a new violation that is a real data error; fix the data instead.
+
+[`.github/workflows/validate-db.yml`](.github/workflows/validate-db.yml) runs `make db` + `make validate` on every pull request that touches `arabterm.db.gz`, the script or the baseline.
 
 ### Downstream notification
 
@@ -70,7 +80,7 @@ Legacy unprefixed URLs from the original Angular site (e.g. `/water_engineering/
   2. **Resolve the Wikidata labels** if the dictionary has a QID — fetch `https://www.wikidata.org/wiki/Special:EntityData/<QID>.json` and use the official `ar`/`en`/`fr` labels. Append the publication year in parentheses to `name_arabic` to match the existing series (e.g. `... (2020)`). Wikidata sometimes uses ALL CAPS or typos in the English/French labels — match the style of existing entries (sentence case for French, no typos).
   3. **Pick a `name_tech` slug**: follow the existing series naming. The 2020 educational series uses `topic_NN` (e.g. `educational_supervision_47`); older ArabTerm-website entries use the `at_` prefix (e.g. `at_water_engineering`). `samples/NN_topic_…/` folder names flip to `topic_NN` slugs.
   4. **Insert** the `dictionary` row (set `nbr_entries` to the actual row count) **and** the `term` rows in a single SQLite transaction. Pre-check that the slug and `wikidata_id` aren't already taken. Use the `Dictionary.id` returned by `lastrowid` as the `term.dictionary_id`.
-  5. **Run `make regenerate_dumps`** — that single target now also rewrites the Dictionaries table in `README.md`. Commit the resulting `arabterm.db.gz`, `db/sqlite/arabterm.sql.gz`, `db/mariadb/arabterm.sql.gz`, and `README.md` together. `arabterm.db` is gitignored and is never committed. The website will pick up the new dictionary automatically on the next deploy.
+  5. **Run `make regenerate_dumps`** — it starts with `make validate`, so a term without Arabic/English, a wrong `nbr_entries` or a QID of the wrong edition stops it before any dump is written. That single target now also rewrites the Dictionaries table in `README.md`. Commit the resulting `arabterm.db.gz`, `db/sqlite/arabterm.sql.gz`, `db/mariadb/arabterm.sql.gz`, and `README.md` together (plus `validation_baseline.json` if it changed). `arabterm.db` is gitignored and is never committed. The website will pick up the new dictionary automatically on the next deploy.
   6. Per the user's `feedback_conventional_commits` memory: branch `feat/...`, commit `feat: ...`.
 - The repo contains large notebooks (`V2.ipynb`, `MigrateDB.ipynb`, etc.) and scratch directories (`playground/`, `samples/`) used for historical scraping/ingestion. They are not part of the published pipeline — don't edit them as part of routine changes.
 - Python 3.10+, SQLAlchemy 2.x style (`Mapped[...]`, `mapped_column`).
