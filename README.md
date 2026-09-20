@@ -95,7 +95,7 @@ It contains 2 tables: `dictionary` and `term`.
 | المعجم الموحد لمصطلحات الحكامة التربوية (2020) | The unified dictionary of educational governance terms<br />Dictionnaire terminologique unifié de la gouvernance éducative | 490 | [Q116431458](https://www.wikidata.org/wiki/Q116431458) |
 | المعجم الموحد لمصطلحات الاستراتيجيات التربوية والتعليمية (2020) | The Unifed Dictionary Of Educational Strategies Terms<br />Dictionnaire terminologique unifié des stratégies de l'éducation et de l'enseignement | 592 | [Q116392774](https://www.wikidata.org/wiki/Q116392774) |
 | المعجم الموحد لمصطلحات الإشراف التربوي (2020) | The unified dictionary of educational supervision terms<br />Dictionnaire terminologique unifié de la supervision pédagogique | 340 | [Q116437316](https://www.wikidata.org/wiki/Q116437316) |
-| المورد الحديث (2008) | Al-Mawrid Al-Hadeeth | 62266 | [Q112315598](https://www.wikidata.org/wiki/Q112315598) |
+| المورد الحديث (2008) | Al-Mawrid Al-Hadeeth | 62265 | [Q112315598](https://www.wikidata.org/wiki/Q112315598) |
 | المعجم الطبي الموحد (2009) | The Unified Medical Dictionary<br />Le dictionnaire médical unifié | 132975 | [Q113466993](https://www.wikidata.org/wiki/Q113466993) |
 | معجم مصطلحات المعلوماتية (2000) | Dictionary of Information Technology Terms | 7031 | [Q108408025](https://www.wikidata.org/wiki/Q108408025) |
 | موسوعة الكهرباء (IEC 60050) | Electropedia | 20611 | [Q1667710](https://www.wikidata.org/wiki/Q1667710) |
