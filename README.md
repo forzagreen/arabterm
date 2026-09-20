@@ -65,7 +65,7 @@ It contains 2 tables: `dictionary` and `term`.
 | معجم مصطلحات الرياضات الإلكترونية (مجمع الملك سلمان) | Dictionary of Esports Terms (KSAA) | 503 | [Q141442251](https://www.wikidata.org/wiki/Q141442251) |
 | معجم اللغة المسرحية (2017) | Dictionary of Theatre Language<br />Dictionnaire de la langue théâtrale | 741 | [Q123984738](https://www.wikidata.org/wiki/Q123984738) |
 | معجم مصطلحات علوم هندسة الطيران والفضاء (2024) | Dictionary of Aerospace Engineering Terms | 14621 | [Q141442353](https://www.wikidata.org/wiki/Q141442353) |
-| معجم مصطلحات الطاقة (وزارة الطاقة، 2024) | Energy Terminology Dictionary (Ministry of Energy, 2024) | 1575 | [Q141133750](https://www.wikidata.org/wiki/Q141133750) |
+| معجم مصطلحات الطاقة (وزارة الطاقة، 2024) | Energy Terminology Dictionary (Ministry of Energy, 2024) | 1569 | [Q141133750](https://www.wikidata.org/wiki/Q141133750) |
 | معجم المصطلحات الإحصائية (الهيئة العامة للإحصاء) | Glossary of Statistical Terms | 1389 | [Q133330920](https://www.wikidata.org/wiki/Q133330920) |
 | معجم مصطلحات تصنيع السيارات الكهربائية وصيانتها (الأكاديمية الوطنية للسيارات والمركبات) | Dictionary of Electric Vehicle Manufacturing and Maintenance Terms | 1061 | [Q141442359](https://www.wikidata.org/wiki/Q141442359) |
 | مسرد المصطلحات القانونية (شعبة الترجمة الرسمية بهيئة الخبراء) | Glossary of Legal Terms (Official Translation Division, Board of Experts) | 755 | [Q141442407](https://www.wikidata.org/wiki/Q141442407) |
