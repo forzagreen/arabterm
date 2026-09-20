@@ -10,10 +10,10 @@
     "astro": "astro"
   },
   "dependencies": {
-    "astro": "^6.3.6",
-    "better-sqlite3": "^11.5.0"
+    "astro": "^7.3.3",
+    "better-sqlite3": "^13.0.3"
   },
   "devDependencies": {
-    "@types/better-sqlite3": "^7.6.11"
+    "@types/better-sqlite3": "^9.6.0"
   }
 }
