@@ -6,14 +6,44 @@ on:
     paths:
       - 'db/mariadb/arabterm.sql.gz'
 
+permissions:
+  contents: read
+
 jobs:
   notify:
     runs-on: ubuntu-latest
     steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+
+      # Describes what the push changed in the data, for the pull request that
+      # wikitermbase opens. Best effort: the dispatch is sent even if this fails.
+      - name: Summarize the data changes
+        continue-on-error: true
+        shell: bash
+        env:
+          BEFORE: ${{ github.event.before }}
+        run: |
+          git fetch --no-tags --depth=1 origin "$BEFORE"
+          git show "$BEFORE:arabterm.db.gz" | gzip -dc > "$RUNNER_TEMP/before.db"
+          make db
+          python3 arabterm/scripts/summarize_changes.py "$RUNNER_TEMP/before.db" arabterm.db > "$RUNNER_TEMP/summary.tmp"
+          mv "$RUNNER_TEMP/summary.tmp" "$RUNNER_TEMP/summary.md"
+          cat "$RUNNER_TEMP/summary.md" >> "$GITHUB_STEP_SUMMARY"
+
       - name: Dispatch to wikitermbase
+        shell: bash
         env:
           GH_TOKEN: ${{ secrets.WIKITERMBASE_DISPATCH_PAT }}
+          MESSAGE: ${{ github.event.head_commit.message }}
         run: |
-          gh api repos/forzagreen/wikitermbase/dispatches \
-            -f event_type=arabterm-data-updated \
-            -F client_payload[arabterm_sha]=${{ github.sha }}
+          touch "$RUNNER_TEMP/summary.md"
+          jq -n \
+            --arg sha "$GITHUB_SHA" \
+            --arg message "$MESSAGE" \
+            --rawfile summary "$RUNNER_TEMP/summary.md" \
+            '{
+              event_type: "arabterm-data-updated",
+              client_payload: {arabterm_sha: $sha, message: $message[0:8000], summary: $summary}
+            }' \
+            | gh api repos/forzagreen/wikitermbase/dispatches --input -

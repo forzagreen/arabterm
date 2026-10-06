@@ -63,7 +63,7 @@ Existing violations are recorded in [arabterm/scripts/validation_baseline.json](
 
 ### Downstream notification
 
-[`.github/workflows/notify-wikitermbase.yml`](.github/workflows/notify-wikitermbase.yml) fires only when `db/mariadb/arabterm.sql.gz` changes on `main`. It uses the `WIKITERMBASE_DISPATCH_PAT` secret to dispatch an `arabterm-data-updated` repository_dispatch event to `forzagreen/wikitermbase`, which auto-opens a PR there. SQLite-only changes do *not* trigger the notification — if you intend to publish a data change, regenerate **both** dumps.
+[`.github/workflows/notify-wikitermbase.yml`](.github/workflows/notify-wikitermbase.yml) fires only when `db/mariadb/arabterm.sql.gz` changes on `main`. It uses the `WIKITERMBASE_DISPATCH_PAT` secret to dispatch an `arabterm-data-updated` repository_dispatch event to `forzagreen/wikitermbase`, which auto-opens a PR there. The event carries what that PR needs to say what it is for: the commit SHA, the message of the head commit (it becomes the PR title and description, so the squash-merge message of a data PR is worth writing well), and a Markdown summary of the data changes produced by [arabterm/scripts/summarize_changes.py](arabterm/scripts/summarize_changes.py), which compares `arabterm.db.gz` before and after the push (dictionaries added / removed / changed, terms added / removed / modified per dictionary). The summary step is best effort (`continue-on-error`): the dispatch is sent even if it fails. SQLite-only changes do *not* trigger the notification — if you intend to publish a data change, regenerate **both** dumps.
 
 ### Website
 
