@@ -60,7 +60,7 @@ It contains 2 tables: `dictionary` and `term`.
 | معجم المصطلحات البينية: مجال اللسانيات (المجمع الجزائري، 2026) | Dictionary of Interdisciplinary Terms: Linguistics (AALA, 2026)<br />Dictionnaire des termes interdisciplinaires : domaine de la linguistique (AALA, 2026) | 102 | [Q141645945](https://www.wikidata.org/wiki/Q141645945) |
 | قاموس المصطلحات المالية الأكثر استخدامًا بالأسواق المالية (2019) | Dictionary of the Most Used Financial Terms in Financial Markets (UASA, 2019)<br />Dictionnaire des termes financiers les plus utilisés sur les marchés financiers (UASA, 2019) | 1046 | [Q138342266](https://www.wikidata.org/wiki/Q138342266) |
 | المعجم الموحد لمصطلحات اللسانيات (2002) | Linguistics<br />Linguistique | 1729 | [Q114600110](https://www.wikidata.org/wiki/Q114600110) |
-| معجم المصطلحات المالية والاقتصادية (مجمع الملك سلمان) | Dictionary of Financial and Economic Terms (KSAA) | 1893 | [Q141442356](https://www.wikidata.org/wiki/Q141442356) |
+| معجم المصطلحات المالية والاقتصادية (مجمع الملك سلمان) | Dictionary of Financial and Economic Terms (KSAA) | 1892 | [Q141442356](https://www.wikidata.org/wiki/Q141442356) |
 | معجم اللغويات الاجتماعية (مجمع الملك سلمان، 2019) | Dictionary of Sociolinguistics (KSAA, 2019) | 1179 | [Q141442357](https://www.wikidata.org/wiki/Q141442357) |
 | معجم المصطلحات الرياضية (مجمع الملك سلمان، 2025) | Dictionary of Sports Terms (KSAA, 2025) | 970 | [Q141442360](https://www.wikidata.org/wiki/Q141442360) |
 | معجم مصطلحات الإعلام (مجمع الملك سلمان، 2024) | Dictionary of Media Terms (KSAA, 2024) | 827 | [Q141442405](https://www.wikidata.org/wiki/Q141442405) |
