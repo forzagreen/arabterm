@@ -11,16 +11,31 @@ format:
 	uv run ruff check --select I --fix arabterm
 	uv run ruff format arabterm
 
+# Caps on the MariaDB container, so that a migration cannot starve the machine
+# it runs on: by default half of the CPUs and a quarter of the memory that
+# Docker has (on a Mac, that of the Docker Desktop VM). Applied on every start,
+# to an existing container as well; override with e.g.
+# `make regenerate_dumps MARIADB_CPUS=1 MARIADB_MEMORY=2g`.
+MARIADB_CPUS ?= $(shell docker info --format '{{.NCPU}}' | awk '{n = int($$1 / 2); print (n < 1 ? 1 : n)}')
+MARIADB_MEMORY ?= $(shell docker info --format '{{.MemTotal}}' | awk '{m = int($$1 / 4 / 1048576); print (m < 1024 ? 1024 : m) "m"}')
+MARIADB_LIMITS = --cpus $(MARIADB_CPUS) --memory $(MARIADB_MEMORY) --memory-swap $(MARIADB_MEMORY)
+
 init_mariadb:
 	@if [ $$(docker ps -a -q -f name=mariadb) ]; then \
-		docker start mariadb; \
+		docker update $(MARIADB_LIMITS) mariadb && docker start mariadb; \
 	else \
-		. ./.env && docker run -d --name mariadb \
+		. ./.env && docker run -d --name mariadb $(MARIADB_LIMITS) \
 			-e MARIADB_DATABASE=arabterm \
 			-e MARIADB_ROOT_PASSWORD=$$MARIADB_PASSWORD \
 			-e MARIADB_USER=arabterm \
 			-p 3306:3306 mariadb:11.8; \
 	fi
+	@# `docker start` returns before the server accepts connections
+	@n=0; until docker exec mariadb healthcheck.sh --connect --innodb_initialized >/dev/null 2>&1; do \
+		n=$$((n + 1)); \
+		if [ $$n -ge 120 ]; then echo "MariaDB is not ready after 120 s — see 'docker logs mariadb'"; exit 1; fi; \
+		sleep 1; \
+	done
 
 delete_mariadb:
 	uv run --env-file .env python arabterm/scripts/delete_mariadb.py

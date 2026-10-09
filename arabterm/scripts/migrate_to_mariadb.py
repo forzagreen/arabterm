@@ -2,7 +2,7 @@ import datetime
 import sys
 from typing import Any, Dict
 
-from sqlalchemy import null
+from sqlalchemy import Row, func, insert, null, select, text
 from sqlalchemy.orm import Session
 
 from arabterm.mariadb_models import Dictionary as DictionaryMariaDB
@@ -11,6 +11,11 @@ from arabterm.mariadb_models import get_mariadb_connection
 from arabterm.sqlite_models import Dictionary as DictionarySQLite
 from arabterm.sqlite_models import Term as TermSQLite
 from arabterm.sqlite_models import get_sqlite_connection
+
+# Terms are copied in batches of this many rows, one transaction per batch.
+# Loading the whole table as ORM objects and committing it in one transaction
+# takes gigabytes on both sides, which is enough to take a small machine down.
+BATCH_SIZE = 2000
 
 
 def migrate_dictionary(sqlite_dict: DictionarySQLite) -> Dict[str, Any]:
@@ -34,7 +39,7 @@ def migrate_dictionary(sqlite_dict: DictionarySQLite) -> Dict[str, Any]:
     }
 
 
-def migrate_term(sqlite_term: TermSQLite) -> Dict[str, Any]:
+def migrate_term(sqlite_term: Row) -> Dict[str, Any]:
     """Convert SQLite term to MariaDB term data"""
     return {
         "id": sqlite_term.id,
@@ -65,15 +70,52 @@ def migrate_data(sqlite_session: Session, mariadb_session: Session):
 
         # Migrate terms
         print("Migrating terms...")
-        sqlite_terms = sqlite_session.query(TermSQLite).all()
-        for sqlite_term in sqlite_terms:
-            term_data = migrate_term(sqlite_term)
-            mariadb_term = TermMariaDB(**term_data)
-            mariadb_session.add(mariadb_term)
+        # The FULLTEXT index is built after the load: indexing all the rows in
+        # one pass is much faster than updating the index on every insert.
+        fulltext_index = next(
+            index
+            for index in TermMariaDB.__table__.indexes
+            if index.name == "idx_term_fulltext"
+        )
+        fulltext_index.drop(mariadb_session.connection(), checkfirst=True)
+        # Dropping the index leaves InnoDB's hidden FTS_DOC_ID column behind,
+        # and rows loaded with it are not found by an index built afterwards:
+        # every search comes back empty. Rebuilding the table removes it.
+        mariadb_session.execute(text("ALTER TABLE term FORCE"))
 
-        # Commit terms
-        mariadb_session.commit()
-        print(f"Successfully migrated {len(sqlite_terms)} terms")
+        nbr_terms = 0
+        # Plain rows on both sides, not ORM objects. On the MariaDB side this
+        # matters: an ORM insert leaves the NULL columns out of the statement,
+        # so a batch falls apart into one small INSERT per run of rows that
+        # have the same columns set. On the table it is one INSERT per batch.
+        batches = sqlite_session.execute(
+            select(TermSQLite.__table__)
+            .order_by(TermSQLite.id)
+            .execution_options(yield_per=BATCH_SIZE)
+        ).partitions()
+        for sqlite_terms in batches:
+            mariadb_session.execute(
+                insert(TermMariaDB.__table__),
+                [migrate_term(t) for t in sqlite_terms],
+            )
+            mariadb_session.commit()
+            nbr_terms += len(sqlite_terms)
+            if nbr_terms % (BATCH_SIZE * 50) == 0:
+                print(f"  {nbr_terms} terms...", flush=True)
+
+        print("Building the full-text index...", flush=True)
+        fulltext_index.create(mariadb_session.connection())
+
+        # The copy is no longer a single transaction, so check that it is whole
+        nbr_mariadb_terms = mariadb_session.scalar(
+            select(func.count()).select_from(TermMariaDB)
+        )
+        if nbr_mariadb_terms != nbr_terms:
+            raise RuntimeError(
+                f"MariaDB has {nbr_mariadb_terms} terms, expected {nbr_terms}"
+                " — run `make delete_mariadb` and migrate again"
+            )
+        print(f"Successfully migrated {nbr_terms} terms")
 
     except Exception as e:
         print(f"Error during migration: {str(e)}")
