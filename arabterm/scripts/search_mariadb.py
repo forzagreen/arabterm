@@ -1,5 +1,6 @@
 import argparse
 import json
+import sys
 
 from sqlalchemy import text
 
@@ -53,6 +54,10 @@ def main():
                     row.pop(key)
 
         print(json.dumps(results, ensure_ascii=False, indent=2))
+
+    # `make regenerate_dumps` uses this as its check of the FULLTEXT index
+    if not results:
+        sys.exit(f"No term found for {args.term!r}")
 
 
 if __name__ == "__main__":

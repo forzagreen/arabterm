@@ -162,6 +162,8 @@ Run the full pipeline (start MariaDB, migrate from SQLite, verify search, and wr
 make regenerate_dumps
 ```
 
+The pipeline is safe to run on a small machine: terms are copied to MariaDB in batches, and the MariaDB container is capped at half of the CPUs and a quarter of the memory available to Docker. Override the caps with `make regenerate_dumps MARIADB_CPUS=4 MARIADB_MEMORY=4g`.
+
 When a PR touching `db/mariadb/arabterm.sql.gz` is merged to `main`, [`.github/workflows/notify-wikitermbase.yml`](.github/workflows/notify-wikitermbase.yml) dispatches an event to [forzagreen/wikitermbase](https://github.com/forzagreen/wikitermbase), which auto-opens a PR there with the regenerated `db/arabterm.sql`. That PR is titled after the arabterm commit and its description carries the commit message and a summary of the data changes (dictionaries and terms added, removed or modified). Merging that PR triggers the automated `mariadb` import on Toolforge.
 
 ## History
