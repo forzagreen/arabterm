@@ -95,6 +95,12 @@ if (props.kind === 'redirect') {
           <dd><a href={wikidataUrl} target="_blank" rel="noopener">{dict!.wikidata_id}</a></dd>
         </div>
       )}
+      {dict!.archive_org_url && (
+        <div>
+          <dt>النسخة المصوّرة</dt>
+          <dd><a href={dict!.archive_org_url} target="_blank" rel="noopener" lang="en" dir="ltr">archive.org</a></dd>
+        </div>
+      )}
     </dl>
 
     <div class="actions">
@@ -109,7 +115,7 @@ if (props.kind === 'redirect') {
       من أصل {dict!.term_count}.
     </p>
 
-    <TermTable terms={terms} startIndex={1} cols={dict!.cols} />
+    <TermTable terms={terms} startIndex={1} cols={dict!.cols} scan={dict!} />
     <Pagination base={detailBase} current={1} total={total} />
   </BaseLayout>
 )}

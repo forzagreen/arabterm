@@ -29,6 +29,8 @@ export interface Dictionary {
   name_french: string | null;
   nbr_entries: number | null;
   wikidata_id: string | null;
+  archive_org_url: string | null;
+  page_offset: number | null;
   term_count: number;
   cols: TermColumns;
 }
@@ -51,6 +53,8 @@ interface DictionaryRow {
   name_french: string | null;
   nbr_entries: number | null;
   wikidata_id: string | null;
+  archive_org_url: string | null;
+  page_offset: number | null;
   term_count: number;
   has_arabic: number | null;
   has_english: number | null;
@@ -73,7 +77,7 @@ function db(): Database.Database {
 // per dictionary per column.
 const DICT_SELECT = `
   SELECT d.id, d.name_tech, d.name_arabic, d.name_english, d.name_french,
-         d.nbr_entries, d.wikidata_id,
+         d.nbr_entries, d.wikidata_id, d.archive_org_url, d.page_offset,
          COUNT(t.id) AS term_count,
          MAX(t.arabic      IS NOT NULL AND t.arabic      <> '') AS has_arabic,
          MAX(t.english     IS NOT NULL AND t.english     <> '') AS has_english,
@@ -97,6 +101,21 @@ function toDictionary(row: DictionaryRow): Dictionary {
       uri: !!has_uri,
     },
   };
+}
+
+/**
+ * The page of the dictionary's archive.org scan that shows printed page
+ * `page`, or null when there is no scan or no page. archive.org numbers the
+ * pages of the file from 0 (`n0` is the first page), and the file page of
+ * printed page p is p + page_offset (Wikidata's P8330).
+ */
+export function scanPageUrl(
+  dict: Pick<Dictionary, 'archive_org_url' | 'page_offset'>,
+  page: number | null
+): string | null {
+  if (!dict.archive_org_url || dict.page_offset === null || page === null) return null;
+  const n = page + dict.page_offset - 1;
+  return n < 0 ? dict.archive_org_url : `${dict.archive_org_url}/page/n${n}/mode/1up`;
 }
 
 export function getAllDictionaries(): Dictionary[] {
