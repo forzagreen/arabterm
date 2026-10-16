@@ -1,0 +1,468 @@
+---
+// The «الجديد» button of the header and its panel. The panel opens by itself,
+// once, when there is news the visitor has not seen yet (a dot on the button
+// says so too), and on demand from the button at any time. The close button,
+// Esc and a click anywhere else close it and mark the news seen. What counts
+// as news, and how "seen" is remembered, is explained in ../lib/whatsNew.ts.
+import { FEATURES, formatMonth } from '../lib/whatsNew';
+import { getDictionaryIndex } from '../lib/db';
+
+const base = import.meta.env.BASE_URL;
+const index = getDictionaryIndex();
+
+// What the browser needs to tell what is new: every id (to count the new
+// dictionaries), the latest few by name (to list them), the feature ids.
+const data = {
+  features: FEATURES.map((f) => f.id),
+  ids: index.map((d) => d.id),
+  latest: index.slice(0, 8),
+};
+---
+
+<div class="whats-new" id="whats-new" data-base={base}>
+  <button
+    type="button"
+    class="wn-button"
+    aria-expanded="false"
+    aria-haspopup="dialog"
+    title="ما الجديد في arabterm؟"
+  >
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+      <path d="M9.9 2.6a1 1 0 0 1 1.9 0l1.3 3.9a3 3 0 0 0 1.9 1.9l3.9 1.3a1 1 0 0 1 0 1.9l-3.9 1.3a3 3 0 0 0-1.9 1.9l-1.3 3.9a1 1 0 0 1-1.9 0l-1.3-3.9a3 3 0 0 0-1.9-1.9L2.8 11.6a1 1 0 0 1 0-1.9l3.9-1.3a3 3 0 0 0 1.9-1.9z" />
+      <path d="M20 3v4M22 5h-4M4 17v2M5 18H3" />
+    </svg>
+    <span>الجديد</span>
+    <span class="wn-dot" hidden aria-hidden="true"></span>
+    <span class="wn-sr" hidden>(يوجد جديد)</span>
+  </button>
+
+  <div class="wn-panel" role="dialog" aria-label="ما الجديد؟" hidden>
+    <div class="wn-head">
+      <h2>ما الجديد؟</h2>
+      <button type="button" class="wn-close" aria-label="إغلاق">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M18 6 6 18M6 6l12 12" />
+        </svg>
+      </button>
+    </div>
+
+    <section class="wn-dicts" hidden>
+      <h3></h3>
+      <ul></ul>
+    </section>
+
+    {FEATURES.map((f) => (
+      <section class="wn-feature" data-feature={f.id}>
+        <h3>{f.title}</h3>
+        <p class="wn-date">{formatMonth(f.date)}</p>
+        <p>{f.body}</p>
+        {f.media === 'page-link' && (
+          <div class="wn-demo" aria-hidden="true">
+            <table>
+              <thead>
+                <tr><th>عربي</th><th lang="en" dir="ltr">English</th><th>الصفحة</th></tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>مِقْراب</td>
+                  <td lang="en" dir="ltr">telescope</td>
+                  <td class="page">
+                    <span class="wn-link">412
+                      <svg class="wn-cursor" viewBox="0 0 24 24" fill="#fff" stroke="#111" stroke-width="2" stroke-linejoin="round" aria-hidden="true">
+                        <path d="M4.04 3.7a1 1 0 0 1 1.26-1.26l15.3 6.33a1 1 0 0 1-.08 1.9l-6.1 1.8a1 1 0 0 0-.67.67l-1.8 6.1a1 1 0 0 1-1.9.08z" />
+                      </svg>
+                    </span>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+            <div class="wn-scan">
+              <div class="wn-scan-bar" dir="ltr"><span>archive.org</span><span>p. 412</span></div>
+              <div class="wn-scan-page">
+                <div class="wn-line" style="width: 92%"></div>
+                <div class="wn-line"></div>
+                <p dir="ltr"><mark>telescope</mark> … <mark>مِقْراب</mark></p>
+                <div class="wn-line" style="width: 80%"></div>
+                <div class="wn-line"></div>
+              </div>
+            </div>
+          </div>
+        )}
+      </section>
+    ))}
+
+    <p class="wn-foot">
+      القواميس المضافة مؤخرًا تجدها في أعلى <a href={base}>الصفحة الرئيسية</a>.
+    </p>
+  </div>
+</div>
+<script type="application/json" id="whats-new-data" set:html={JSON.stringify(data)} />
+
+<script>
+  interface Seen {
+    features: string[];
+    maxDictId: number;
+  }
+  interface Data {
+    features: string[];
+    ids: number[];
+    latest: { id: number; name_tech: string; name_arabic: string }[];
+  }
+
+  const root = document.getElementById('whats-new');
+  const dataEl = document.getElementById('whats-new-data');
+  if (root && dataEl) {
+    const data: Data = JSON.parse(dataEl.textContent || '{}');
+    const base = root.dataset.base || '/';
+    const button = root.querySelector<HTMLButtonElement>('.wn-button')!;
+    const dot = root.querySelector<HTMLElement>('.wn-dot')!;
+    const sr = root.querySelector<HTMLElement>('.wn-sr')!;
+    const panel = root.querySelector<HTMLElement>('.wn-panel')!;
+    const closeButton = root.querySelector<HTMLButtonElement>('.wn-close')!;
+    const dictsBlock = root.querySelector<HTMLElement>('.wn-dicts')!;
+    const foot = root.querySelector<HTMLElement>('.wn-foot')!;
+    const featureBlocks = Array.from(root.querySelectorAll<HTMLElement>('.wn-feature'));
+
+    const KEY = 'whatsNew';
+    const maxDictId = Math.max(0, ...data.ids);
+    const current: Seen = { features: data.features, maxDictId };
+
+    const readSeen = (): Seen | null => {
+      try {
+        const seen = JSON.parse(localStorage.getItem(KEY) || 'null');
+        if (seen && Array.isArray(seen.features) && Number.isFinite(seen.maxDictId)) return seen;
+      } catch (e) {
+        /* unavailable or garbage: treated as a first visit */
+      }
+      return null;
+    };
+    const writeSeen = () => {
+      try {
+        localStorage.setItem(KEY, JSON.stringify(current));
+      } catch (e) {
+        /* ignore persistence failures */
+      }
+    };
+
+    // Arabic count agreement for the heading of the dictionaries block.
+    const addedLabel = (n: number) => {
+      if (n === 1) return 'أُضيف قاموس جديد';
+      if (n === 2) return 'أُضيف قاموسان جديدان';
+      if (n <= 10) return `أُضيفت ${n} قواميس جديدة`;
+      return `أُضيف ${n} قاموسًا جديدًا`;
+    };
+
+    const seen = readSeen();
+    const unseenFeatures = seen ? data.features.filter((id) => !seen.features.includes(id)) : [];
+    const newDictIds = seen ? data.ids.filter((id) => id > seen.maxDictId) : [];
+    let hasUnseen = unseenFeatures.length > 0 || newDictIds.length > 0;
+
+    // The new dictionaries, if any: up to five by name, then "and N more".
+    if (newDictIds.length > 0) {
+      const listed = data.latest.filter((d) => newDictIds.includes(d.id)).slice(0, 5);
+      const more = newDictIds.length - listed.length;
+      dictsBlock.querySelector('h3')!.textContent = addedLabel(newDictIds.length);
+      const ul = dictsBlock.querySelector('ul')!;
+      for (const d of listed) {
+        const li = document.createElement('li');
+        const a = document.createElement('a');
+        a.href = `${base}${d.name_tech}/`;
+        a.textContent = d.name_arabic;
+        li.appendChild(a);
+        ul.appendChild(li);
+      }
+      if (more > 0) {
+        const li = document.createElement('li');
+        const a = document.createElement('a');
+        a.href = base;
+        a.textContent = `و${more} ${more <= 10 ? 'قواميس أخرى' : 'قاموسًا آخر'}…`;
+        li.appendChild(a);
+        ul.appendChild(li);
+      }
+      dictsBlock.hidden = false;
+      foot.hidden = true;
+    }
+
+    const setDot = (on: boolean) => {
+      dot.hidden = !on;
+      sr.hidden = !on;
+    };
+
+    // Opened by itself the panel shows only the news; opened by the visitor it
+    // shows the whole (short) list, so earlier entries can be read again.
+    const open = (by: 'auto' | 'button') => {
+      for (const block of featureBlocks) {
+        block.hidden = by === 'auto' && !unseenFeatures.includes(block.dataset.feature || '');
+      }
+      panel.hidden = false;
+      button.setAttribute('aria-expanded', 'true');
+      if (by === 'button') closeButton.focus();
+    };
+    const close = () => {
+      panel.hidden = true;
+      button.setAttribute('aria-expanded', 'false');
+      writeSeen();
+      hasUnseen = false;
+      setDot(false);
+    };
+
+    button.addEventListener('click', () => (panel.hidden ? open('button') : close()));
+    closeButton.addEventListener('click', close);
+    document.addEventListener('mousedown', (e) => {
+      if (!panel.hidden && !root.contains(e.target as Node)) close();
+    });
+    document.addEventListener('touchstart', (e) => {
+      if (!panel.hidden && !root.contains(e.target as Node)) close();
+    });
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && !panel.hidden) close();
+    });
+
+    if (!seen) {
+      // First visit: everything is new, so nothing is; just remember the state.
+      writeSeen();
+    } else if (hasUnseen) {
+      setDot(true);
+      open('auto');
+    }
+  }
+</script>
+
+<style>
+  .whats-new {
+    position: relative;
+  }
+  .wn-button {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    padding: 0.25rem 0.5rem;
+    border: 0;
+    border-radius: 6px;
+    background: transparent;
+    color: var(--fg);
+    font: inherit;
+    font-weight: 500;
+    cursor: pointer;
+  }
+  .wn-button:hover,
+  .wn-button[aria-expanded='true'] {
+    color: var(--accent);
+  }
+  .wn-button svg {
+    width: 1.1rem;
+    height: 1.1rem;
+  }
+  /* Screen readers only. */
+  .wn-sr {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+  .wn-dot {
+    position: absolute;
+    top: 0;
+    right: 0.1rem;
+    width: 0.55rem;
+    height: 0.55rem;
+    border-radius: 50%;
+    background: var(--accent);
+    box-shadow: 0 0 0 2px var(--surface);
+  }
+
+  .wn-panel {
+    position: absolute;
+    top: calc(100% + 0.5rem);
+    left: 0;
+    z-index: 20;
+    width: 24rem;
+    max-width: calc(100vw - 1.5rem);
+    max-height: 80vh;
+    overflow-y: auto;
+    padding: 1rem;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    background: var(--bg);
+    box-shadow: 0 10px 30px rgb(0 0 0 / 0.15);
+    text-align: start;
+    font-size: 0.95rem;
+  }
+  @media (max-width: 639px) {
+    .wn-panel {
+      position: fixed;
+      top: auto;
+      left: 0.75rem;
+      right: 0.75rem;
+      bottom: 0.75rem;
+      width: auto;
+      max-width: none;
+    }
+  }
+  .wn-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 0.75rem;
+  }
+  .wn-head h2 {
+    margin: 0;
+    font-size: 1.05rem;
+  }
+  .wn-close {
+    display: inline-flex;
+    padding: 0.25rem;
+    border: 0;
+    border-radius: 50%;
+    background: transparent;
+    color: var(--muted);
+    cursor: pointer;
+    line-height: 0;
+  }
+  .wn-close:hover {
+    color: var(--fg);
+    background: var(--surface);
+  }
+  .wn-close svg {
+    width: 1.1rem;
+    height: 1.1rem;
+  }
+  .wn-panel section + section {
+    margin-top: 0.75rem;
+    padding-top: 0.75rem;
+    border-top: 1px solid var(--border);
+  }
+  .wn-panel section[hidden] + section {
+    margin-top: 0;
+    padding-top: 0;
+    border-top: 0;
+  }
+  .wn-panel h3 {
+    margin: 0;
+    font-size: 1rem;
+  }
+  .wn-panel p {
+    margin: 0.25rem 0 0;
+    color: var(--muted);
+    line-height: 1.55;
+  }
+  .wn-panel .wn-date {
+    margin-top: 0;
+    font-size: 0.8rem;
+  }
+  .wn-dicts ul {
+    margin: 0.35rem 0 0;
+    padding-inline-start: 1.1rem;
+  }
+  .wn-foot {
+    margin-top: 0.75rem !important;
+    padding-top: 0.75rem;
+    border-top: 1px solid var(--border);
+    font-size: 0.85rem;
+  }
+
+  /* The demo: one 6 s loop in which the pointer comes in, clicks the page
+     number, and the scan opens below. */
+  .wn-demo {
+    margin-top: 0.75rem;
+    user-select: none;
+  }
+  .wn-demo table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.85rem;
+  }
+  .wn-demo th,
+  .wn-demo td {
+    padding: 0.35rem 0.5rem;
+    border-bottom: 1px solid var(--border);
+    text-align: start;
+  }
+  .wn-demo th {
+    background: var(--surface);
+    color: var(--muted);
+    font-weight: 600;
+    font-size: 0.75rem;
+  }
+  .wn-demo .wn-link {
+    position: relative;
+    padding: 0 0.15rem;
+    border-radius: 3px;
+    color: var(--accent);
+    text-decoration: underline;
+    text-decoration-color: transparent;
+    animation: wn-link 6s linear infinite;
+  }
+  .wn-demo .wn-cursor {
+    position: absolute;
+    left: 45%;
+    top: 55%;
+    width: 18px;
+    height: 18px;
+    filter: drop-shadow(0 1px 1px rgb(0 0 0 / 0.3));
+    animation: wn-cursor 6s ease-in-out infinite;
+  }
+  .wn-scan {
+    margin-top: 0.5rem;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    overflow: hidden;
+    animation: wn-scan 6s ease-out infinite;
+  }
+  .wn-scan-bar {
+    display: flex;
+    justify-content: space-between;
+    padding: 0.2rem 0.5rem;
+    background: #1f2937;
+    color: #e5e7eb;
+    font-size: 10px;
+  }
+  .wn-scan-page {
+    padding: 0.6rem 0.75rem;
+    background: #fbf7ee;
+  }
+  .wn-scan-page .wn-line {
+    height: 0.35rem;
+    margin: 0.35rem 0;
+    border-radius: 2px;
+    background: rgb(168 162 158 / 0.6);
+  }
+  .wn-scan-page p {
+    margin: 0.35rem 0;
+    color: #292524;
+    font-size: 11px;
+    line-height: 1rem;
+  }
+  .wn-scan-page mark {
+    padding: 0 0.1rem;
+    border-radius: 2px;
+    background: #fef08a;
+    color: inherit;
+  }
+  @keyframes wn-cursor {
+    0%, 8%    { opacity: 0; transform: translate(2.75rem, 2rem); }
+    16%       { opacity: 1; transform: translate(2.75rem, 2rem); }
+    32%, 36%  { opacity: 1; transform: translate(0, 0) scale(1); }
+    39%       { opacity: 1; transform: translate(0, 0) scale(0.8); }
+    42%, 84%  { opacity: 1; transform: translate(0, 0) scale(1); }
+    92%, 100% { opacity: 0; transform: translate(0, 0) scale(1); }
+  }
+  @keyframes wn-link {
+    0%, 38%   { background-color: transparent; text-decoration-color: transparent; }
+    40%, 88%  { background-color: color-mix(in srgb, var(--accent) 18%, transparent); text-decoration-color: currentColor; }
+    94%, 100% { background-color: transparent; text-decoration-color: transparent; }
+  }
+  @keyframes wn-scan {
+    0%, 42%   { opacity: 0; transform: translateY(0.4rem); }
+    50%, 88%  { opacity: 1; transform: none; }
+    96%, 100% { opacity: 0; transform: translateY(0.4rem); }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .wn-demo .wn-cursor { display: none; }
+    .wn-demo .wn-link { animation: none; text-decoration-color: currentColor; }
+    .wn-scan { animation: none; }
+  }
+</style>
