@@ -118,6 +118,25 @@ export function scanPageUrl(
   return n < 0 ? dict.archive_org_url : `${dict.archive_org_url}/page/n${n}/mode/1up`;
 }
 
+export interface DictionaryIndexEntry {
+  id: number;
+  name_tech: string;
+  name_arabic: string;
+}
+
+// Every dictionary by descending id, i.e. most recently added first, without
+// the term counts: enough for the "what's new" panel, which every page
+// carries. Computed once per build, so it costs nothing per page.
+let _index: DictionaryIndexEntry[] | null = null;
+export function getDictionaryIndex(): DictionaryIndexEntry[] {
+  if (!_index) {
+    _index = db()
+      .prepare('SELECT id, name_tech, name_arabic FROM dictionary ORDER BY id DESC')
+      .all() as DictionaryIndexEntry[];
+  }
+  return _index;
+}
+
 export function getAllDictionaries(): Dictionary[] {
   const rows = db()
     .prepare(`${DICT_SELECT} GROUP BY d.id ORDER BY d.created_at DESC, d.id DESC`)

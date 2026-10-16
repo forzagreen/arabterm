@@ -1,4 +1,6 @@
 ---
+import WhatsNew from './WhatsNew.astro';
+
 const base = import.meta.env.BASE_URL;
 ---
 <header class="site-header">
@@ -11,6 +13,7 @@ const base = import.meta.env.BASE_URL;
         <a href="https://wikitermbase.toolforge.org/" target="_blank" rel="noopener">مسرد الويكي</a>
         <a href="https://github.com/forzagreen/arabterm" target="_blank" rel="noopener">GitHub</a>
       </nav>
+      <WhatsNew />
       <div class="theme-switch" role="group" aria-label="نمط العرض">
         <button type="button" data-theme-value="auto" aria-pressed="false" title="تلقائي" aria-label="تلقائي">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
