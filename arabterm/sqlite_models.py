@@ -26,6 +26,10 @@ class Dictionary(Base):
     wikidata_id: Mapped[Optional[str]] = mapped_column(String)
     dict_type: Mapped[Optional[str]] = mapped_column(String)
     tier: Mapped[Optional[int]] = mapped_column(Integer)
+    # Scan of a paper dictionary on archive.org, and where its printed pages are
+    # in it: printed page p is page p + page_offset of the file (Wikidata P8330).
+    archive_org_url: Mapped[Optional[str]] = mapped_column(String)
+    page_offset: Mapped[Optional[int]] = mapped_column(Integer)
     created_at: Mapped[datetime.datetime] = mapped_column(
         DateTime, server_default=text("CURRENT_TIMESTAMP")
     )

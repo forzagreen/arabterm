@@ -30,6 +30,8 @@ It contains 2 tables: `dictionary` and `term`.
 | `nbr_entries` | INTEGER | Number of terms in the dictionary |
 | `name_tech` | VARCHAR | Technical/slug name (unique) |
 | `wikidata_id` | VARCHAR | Wikidata item ID for the dictionary |
+| `archive_org_url` | VARCHAR | Scan of the paper dictionary on archive.org (`https://archive.org/details/<item>`), as in Wikidata's P953 |
+| `page_offset` | INTEGER | Printed page `p` is page `p + page_offset` of the scan (Wikidata's P8330). Its archive.org link is `<archive_org_url>/page/n<p + page_offset - 1>/mode/1up` |
 | `created_at` | DATETIME | Record creation timestamp |
 | `updated_at` | DATETIME | Record last update timestamp |
 
@@ -43,7 +45,7 @@ It contains 2 tables: `dictionary` and `term`.
 | `french` | VARCHAR | Term in French |
 | `description` | VARCHAR | Term description (usually in Arabic) |
 | `dictionary_id` | INTEGER | Foreign key to `dictionary.id` |
-| `page` | INTEGER | Page number in source document (if applicable) |
+| `page` | INTEGER | Printed page number in the source document (if applicable) |
 | `uri` | VARCHAR | Source URI/link |
 | `created_at` | DATETIME | Record creation timestamp |
 | `updated_at` | DATETIME | Record last update timestamp |

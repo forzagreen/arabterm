@@ -35,6 +35,11 @@ DB = REPO_ROOT / "arabterm.db"
 BASELINE = Path(__file__).resolve().with_name("validation_baseline.json")
 
 QID_RE = re.compile(r"Q[1-9]\d*")
+# An archive.org item, or one file of a multi-volume item, as the page links
+# need it: no /page/ or /mode/ of its own, no query, no trailing slash.
+ARCHIVE_ORG_URL_RE = re.compile(
+    r"https://archive\.org/details/[A-Za-z0-9][A-Za-z0-9._-]*(/[^/?#\s]+)?"
+)
 
 # Tab, LF, CR, space, no-break space: a value made only of these is empty.
 BLANK = "char(9, 10, 13, 32, 160)"
@@ -117,6 +122,45 @@ def check_wikidata_id_duplicate(con: sqlite3.Connection) -> Violations:
     return {slug: f"{qid} is used by more than one dictionary" for slug, qid in rows}
 
 
+def check_archive_org_url_invalid(con: sqlite3.Connection) -> Violations:
+    rows = con.execute(
+        "SELECT name_tech, archive_org_url FROM dictionary"
+        " WHERE archive_org_url IS NOT NULL"
+    )
+    return {
+        slug: f"archive_org_url={url!r} is not an archive.org/details/ URL"
+        for slug, url in rows
+        if not ARCHIVE_ORG_URL_RE.fullmatch(url)
+    }
+
+
+def check_page_offset_without_url(con: sqlite3.Connection) -> Violations:
+    rows = con.execute(
+        "SELECT name_tech, page_offset FROM dictionary"
+        " WHERE page_offset IS NOT NULL AND archive_org_url IS NULL"
+    )
+    return {
+        slug: f"page_offset={offset} but no archive_org_url" for slug, offset in rows
+    }
+
+
+def check_page_offset_missing(con: sqlite3.Connection) -> Violations:
+    """A scan and page numbers without the offset: no page could be linked."""
+    rows = con.execute(
+        """
+        SELECT name_tech FROM dictionary d
+        WHERE archive_org_url IS NOT NULL AND page_offset IS NULL
+          AND EXISTS (
+              SELECT 1 FROM term t WHERE t.dictionary_id = d.id AND t.page IS NOT NULL
+          )
+        """
+    )
+    return {
+        slug: "archive_org_url and term pages are set, but not page_offset"
+        for (slug,) in rows
+    }
+
+
 def run_checks(
     con: sqlite3.Connection, exempt: dict[str, list[str]]
 ) -> dict[str, Violations]:
@@ -131,6 +175,9 @@ def run_checks(
         "dictionary_nbr_entries_mismatch": check_nbr_entries(con),
         "dictionary_wikidata_id_invalid": check_wikidata_id_invalid(con),
         "dictionary_wikidata_id_duplicate": check_wikidata_id_duplicate(con),
+        "dictionary_archive_org_url_invalid": check_archive_org_url_invalid(con),
+        "dictionary_page_offset_without_url": check_page_offset_without_url(con),
+        "dictionary_page_offset_missing": check_page_offset_missing(con),
     }
 
 

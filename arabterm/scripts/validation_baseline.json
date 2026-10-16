@@ -168,6 +168,9 @@
     "term_orphan": [],
     "dictionary_nbr_entries_mismatch": [],
     "dictionary_wikidata_id_invalid": [],
-    "dictionary_wikidata_id_duplicate": []
+    "dictionary_wikidata_id_duplicate": [],
+    "dictionary_archive_org_url_invalid": [],
+    "dictionary_page_offset_without_url": [],
+    "dictionary_page_offset_missing": []
   }
 }

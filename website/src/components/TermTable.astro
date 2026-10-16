@@ -1,13 +1,15 @@
 ---
-import type { Term, TermColumns } from '../lib/db';
+import { scanPageUrl, type Dictionary, type Term, type TermColumns } from '../lib/db';
 
 interface Props {
   terms: Term[];
   startIndex: number; // 1-based index of first row on this page
   cols: TermColumns;
+  // Page numbers link to the dictionary's archive.org scan, when it has one.
+  scan: Pick<Dictionary, 'archive_org_url' | 'page_offset'>;
 }
 
-const { terms, startIndex, cols } = Astro.props;
+const { terms, startIndex, cols, scan } = Astro.props;
 ---
 <div class="table-wrap">
   <table class="terms">
@@ -23,14 +25,22 @@ const { terms, startIndex, cols } = Astro.props;
       </tr>
     </thead>
     <tbody>
-      {terms.map((t, i) => (
+      {terms.map((t, i) => {
+        const pageUrl = scanPageUrl(scan, t.page);
+        return (
           <tr>
             <td class="id">{startIndex + i}</td>
             {cols.arabic && <td lang="ar" dir="rtl">{t.arabic ?? ''}</td>}
             {cols.english && <td lang="en" dir="ltr">{t.english ?? ''}</td>}
             {cols.french && <td lang="fr" dir="ltr">{t.french ?? ''}</td>}
             {cols.description && <td class="desc">{t.description ?? ''}</td>}
-            {cols.page && <td class="page">{t.page ?? ''}</td>}
+            {cols.page && (
+              <td class="page">
+                {pageUrl ? (
+                  <a href={pageUrl} target="_blank" rel="noopener" title="الصفحة في النسخة المصوّرة (archive.org)">{t.page}</a>
+                ) : (t.page ?? '')}
+              </td>
+            )}
             {cols.uri && (
               <td class="uri">
                 {t.uri && (
@@ -39,7 +49,8 @@ const { terms, startIndex, cols } = Astro.props;
               </td>
             )}
           </tr>
-      ))}
+        );
+      })}
     </tbody>
   </table>
 </div>

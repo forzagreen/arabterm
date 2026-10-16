@@ -30,6 +30,8 @@ def migrate_dictionary(sqlite_dict: DictionarySQLite) -> Dict[str, Any]:
         "wikidata_id": sqlite_dict.wikidata_id,
         "dict_type": sqlite_dict.dict_type,
         "tier": sqlite_dict.tier,
+        "archive_org_url": sqlite_dict.archive_org_url,
+        "page_offset": sqlite_dict.page_offset,
         "created_at": sqlite_dict.created_at or datetime.datetime.now(),
         # A plain `None` here is indistinguishable to SQLAlchemy from "no value
         # given" and gets silently dropped from the INSERT, letting MariaDB's
