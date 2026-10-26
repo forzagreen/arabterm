@@ -67,7 +67,7 @@ It contains 2 tables: `dictionary` and `term`.
 | معجم المصطلحات الرياضية (مجمع الملك سلمان، 2025) | Dictionary of Sports Terms (KSAA, 2025) | 970 | [Q141442360](https://www.wikidata.org/wiki/Q141442360) |
 | معجم مصطلحات الإعلام (مجمع الملك سلمان، 2024) | Dictionary of Media Terms (KSAA, 2024) | 827 | [Q141442405](https://www.wikidata.org/wiki/Q141442405) |
 | معجم المصطلحات الإنمائية (مجمع الملك سلمان) | Dictionary of Development Terms (KSAA) | 791 | [Q141442406](https://www.wikidata.org/wiki/Q141442406) |
-| معجم مصطلحات الخطوط الحديدية (مجمع الملك سلمان، الإصدار الثاني، 2026) | Dictionary of Railway Terms (KSAA, 2nd edition, 2026) | 854 | [Q141442247](https://www.wikidata.org/wiki/Q141442247) |
+| معجم مصطلحات الخطوط الحديدية (مجمع الملك سلمان، 2026) | Dictionary of Railway Terms (KSAA, 2026) | 854 | [Q141881807](https://www.wikidata.org/wiki/Q141881807) |
 | معجم المصطلحات الموسيقية (مجمع الملك سلمان، 2024) | Dictionary of Musical Terms (KSAA, 2024) | 579 | [Q141442249](https://www.wikidata.org/wiki/Q141442249) |
 | معجم مصطلحات الرياضات الإلكترونية (مجمع الملك سلمان) | Dictionary of Esports Terms (KSAA) | 503 | [Q141442251](https://www.wikidata.org/wiki/Q141442251) |
 | معجم اللغة المسرحية (2017) | Dictionary of Theatre Language<br />Dictionnaire de la langue théâtrale | 741 | [Q123984738](https://www.wikidata.org/wiki/Q123984738) |
