@@ -170,7 +170,7 @@ When a PR touching `db/mariadb/arabterm.sql.gz` is merged to `main`, [`.github/w
 
 ## History
 
-This project started in 2022 as a web scraping effort to extract dictionaries from [arabterm.org](http://www.arabterm.org/), a set of multilingual technical dictionaries organized by technical domains and industry sectors. The extraction was performed using Python, [Selenium](https://selenium-python.readthedocs.io/), and [lxml](https://lxml.de/lxmlhtml.html).
+This project started in 2022 as a web scraping effort to extract dictionaries from [arabterm.org](https://www.arabterm.org/), a set of multilingual technical dictionaries organized by technical domains and industry sectors. The extraction was performed using Python, [Selenium](https://selenium-python.readthedocs.io/), and [lxml](https://lxml.de/lxmlhtml.html).
 
 Over time, the project evolved to include additional Arabic/English/French dictionaries from various sources, becoming a broader multilingual terminology dataset.
 
