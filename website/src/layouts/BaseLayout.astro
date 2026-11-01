@@ -30,6 +30,8 @@ const meta = description ?? 'قاعدة بيانات للقواميس العرب
       })();
     </script>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <!-- «أدوات الحوسبة»: the ecosystem menu; the same file every sister site carries (canonical copy in the wikitermbase repo). -->
+    <script is:inline defer src={`${import.meta.env.BASE_URL}ecosystem-switcher.js`}></script>
     <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)" />
     <meta name="theme-color" content="#0f1115" media="(prefers-color-scheme: dark)" />
     <title>{fullTitle}</title>
