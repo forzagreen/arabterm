@@ -43,7 +43,6 @@
       tools: [
         { id: 'farahidi', name: 'الفراهيدي', latin: 'farahidi', tag: 'محلّل صرفي', url: 'https://forzagreen.github.io/farahidi-js/' },
         { id: 'mazini', name: 'المازني', latin: 'mazini', tag: 'مصرّف الأفعال', url: 'https://forzagreen.github.io/mazini-js/' },
-        { id: 'ar-conjugation', name: 'جداول تصريف الأفعال', latin: 'ar-conjugation', tag: 'بيانات التصريف', url: 'https://forzagreen.github.io/ar-conjugation/' },
         { id: 'arabic-morphology', name: 'جداول الأفعال العربية', latin: 'arabic-morphology', tag: 'إحصاءات الأفعال والجذور بالمعاجم العربية', url: 'https://m-bakni.github.io/arabic-morphology/' },
         { id: 'ar-plurals', name: 'جموع التكسير', latin: 'ar-plurals', tag: 'أوزان المفرد والجمع', url: 'https://forzagreen.github.io/ar-plurals/' },
       ],
