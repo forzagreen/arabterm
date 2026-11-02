@@ -1,4 +1,4 @@
-// ecosystem-switcher.js — «أدوات الحوسبة»: the menu that links every site of
+// ecosystem-switcher.js — «أدوات التحليل اللغوي»: the menu that links every site of
 // the ecosystem to the others.
 //
 // One self-contained file, deliberately dependency-free (no framework, no
@@ -31,7 +31,7 @@
   if (typeof window === 'undefined' || !window.customElements) return;
   if (window.customElements.get('ecosystem-switcher')) return;
 
-  var NAME = 'أدوات الحوسبة';
+  var NAME = 'أدوات التحليل اللغوي';
   var TAGLINE = 'منظومة مفتوحة المصدر لحوسبة اللغة العربية';
   var ABOUT_URL = 'https://wikitermbase.toolforge.org/tools';
 
