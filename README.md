@@ -2,7 +2,9 @@
 
 This repository is a collection of Arabic/English/French multilingual dictionaries. It serves as the primary data source for [Wiki Term Base](https://wikitermbase.toolforge.org/), a tool designed to standardize terminology used on Arabic Wikipedia and accelerate vocabulary translation.
 
-The dictionaries are available as an [SQLite](https://www.sqlite.org/) database ([arabterm.db.gz](arabterm.db.gz) — gunzip it, or run `make db`), and as SQL dumps for SQLite and MariaDB in the [db/](db/) folder.
+The dictionaries are available as an [SQLite](https://www.sqlite.org/) database ([arabterm.db.gz](arabterm.db.gz) — gunzip it, or run `make db`), as SQL dumps for SQLite and MariaDB in the [db/](db/) folder, and as Parquet on Hugging Face: [forzagreen/arabterm](https://huggingface.co/datasets/forzagreen/arabterm) (`load_dataset("forzagreen/arabterm")`).
+
+The data is licensed under [CC BY 4.0](LICENSE).
 
 
   - [SQLite database](#sqlite-database)
@@ -167,6 +169,8 @@ make regenerate_dumps
 The pipeline is safe to run on a small machine: terms are copied to MariaDB in batches, and the MariaDB container is capped at half of the CPUs and a quarter of the memory available to Docker. Override the caps with `make regenerate_dumps MARIADB_CPUS=4 MARIADB_MEMORY=4g`.
 
 When a PR touching `db/mariadb/arabterm.sql.gz` is merged to `main`, [`.github/workflows/notify-wikitermbase.yml`](.github/workflows/notify-wikitermbase.yml) dispatches an event to [forzagreen/wikitermbase](https://github.com/forzagreen/wikitermbase), which auto-opens a PR there with the regenerated `db/arabterm.sql`. That PR is titled after the arabterm commit and its description carries the commit message and a summary of the data changes (dictionaries and terms added, removed or modified). Merging that PR triggers the automated `mariadb` import on Toolforge.
+
+When `arabterm.db.gz` changes on `main`, [`.github/workflows/publish-huggingface.yml`](.github/workflows/publish-huggingface.yml) also re-exports the database as Parquet and pushes it, with its dataset card, to [forzagreen/arabterm](https://huggingface.co/datasets/forzagreen/arabterm) on Hugging Face. The same export runs locally with `make hf_export` (into the gitignored `hf/` folder) and `make hf_push` (needs `HF_TOKEN` in `.env`); both need the `hf` extra, which `make init` installs.
 
 ## History
 
