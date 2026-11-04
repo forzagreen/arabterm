@@ -1,0 +1,47 @@
+name: Publish to Hugging Face
+
+# Mirrors the database to https://huggingface.co/datasets/forzagreen/arabterm
+# as Parquet (see arabterm/scripts/export_hf.py) whenever it changes on main.
+# Needs the HF_TOKEN secret: a write token from
+# https://huggingface.co/settings/tokens. workflow_dispatch is for the first
+# publish, and for republishing after a change to the card template.
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'arabterm.db.gz'
+      - 'arabterm/scripts/export_hf.py'
+      - 'arabterm/scripts/hf_dataset_card.md'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v7
+
+      - name: Unpack the database
+        run: make db
+
+      - name: Install the hf extra
+        run: |
+          cp example.env .env
+          uv sync --extra hf
+
+      - name: Export and push
+        shell: bash
+        env:
+          HF_TOKEN: ${{ secrets.HF_TOKEN }}
+          MESSAGE: ${{ github.event.head_commit.message || 'Manual publish' }}
+        run: |
+          # First line of the commit message, plus the commit for traceability.
+          subject="${MESSAGE%%$'\n'*}"
+          make hf_push MESSAGE="$subject (${GITHUB_SHA::7})"

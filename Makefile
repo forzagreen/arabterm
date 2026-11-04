@@ -1,4 +1,4 @@
-.PHONY: init build format init_mariadb delete_mariadb migrate_to_mariadb search_mariadb db require_db dump_db dump_sqlite dump_mariadb dump readme validate validate_update_baseline regenerate_dumps website_init website_dev website_build website_preview
+.PHONY: init build format init_mariadb delete_mariadb migrate_to_mariadb search_mariadb db require_db dump_db dump_sqlite dump_mariadb dump readme validate validate_update_baseline regenerate_dumps hf_export hf_push website_init website_dev website_build website_preview
 
 
 init:
@@ -95,6 +95,19 @@ regenerate_dumps:
 	$(MAKE) search_mariadb term="telescope"
 	$(MAKE) dump
 	$(MAKE) readme
+
+# Hugging Face mirror (https://huggingface.co/datasets/forzagreen/arabterm):
+# Parquet files and a dataset card in hf/ (gitignored), pushed by
+# .github/workflows/publish-huggingface.yml whenever arabterm.db.gz changes on
+# main. Needs the `hf` extra (`make init`); hf_push also needs HF_TOKEN in .env.
+hf_export: require_db
+	rm -rf hf
+	uv run --env-file .env python arabterm/scripts/export_hf.py
+
+MESSAGE ?= Update from arabterm
+hf_push: require_db
+	rm -rf hf
+	uv run --env-file .env python arabterm/scripts/export_hf.py --push --message "$(MESSAGE)"
 
 website_init:
 	cd website && npm install

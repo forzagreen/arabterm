@@ -1,5 +1,5 @@
 [build-system]
-requires = ["setuptools>=61.0"]
+requires = ["setuptools>=77.0"]
 build-backend = "setuptools.build_meta"
 
 [project]
@@ -10,6 +10,8 @@ authors = [
     { name = "forzagreen" },
 ]
 readme = "README.md"
+license = "CC-BY-4.0"
+license-files = ["LICENSE"]
 requires-python = ">=3.10"
 dependencies = [
     "pymysql",
@@ -20,6 +22,11 @@ dependencies = [
 dev = [
     "pip",
     "ruff",
+]
+# Only for `make hf_export` / `make hf_push` (the Hugging Face mirror).
+hf = [
+    "huggingface_hub",
+    "pyarrow",
 ]
 
 [project.urls]
