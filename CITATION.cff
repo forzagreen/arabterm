@@ -1,0 +1,20 @@
+cff-version: 1.2.0
+message: "If you use this data, please cite it as below and credit the dictionary the terms come from."
+title: "arabterm: Arabic/English/French terminology dictionaries"
+type: dataset
+authors:
+  - family-names: Tellat
+    given-names: Wael
+repository-code: "https://github.com/forzagreen/arabterm"
+url: "https://forzagreen.github.io/arabterm/"
+license: CC-BY-4.0
+keywords:
+  - arabic
+  - terminology
+  - dictionary
+  - multilingual
+  - wikipedia
+identifiers:
+  - type: url
+    value: "https://huggingface.co/datasets/forzagreen/arabterm"
+    description: "The dataset on the Hugging Face Hub (Parquet)"

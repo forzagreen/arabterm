@@ -111,6 +111,19 @@ The canonical data is the SQLite database `arabterm.db` in [forzagreen/arabterm]
 
 The project started in 2022 as an extraction of the multilingual technical dictionaries of [arabterm.org](https://www.arabterm.org/), and has since grown to include the ALECSO glossaries and dictionaries from the KSAA, the Arabic Language Academy of Damascus, Librairie du Liban and other publishers.
 
+## Citation
+
+```bibtex
+@misc{arabterm,
+  author    = {Tellat, Wael},
+  title     = {arabterm: Arabic/English/French terminology dictionaries},
+  year      = {2022},
+  publisher = {GitHub},
+  url       = {https://github.com/forzagreen/arabterm},
+  note      = {Dataset: \url{https://huggingface.co/datasets/forzagreen/arabterm}}
+}
+```
+
 ## License
 
 [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/). Please credit *arabterm* (<https://github.com/forzagreen/arabterm>) and the dictionary the terms come from, which the `dictionary` column and the table above identify.

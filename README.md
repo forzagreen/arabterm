@@ -1,5 +1,10 @@
 # arabterm
 
+[![Dataset on Hugging Face](https://huggingface.co/datasets/huggingface/badges/resolve/main/dataset-on-hf-md.svg)](https://huggingface.co/datasets/forzagreen/arabterm)
+[![License: CC BY 4.0](https://img.shields.io/badge/license-CC%20BY%204.0-lightgrey.svg)](LICENSE)
+[![Validate the database](https://github.com/forzagreen/arabterm/actions/workflows/validate-db.yml/badge.svg)](https://github.com/forzagreen/arabterm/actions/workflows/validate-db.yml)
+[![Website](https://img.shields.io/badge/website-forzagreen.github.io%2Farabterm-blue)](https://forzagreen.github.io/arabterm/)
+
 This repository is a collection of Arabic/English/French multilingual dictionaries. It serves as the primary data source for [Wiki Term Base](https://wikitermbase.toolforge.org/), a tool designed to standardize terminology used on Arabic Wikipedia and accelerate vocabulary translation.
 
 The dictionaries are available as an [SQLite](https://www.sqlite.org/) database ([arabterm.db.gz](arabterm.db.gz) — gunzip it, or run `make db`), as SQL dumps for SQLite and MariaDB in the [db/](db/) folder, and as Parquet on Hugging Face: [forzagreen/arabterm](https://huggingface.co/datasets/forzagreen/arabterm) (`load_dataset("forzagreen/arabterm")`).
@@ -8,10 +13,12 @@ The data is licensed under [CC BY 4.0](LICENSE).
 
 
   - [SQLite database](#sqlite-database)
+  - [Hugging Face dataset](#hugging-face-dataset)
   - [Dictionaries](#dictionaries)
   - [Website](#website)
   - [Generating database dumps](#generating-database-dumps)
   - [History](#history)
+  - [Citation](#citation)
   - [References](#references)
 
 
@@ -51,6 +58,28 @@ It contains 2 tables: `dictionary` and `term`.
 | `uri` | VARCHAR | Source URI/link |
 | `created_at` | DATETIME | Record creation timestamp |
 | `updated_at` | DATETIME | Record last update timestamp |
+
+
+## Hugging Face dataset
+
+The same data is published as Parquet on the Hugging Face Hub at [forzagreen/arabterm](https://huggingface.co/datasets/forzagreen/arabterm), regenerated automatically on every change to the database. The default config is the `term` table with the dictionary's `name_tech` joined in as `dictionary`; the `dictionaries` config is the `dictionary` table.
+
+```python
+from datasets import load_dataset
+
+terms = load_dataset("forzagreen/arabterm")
+dictionaries = load_dataset("forzagreen/arabterm", "dictionaries")
+```
+
+Or straight from Parquet, with pandas, polars or DuckDB:
+
+```python
+import pandas as pd
+
+terms = pd.read_parquet("hf://datasets/forzagreen/arabterm/data/terms.parquet")
+```
+
+The dataset card describes the columns and lists the dictionaries.
 
 
 ## Dictionaries
@@ -177,6 +206,22 @@ When `arabterm.db.gz` changes on `main`, [`.github/workflows/publish-huggingface
 This project started in 2022 as a web scraping effort to extract dictionaries from [arabterm.org](https://www.arabterm.org/), a set of multilingual technical dictionaries organized by technical domains and industry sectors. The extraction was performed using Python, [Selenium](https://selenium-python.readthedocs.io/), and [lxml](https://lxml.de/lxmlhtml.html).
 
 Over time, the project evolved to include additional Arabic/English/French dictionaries from various sources, becoming a broader multilingual terminology dataset.
+
+
+## Citation
+
+If you use this data, please cite the repository (GitHub's "Cite this repository" button uses [CITATION.cff](CITATION.cff)) and credit the dictionary the terms come from, which the `dictionary` table identifies:
+
+```bibtex
+@misc{arabterm,
+  author    = {Tellat, Wael},
+  title     = {arabterm: Arabic/English/French terminology dictionaries},
+  year      = {2022},
+  publisher = {GitHub},
+  url       = {https://github.com/forzagreen/arabterm},
+  note      = {Dataset: \url{https://huggingface.co/datasets/forzagreen/arabterm}}
+}
+```
 
 
 ## References
