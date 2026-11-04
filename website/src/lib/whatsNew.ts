@@ -26,6 +26,13 @@ export interface Feature {
 
 export const FEATURES: Feature[] = [
   {
+    id: 'hugging-face',
+    date: '2026-11-04',
+    title: 'البيانات على Hugging Face',
+    body:
+      'صارت قاعدة البيانات كلّها متاحة على Hugging Face مجموعةَ بياناتٍ جاهزة للتحميل في بايثون، تُحدَّث آليًا مع كلّ تغيير. الرابط «🤗 Hugging Face» في أعلى الصفحة.',
+  },
+  {
     id: 'page-links',
     date: '2026-10-16',
     title: 'رقم الصفحة يفتح القاموس المصوّر',
