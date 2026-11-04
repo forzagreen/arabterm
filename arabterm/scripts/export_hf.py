@@ -235,7 +235,10 @@ def push(repo: str, message: str) -> None:
     from huggingface_hub import HfApi
 
     api = HfApi(token=token)
-    api.create_repo(repo, repo_type="dataset", exist_ok=True)
+    # A fine-grained token scoped to the one dataset repo cannot create repos,
+    # so only create when needed (the Hub repo is normally made by hand first).
+    if not api.repo_exists(repo, repo_type="dataset"):
+        api.create_repo(repo, repo_type="dataset")
     api.upload_folder(
         repo_id=repo,
         repo_type="dataset",
