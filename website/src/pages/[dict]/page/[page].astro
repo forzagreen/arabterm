@@ -2,9 +2,11 @@
 import BaseLayout from '../../../layouts/BaseLayout.astro';
 import TermTable from '../../../components/TermTable.astro';
 import Pagination from '../../../components/Pagination.astro';
+import ToTop from '../../../components/ToTop.astro';
 import {
   getAllDictionaries,
   getTermsPage,
+  getPageGuides,
   totalPages,
   PER_PAGE,
   type Dictionary,
@@ -26,6 +28,7 @@ const { dict, page } = Astro.props;
 const base = import.meta.env.BASE_URL;
 const total = totalPages(dict.term_count, PER_PAGE);
 const terms = getTermsPage(dict.name_tech, page, PER_PAGE);
+const guide = getPageGuides(dict);
 const detailBase = `${base}${dict.name_tech}/`;
 const startIndex = (page - 1) * PER_PAGE + 1;
 const description = `قاموس ${dict.name_arabic} — الصفحة ${page} من ${total}.`;
@@ -37,12 +40,11 @@ const description = `قاموس ${dict.name_arabic} — الصفحة ${page} م�
     <a href={detailBase}>{dict.name_arabic}</a>
   </p>
   <h1>{dict.name_arabic}</h1>
-  <p class="muted">
-    الصفحة {page} من {total} —
-    المصطلحات من {startIndex} إلى {startIndex + terms.length - 1}
-    من أصل {dict.term_count}.
-  </p>
 
+  <Pagination base={detailBase} current={page} total={total} position="top"
+    termCount={dict.term_count} perPage={PER_PAGE} guide={guide} />
   <TermTable terms={terms} startIndex={startIndex} cols={dict.cols} scan={dict} />
-  <Pagination base={detailBase} current={page} total={total} />
+  <Pagination base={detailBase} current={page} total={total} position="bottom"
+    termCount={dict.term_count} perPage={PER_PAGE} guide={guide} />
+  <ToTop />
 </BaseLayout>

@@ -1,11 +1,20 @@
 ---
+import type { DictionaryGuide } from '../lib/db';
+
 interface Props {
   base: string; // e.g. "/arabterm/at_water_engineering/"
   current: number;
   total: number;
+  // 'top' is the full pager above the table: where the reader is (page, term
+  // numbers), the page links, then the guide words. 'bottom' is the page
+  // links alone, for whoever has read the page to its end.
+  position: 'top' | 'bottom';
+  termCount: number;
+  perPage: number;
+  guide: DictionaryGuide | null;
 }
 
-const { base, current, total } = Astro.props;
+const { base, current, total, position, termCount, perPage, guide } = Astro.props;
 
 function pageUrl(p: number): string {
   return p === 1 ? base : `${base}page/${p}/`;
@@ -25,19 +34,68 @@ function buildPageNumbers(current: number, total: number): (number | 'ellipsis')
 }
 
 const pages = total <= 1 ? [] : buildPageNumbers(current, total);
+
+const from = (current - 1) * perPage + 1;
+const to = Math.min(current * perPage, termCount);
+
+// Guide words keep the direction of their own language, as in a printed
+// dictionary: the first word on the side where reading starts.
+const guideDir = guide?.lang === 'ar' ? 'rtl' : 'ltr';
+function words(p: number) {
+  const g = guide?.pages[p - 1];
+  return g && g.first && g.last ? g : null;
+}
+// What a neighbouring page holds, as the tooltip of its link.
+function rangeTitle(p: number): string | undefined {
+  const g = words(p);
+  return g ? `${g.first} — ${g.last}` : undefined;
+}
+const here = words(current);
 ---
 {total > 1 && (
-  <nav class="pagination" aria-label="ترقيم الصفحات">
-    {current > 1 && <a href={pageUrl(current - 1)} rel="prev">السابقة</a>}
-    {pages.map((p) =>
-      p === 'ellipsis' ? (
-        <span class="ellipsis">…</span>
-      ) : p === current ? (
-        <span class="current" aria-current="page">{p}</span>
-      ) : (
-        <a href={pageUrl(p)}>{p}</a>
-      )
+  <div class:list={['pager', `pager-${position}`]}>
+    {position === 'top' && (
+      <p class="pager-caption">
+        الصفحة <b>{current}</b> من {total}
+        <span aria-hidden="true">·</span>
+        المصطلحات من {from} إلى {to} من أصل {termCount}
+      </p>
     )}
-    {current < total && <a href={pageUrl(current + 1)} rel="next">التالية</a>}
-  </nav>
+    <nav class="pagination" aria-label={position === 'top' ? 'ترقيم الصفحات' : 'ترقيم الصفحات (أسفل الجدول)'}>
+      {current > 1 && (
+        <a class="step" href={pageUrl(current - 1)} rel="prev" title={rangeTitle(current - 1)}>
+          <span aria-hidden="true">→</span> السابقة
+        </a>
+      )}
+      {pages.map((p) =>
+        p === 'ellipsis' ? (
+          <span class="ellipsis">…</span>
+        ) : p === current ? (
+          <span class="current" aria-current="page">{p}</span>
+        ) : (
+          <a href={pageUrl(p)} title={rangeTitle(p)}>{p}</a>
+        )
+      )}
+      {current < total && (
+        <a class="step" href={pageUrl(current + 1)} rel="next" title={rangeTitle(current + 1)}>
+          التالية <span aria-hidden="true">←</span>
+        </a>
+      )}
+    </nav>
+
+    {position === 'top' && here && (
+      <p
+        class="guide-words"
+        dir={guideDir}
+        lang={guide!.lang}
+        title="أوّل مصطلح في هذه الصفحة وآخر مصطلح فيها"
+      >
+        <span class="visually-hidden" lang="ar">أوّل مصطلح في الصفحة:</span>
+        <span class="guide-word">{here.first}</span>
+        <span class="guide-leader" aria-hidden="true"></span>
+        <span class="visually-hidden" lang="ar">آخر مصطلح في الصفحة:</span>
+        <span class="guide-word">{here.last}</span>
+      </p>
+    )}
+  </div>
 )}

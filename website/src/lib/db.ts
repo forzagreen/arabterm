@@ -181,6 +181,95 @@ export function getAllTerms(nameTech: string): Term[] {
     .all(nameTech) as Term[];
 }
 
+export type GuideLang = 'ar' | 'en' | 'fr';
+
+export interface PageGuide {
+  first: string;
+  last: string;
+}
+
+/** The guide words of every page of a dictionary: `pages[0]` is page 1. */
+export interface DictionaryGuide {
+  lang: GuideLang;
+  pages: PageGuide[];
+}
+
+// Below this share of adjacent terms in ascending order, a dictionary is not
+// considered sorted in that language. Sorted dictionaries score 0.82 to 1.00
+// (compound entries, accents and case keep them under 1), unsorted ones 0.50,
+// and the few that are sorted block by block 0.65 to 0.76.
+const SORTED_THRESHOLD = 0.8;
+
+const _guides = new Map<string, DictionaryGuide | null>();
+
+/**
+ * Guide words, as at the top of the pages of a printed dictionary: the first
+ * and the last term of each page, in the language the dictionary is sorted by.
+ * They tell the reader which page holds the word they are after, which a page
+ * number alone does not. Null when the dictionary is sorted in no language
+ * (e.g. grouped by topic): the first and last term of a page then say nothing
+ * about what lies in between.
+ */
+export function getPageGuides(
+  dict: Pick<Dictionary, 'id' | 'name_tech'>,
+  perPage: number = PER_PAGE
+): DictionaryGuide | null {
+  const key = `${dict.name_tech}:${perPage}`;
+  const cached = _guides.get(key);
+  if (cached !== undefined) return cached;
+
+  const langs: { lang: GuideLang; col: 'arabic' | 'english' | 'french' }[] = [
+    { lang: 'ar', col: 'arabic' },
+    { lang: 'en', col: 'english' },
+    { lang: 'fr', col: 'french' },
+  ];
+  const stats = langs.map(() => ({
+    prev: null as string | null,
+    ascending: 0,
+    pairs: 0,
+    pages: [] as PageGuide[],
+  }));
+
+  // One streamed pass per dictionary, cached: every page of the dictionary
+  // asks for the same guides.
+  const rows = db()
+    .prepare('SELECT arabic, english, french FROM term WHERE dictionary_id = ? ORDER BY id')
+    .iterate(dict.id) as IterableIterator<Record<'arabic' | 'english' | 'french', string | null>>;
+  let i = 0;
+  for (const row of rows) {
+    const page = Math.floor(i / perPage);
+    langs.forEach(({ col }, k) => {
+      const st = stats[k];
+      st.pages[page] ??= { first: '', last: '' };
+      const value = (row[col] ?? '').trim();
+      // A term without a value in this language is skipped: the guide word
+      // is the nearest term that has one.
+      if (!value) return;
+      const folded = value.toLowerCase();
+      if (st.prev !== null) {
+        st.pairs++;
+        if (st.prev <= folded) st.ascending++;
+      }
+      st.prev = folded;
+      if (!st.pages[page].first) st.pages[page].first = value;
+      st.pages[page].last = value;
+    });
+    i++;
+  }
+
+  let best: DictionaryGuide | null = null;
+  let bestScore = SORTED_THRESHOLD;
+  stats.forEach((st, k) => {
+    const score = st.pairs ? st.ascending / st.pairs : 0;
+    if (score >= bestScore) {
+      bestScore = score;
+      best = { lang: langs[k].lang, pages: st.pages };
+    }
+  });
+  _guides.set(key, best);
+  return best;
+}
+
 export function totalPages(termCount: number, perPage: number = PER_PAGE): number {
   return Math.max(1, Math.ceil(termCount / perPage));
 }
