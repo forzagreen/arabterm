@@ -299,11 +299,25 @@ a.ext:hover {
   border-bottom: 2px solid var(--border);
 }
 
+/* One row when it fits: the names share the free width, the short facts
+   (count, Wikidata, scan) keep their own. */
 .meta-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-  gap: 0.5rem 1.5rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem 2rem;
   margin: 0.75rem 0 1rem;
+}
+.meta-grid > div {
+  flex: 1 1 14rem;
+  min-width: 0;
+}
+.meta-grid > div.compact {
+  flex: none;
+}
+/* A Latin value stays under its Arabic label instead of drifting to the far
+   side of its cell. */
+.meta-grid dd[dir='ltr'] {
+  text-align: right;
 }
 .meta-grid dt {
   color: var(--muted);
@@ -342,28 +356,80 @@ a.ext:hover {
   background: var(--surface);
 }
 
+/* The pager of a dictionary page. Above the table it is a card that says
+   where the reader is; below it, the page links alone. */
+.pager-top {
+  margin: 1.25rem 0 1rem;
+  padding: 0.85rem 1rem 0.9rem;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--surface);
+}
+.pager-bottom {
+  margin: 1.5rem 0 0.5rem;
+}
+.pager-caption {
+  margin: 0 0 0.6rem;
+  color: var(--muted);
+  font-size: 0.85rem;
+  text-align: center;
+}
+.pager-caption b {
+  color: var(--fg);
+}
+
+/* Guide words, like the running head of a printed dictionary: the first term
+   of the page on one side, the last on the other, a dotted leader between. */
+.guide-words {
+  display: flex;
+  align-items: baseline;
+  gap: 0.75rem;
+  margin: 0.75rem 0 0;
+  font-size: 1.3rem;
+  font-weight: 700;
+  line-height: 1.5;
+}
+.guide-word {
+  flex: 0 1 auto;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.guide-leader {
+  flex: 1 1 1.5rem;
+  min-width: 1.5rem;
+  border-bottom: 2px dotted var(--border);
+}
+
 nav.pagination {
   display: flex;
   flex-wrap: wrap;
   gap: 0.35rem;
   justify-content: center;
-  margin: 1.5rem 0 0.5rem;
+  align-items: center;
 }
 nav.pagination a,
-nav.pagination span {
+nav.pagination span.current,
+nav.pagination span.ellipsis {
   display: inline-block;
   padding: 0.4rem 0.75rem;
-  min-width: 2.25rem;
+  min-width: 2.4rem;
   text-align: center;
   border: 1px solid var(--border);
-  border-radius: 4px;
+  border-radius: 6px;
   font-size: 0.9rem;
+  font-variant-numeric: tabular-nums;
   color: var(--fg);
   background: var(--bg);
 }
 nav.pagination a:hover {
   border-color: var(--accent);
   text-decoration: none;
+  color: var(--accent);
+}
+nav.pagination a.step {
+  font-weight: 600;
   color: var(--accent);
 }
 nav.pagination span.current {
@@ -373,9 +439,64 @@ nav.pagination span.current {
   font-weight: 600;
 }
 nav.pagination span.ellipsis {
+  min-width: 0;
+  padding-inline: 0.2rem;
   border: none;
   background: transparent;
   color: var(--muted);
+}
+
+/* «إلى الأعلى» (ToTop.astro). The track covers the page from one screen down
+   to its end; the sticky button rides the bottom corner of the viewport for
+   as long as the track is in view. On a page shorter than the track's start
+   the track has no height and clips the button away. */
+body {
+  position: relative;
+}
+.to-top-track {
+  position: absolute;
+  top: 100vh;
+  bottom: 0;
+  inset-inline-end: 1rem;
+  overflow: clip;
+  pointer-events: none;
+}
+.to-top {
+  position: sticky;
+  top: calc(100vh - 3.75rem);
+  top: calc(100dvh - 3.75rem);
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.45rem 0.9rem;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  background: var(--bg);
+  color: var(--fg);
+  font-size: 0.9rem;
+  font-weight: 600;
+  box-shadow: 0 2px 10px rgb(0 0 0 / 0.15);
+  pointer-events: auto;
+}
+.to-top:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+  text-decoration: none;
+}
+.to-top .arrow {
+  color: var(--accent);
+  font-size: 1.05rem;
+  line-height: 1;
+}
+@media (prefers-reduced-motion: no-preference) {
+  html {
+    scroll-behavior: smooth;
+  }
+}
+@media print {
+  .to-top-track {
+    display: none;
+  }
 }
 
 .muted {

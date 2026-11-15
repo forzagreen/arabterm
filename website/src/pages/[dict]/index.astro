@@ -2,9 +2,11 @@
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import TermTable from '../../components/TermTable.astro';
 import Pagination from '../../components/Pagination.astro';
+import ToTop from '../../components/ToTop.astro';
 import {
   getAllDictionaries,
   getTermsPage,
+  getPageGuides,
   totalPages,
   PER_PAGE,
   LEGACY_SLUGS,
@@ -35,6 +37,7 @@ const base = import.meta.env.BASE_URL;
 let dict: Dictionary | null = null;
 let terms: ReturnType<typeof getTermsPage> = [];
 let total = 1;
+let guide: ReturnType<typeof getPageGuides> = null;
 let detailBase = '';
 let wikidataUrl: string | null = null;
 let description = '';
@@ -46,6 +49,7 @@ if (props.kind === 'redirect') {
   dict = props.dict;
   total = totalPages(dict.term_count, PER_PAGE);
   terms = getTermsPage(dict.name_tech, 1, PER_PAGE);
+  guide = total > 1 ? getPageGuides(dict) : null;
   detailBase = `${base}${dict.name_tech}/`;
   wikidataUrl = dict.wikidata_id ? `https://www.wikidata.org/wiki/${dict.wikidata_id}` : null;
   description = `قاموس ${dict.name_arabic} — ${dict.term_count} مصطلحاً.`;
@@ -85,18 +89,18 @@ if (props.kind === 'redirect') {
           <dd lang="fr" dir="ltr">{dict!.name_french}</dd>
         </div>
       )}
-      <div>
+      <div class="compact">
         <dt>عدد المصطلحات</dt>
         <dd>{dict!.term_count}</dd>
       </div>
       {wikidataUrl && (
-        <div>
-          <dt>ويكي‌بيانات</dt>
+        <div class="compact">
+          <dt>ويكي بيانات</dt>
           <dd><a href={wikidataUrl} target="_blank" rel="noopener">{dict!.wikidata_id}</a></dd>
         </div>
       )}
       {dict!.archive_org_url && (
-        <div>
+        <div class="compact">
           <dt>النسخة المصوّرة</dt>
           <dd><a href={dict!.archive_org_url} target="_blank" rel="noopener" lang="en" dir="ltr">archive.org</a></dd>
         </div>
@@ -110,12 +114,11 @@ if (props.kind === 'redirect') {
       </a>
     </div>
 
-    <p class="small muted">
-      الصفحة 1 من {total} — تعرض {Math.min(PER_PAGE, dict!.term_count)} مصطلحاً
-      من أصل {dict!.term_count}.
-    </p>
-
+    <Pagination base={detailBase} current={1} total={total} position="top"
+      termCount={dict!.term_count} perPage={PER_PAGE} guide={guide} />
     <TermTable terms={terms} startIndex={1} cols={dict!.cols} scan={dict!} />
-    <Pagination base={detailBase} current={1} total={total} />
+    <Pagination base={detailBase} current={1} total={total} position="bottom"
+      termCount={dict!.term_count} perPage={PER_PAGE} guide={guide} />
+    <ToTop />
   </BaseLayout>
 )}
