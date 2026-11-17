@@ -131,7 +131,7 @@ The dataset card describes the columns and lists the dictionaries.
 | قاموس المؤسسة للمصطلحات والعبارات والمسميات المتداولة في القطاع النفطي (2007) | KPC Dictionary of Terms, Expressions and Names Used in the Oil Sector | 487 | [Q132396287](https://www.wikidata.org/wiki/Q132396287) |
 | المعجم الموحد لمصطلحات التربية على الإبداع والابتكار (2020) | The unified dictionary of educational terms on creativity and innovation<br />Dictionnaire terminologique unifié de l'éducation à la créativité et à l'innovation | 428 | [Q116443862](https://www.wikidata.org/wiki/Q116443862) |
 | المعجم الموحد لمصطلحات المناهج وطرائق التدريس (2020) | The unified dictionary of curricula and teaching methods terms<br />Dictionnaire terminologique unifié des programmes scolaires et des méthodes d'enseignement | 383 | [Q116390963](https://www.wikidata.org/wiki/Q116390963) |
-| عرب آيز | Arabeyes | 3885 | [Q2859359](https://www.wikidata.org/wiki/Q2859359) |
+| عرب آيز | Arabeyes | 3885 | [Q142195103](https://www.wikidata.org/wiki/Q142195103) |
 | المعجم الموحد لمصطلحات التعدين (2026) | The unified dictionary of mining terms | 1853 | [Q138820643](https://www.wikidata.org/wiki/Q138820643) |
 | معجم البيانات والذكاء الاصطناعي (الإصدار الثالث، 2026) | Data and AI Glossary | 1423 | [Q141499878](https://www.wikidata.org/wiki/Q141499878) |
 | المَكنَز الزراعي متعدد اللغات | AGROVOC | 22212 | [Q292649](https://www.wikidata.org/wiki/Q292649) |
