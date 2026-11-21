@@ -7,6 +7,8 @@ becomes the description of the auto-generated "refresh DB dump" pull request.
 The summary is Markdown, written to stdout. Rows are matched on their primary
 key; `created_at` and `updated_at` are ignored, and so is
 `dictionary.nbr_entries`, which is reported as a number of terms instead.
+Domains are reported by slug: the ones added, removed or renamed, and the
+dictionaries whose domains changed.
 
 Like validate_db.py, it uses only the standard library, so CI can run it with
 plain `python3`.
@@ -61,7 +63,22 @@ def columns(con: sqlite3.Connection, schema: str, table: str) -> list[str]:
     return [row[1] for row in con.execute(f"PRAGMA {schema}.table_info({table})")]
 
 
-def describe_dictionary(row: sqlite3.Row, nbr_terms: int) -> str:
+def has_table(con: sqlite3.Connection, schema: str, table: str) -> bool:
+    return bool(
+        con.execute(
+            f"SELECT 1 FROM {schema}.sqlite_master WHERE type = 'table' AND name = ?",
+            (table,),
+        ).fetchone()
+    )
+
+
+def slugs(names: list[str]) -> str:
+    return ", ".join(f"`{name}`" for name in names) or "_none_"
+
+
+def describe_dictionary(
+    row: sqlite3.Row, nbr_terms: int, domains: list[str] | None = None
+) -> str:
     keys = row.keys()
     names = [
         escape(row[c]) for c in ("name_english", "name_arabic") if c in keys and row[c]
@@ -71,7 +88,105 @@ def describe_dictionary(row: sqlite3.Row, nbr_terms: int) -> str:
     if qid:
         parts.append(f"[{escape(qid)}](https://www.wikidata.org/wiki/{qid})")
     parts.append(f"{nbr_terms} terms")
+    if domains:
+        parts.append(f"domains: {slugs(domains)}")
     return "- " + " · ".join(parts)
+
+
+def describe_domain(row: sqlite3.Row, nbr_dicts: int | None = None) -> str:
+    parts = [f"`{row['name_tech']}`"]
+    parts += [escape(row[c]) for c in ("name_english", "name_arabic") if row[c]]
+    if row["wikidata_id"]:
+        qid = row["wikidata_id"]
+        parts.append(f"[{escape(qid)}](https://www.wikidata.org/wiki/{qid})")
+    if nbr_dicts is not None:
+        parts.append(f"{nbr_dicts} dictionaries")
+    return "- " + " · ".join(parts)
+
+
+def load_domains(
+    con: sqlite3.Connection, schema: str
+) -> tuple[dict[int, sqlite3.Row], dict[int, list[str]]]:
+    """The domains by id, and the domain slugs of each dictionary. Both are
+    empty for a database from before the domains existed."""
+    if not has_table(con, schema, "domain"):
+        return {}, {}
+    domains = {r["id"]: r for r in con.execute(f"SELECT * FROM {schema}.domain")}
+    of_dictionary: dict[int, list[str]] = {}
+    for dict_id, slug in con.execute(
+        f"""
+        SELECT dd.dictionary_id, dm.name_tech
+        FROM {schema}.dictionary_domain dd
+        JOIN {schema}.domain dm ON dm.id = dd.domain_id
+        ORDER BY dd.dictionary_id, dm.id
+        """
+    ):
+        of_dictionary.setdefault(dict_id, []).append(slug)
+    return domains, of_dictionary
+
+
+DOMAIN_COLUMNS = (
+    "name_tech",
+    "name_arabic",
+    "name_english",
+    "name_french",
+    "wikidata_id",
+)
+
+
+def summarize_domains(
+    con: sqlite3.Connection, kept: list[int], new_dicts: dict[int, sqlite3.Row]
+) -> list[str]:
+    """The "Domains" section, empty when nothing about them changed."""
+    old_domains, old_of = load_domains(con, "old")
+    new_domains, new_of = load_domains(con, "main")
+    out: list[str] = []
+    if not has_table(con, "old", "domain"):
+        # The database gains its domains: listing every dictionary as changed
+        # would say nothing, the domains and their sizes say it all.
+        if new_domains:
+            count: dict[str, int] = {}
+            for names in new_of.values():
+                for name in names:
+                    count[name] = count.get(name, 0) + 1
+            out += [f"Dictionaries are now tagged with {len(new_domains)} domains:", ""]
+            out += [
+                describe_domain(d, count.get(d["name_tech"], 0))
+                for d in sorted(
+                    new_domains.values(),
+                    key=lambda d: (-count.get(d["name_tech"], 0), d["id"]),
+                )
+            ]
+        return out
+
+    added = [
+        describe_domain(new_domains[i]) for i in new_domains if i not in old_domains
+    ]
+    removed = [
+        describe_domain(old_domains[i]) for i in old_domains if i not in new_domains
+    ]
+    changed: list[str] = []
+    for i, new in new_domains.items():
+        old = old_domains.get(i)
+        fields = [c for c in DOMAIN_COLUMNS if old is not None and old[c] != new[c]]
+        if fields:
+            changed.append(f"- `{new['name_tech']}`")
+            changed += [f"  - {c}: {code(old[c])} → {code(new[c])}" for c in fields]
+    retagged = [
+        f"- `{new_dicts[i]['name_tech']}`: {slugs(old_of.get(i, []))} → "
+        f"{slugs(new_of.get(i, []))}"
+        for i in kept
+        if old_of.get(i, []) != new_of.get(i, [])
+    ]
+    for title, lines in (
+        (f"Added ({len(added)})", added),
+        (f"Removed ({len(removed)})", removed),
+        ("Renamed", changed),
+        (f"Dictionaries whose domains changed ({len(retagged)})", retagged),
+    ):
+        if lines:
+            out += [f"{title}:", "", *lines, ""]
+    return out[:-1] if out else out
 
 
 def summarize(con: sqlite3.Connection, max_terms: int) -> str:
@@ -92,6 +207,11 @@ def summarize(con: sqlite3.Connection, max_terms: int) -> str:
             f"- column `{table}.{c}` removed" for c in old_cols if c not in new_cols
         ]
 
+    for table in ("domain", "dictionary_domain"):
+        was, now = has_table(con, "old", table), has_table(con, "main", table)
+        if was != now:
+            schema_changes.append(f"- table `{table}` {'added' if now else 'removed'}")
+
     # Dictionaries ---------------------------------------------------------
     old_dicts = {r["id"]: r for r in con.execute("SELECT * FROM old.dictionary")}
     new_dicts = {r["id"]: r for r in con.execute("SELECT * FROM main.dictionary")}
@@ -108,11 +228,15 @@ def summarize(con: sqlite3.Connection, max_terms: int) -> str:
         f"- Terms: {delta(sum(old_count.values()), sum(new_count.values()))}",
     ]
 
+    new_domains_of = load_domains(con, "main")[1]
     added_dicts = [i for i in new_dicts if i not in old_dicts]
     if added_dicts:
         out += ["", f"#### Dictionaries added ({len(added_dicts)})", ""]
         out += [
-            describe_dictionary(new_dicts[i], new_count.get(i, 0)) for i in added_dicts
+            describe_dictionary(
+                new_dicts[i], new_count.get(i, 0), new_domains_of.get(i)
+            )
+            for i in added_dicts
         ]
 
     removed_dicts = [i for i in old_dicts if i not in new_dicts]
@@ -134,6 +258,10 @@ def summarize(con: sqlite3.Connection, max_terms: int) -> str:
             ]
     if changed_dicts:
         out += ["", "#### Dictionaries changed", "", *changed_dicts]
+
+    domain_changes = summarize_domains(con, kept, new_dicts)
+    if domain_changes:
+        out += ["", "#### Domains", "", *domain_changes]
 
     # Terms of the dictionaries present on both sides ----------------------
     # A term that moved to another dictionary counts as removed from the first
@@ -215,10 +343,18 @@ def summarize(con: sqlite3.Connection, max_terms: int) -> str:
     if schema_changes:
         out += ["", "#### Schema", "", *schema_changes]
 
-    if not (added_dicts or removed_dicts or changed_dicts or touched or schema_changes):
+    if not (
+        added_dicts
+        or removed_dicts
+        or changed_dicts
+        or domain_changes
+        or touched
+        or schema_changes
+    ):
         out += [
             "",
-            "No difference in the `dictionary` and `term` tables (timestamps aside).",
+            "No difference in the dictionaries, their domains and their terms"
+            " (timestamps aside).",
         ]
 
     return "\n".join(out) + "\n"

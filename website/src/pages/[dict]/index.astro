@@ -89,6 +89,18 @@ if (props.kind === 'redirect') {
           <dd lang="fr" dir="ltr">{dict!.name_french}</dd>
         </div>
       )}
+      {dict!.domains.length > 0 && (
+        <div class="compact">
+          <dt>المجال</dt>
+          <dd class="tags">
+            {dict!.domains.map((d) => (
+              <a class="tag" href={`${base}?domain=${d.name_tech}`} title={`قواميس مجال «${d.name_arabic}»`}>
+                {d.name_arabic}
+              </a>
+            ))}
+          </dd>
+        </div>
+      )}
       <div class="compact">
         <dt>عدد المصطلحات</dt>
         <dd>{dict!.term_count}</dd>

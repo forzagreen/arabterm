@@ -6,7 +6,8 @@
 Writes to hf/ (gitignored) at the repo root:
     hf/README.md                  the dataset card, from hf_dataset_card.md
     hf/data/terms.parquet         one row per term, with the dictionary slug
-    hf/data/dictionaries.parquet  one row per dictionary
+    hf/data/dictionaries.parquet  one row per dictionary, with its domain slugs
+    hf/data/domains.parquet       one row per domain
 
 With --push, uploads those files to the dataset repo on the Hub (creating it
 if needed). The token comes from HF_TOKEN. GitHub stays canonical: this is a
@@ -47,10 +48,20 @@ DICTIONARY_COLUMNS = [
     "dict_type",
     "tier",
     "wikidata_id",
+    "domains",
     "archive_org_url",
     "page_offset",
     "created_at",
     "updated_at",
+]
+DOMAIN_COLUMNS = [
+    "id",
+    "name_tech",
+    "name_arabic",
+    "name_english",
+    "name_french",
+    "wikidata_id",
+    "nbr_dictionaries",
 ]
 TERM_COLUMNS = [
     "id",
@@ -68,6 +79,7 @@ TERM_COLUMNS = [
 TIMESTAMP = pa.timestamp("us")
 INT = pa.int64()
 STR = pa.string()
+STR_LIST = pa.list_(STR)
 DICTIONARY_SCHEMA = pa.schema(
     [
         ("id", INT),
@@ -79,10 +91,22 @@ DICTIONARY_SCHEMA = pa.schema(
         ("dict_type", STR),
         ("tier", INT),
         ("wikidata_id", STR),
+        ("domains", STR_LIST),
         ("archive_org_url", STR),
         ("page_offset", INT),
         ("created_at", TIMESTAMP),
         ("updated_at", TIMESTAMP),
+    ]
+)
+DOMAIN_SCHEMA = pa.schema(
+    [
+        ("id", INT),
+        ("name_tech", STR),
+        ("name_arabic", STR),
+        ("name_english", STR),
+        ("name_french", STR),
+        ("wikidata_id", STR),
+        ("nbr_dictionaries", INT),
     ]
 )
 TERM_SCHEMA = pa.schema(
@@ -101,8 +125,30 @@ TERM_SCHEMA = pa.schema(
     ]
 )
 
+# The domain slugs of a dictionary, comma-separated (a slug has no comma), in
+# the order of the domain ids; _column() splits them into a list.
+DOMAINS_OF_DICTIONARY_SQL = """(
+        SELECT group_concat(name_tech) FROM (
+            SELECT dm.name_tech
+            FROM dictionary_domain dd JOIN domain dm ON dm.id = dd.domain_id
+            WHERE dd.dictionary_id = dictionary.id
+            ORDER BY dm.id
+        )
+    ) AS domains"""
 DICTIONARY_SQL = f"""
-    SELECT {", ".join(DICTIONARY_COLUMNS)} FROM dictionary ORDER BY id
+    SELECT {
+    ", ".join(
+        DOMAINS_OF_DICTIONARY_SQL if column == "domains" else column
+        for column in DICTIONARY_COLUMNS
+    )
+}
+    FROM dictionary ORDER BY id
+"""
+DOMAIN_SQL = """
+    SELECT dm.id, dm.name_tech, dm.name_arabic, dm.name_english, dm.name_french,
+           dm.wikidata_id, count(dd.dictionary_id) AS nbr_dictionaries
+    FROM domain dm LEFT JOIN dictionary_domain dd ON dd.domain_id = dm.id
+    GROUP BY dm.id ORDER BY dm.id
 """
 TERM_SQL = """
     SELECT t.id, t.arabic, t.english, t.french, t.description,
@@ -125,6 +171,8 @@ def _timestamp(value) -> datetime | None:
 def _column(values: list, field: pa.Field) -> pa.Array:
     if field.type == TIMESTAMP:
         values = [_timestamp(v) for v in values]
+    elif field.type == STR_LIST:
+        values = [v.split(",") if v else [] for v in values]
     return pa.array(values, type=field.type)
 
 
@@ -154,18 +202,33 @@ def _dictionaries_table(connection) -> str:
     rows = connection.execute(
         text(
             "SELECT name_tech, name_arabic, name_english, name_french, "
-            "nbr_entries, wikidata_id FROM dictionary "
+            f"{DOMAINS_OF_DICTIONARY_SQL}, nbr_entries, wikidata_id FROM dictionary "
             "ORDER BY created_at DESC, id DESC"
         )
     ).all()
     lines = [
-        "| `dictionary` | العربية | English / Français | Terms | Wikidata |",
-        "|:---|:---|:---|---:|:---:|",
+        "| `dictionary` | العربية | English / Français | `domains` | Terms | Wikidata |",
+        "|:---|:---|:---|:---|---:|:---:|",
     ]
-    for slug, ar, en, fr, n, qid in rows:
+    for slug, ar, en, fr, domains, n, qid in rows:
+        domains = ", ".join(f"`{d}`" for d in (domains or "").split(",") if d)
         lines.append(
             f"| `{slug}` | {(ar or '').strip()} | {_en_fr_cell(en, fr)} "
-            f"| {n or 0} | {_wikidata_cell(qid)} |"
+            f"| {domains} | {n or 0} | {_wikidata_cell(qid)} |"
+        )
+    return "\n".join(lines)
+
+
+def _domains_table(connection) -> str:
+    """Markdown table of the domains, the most used first."""
+    rows = connection.execute(text(DOMAIN_SQL)).all()
+    lines = [
+        "| `domains` | العربية | English | Français | Dictionaries | Wikidata |",
+        "|:---|:---|:---|:---|---:|:---:|",
+    ]
+    for _id, slug, ar, en, fr, qid, n in sorted(rows, key=lambda r: (-r[6], r[0])):
+        lines.append(
+            f"| `{slug}` | {ar} | {en or ''} | {fr or ''} | {n} | {_wikidata_cell(qid)} |"
         )
     return "\n".join(lines)
 
@@ -186,7 +249,7 @@ def _commit_sha() -> str:
     return sha
 
 
-def _render_card(connection, n_terms: int, n_dictionaries: int) -> str:
+def _render_card(connection, n_terms: int, n_dictionaries: int, n_domains: int) -> str:
     sha = _commit_sha()
     if sha:
         source = f"[`{sha[:7]}`](https://github.com/forzagreen/arabterm/commit/{sha})"
@@ -196,7 +259,9 @@ def _render_card(connection, n_terms: int, n_dictionaries: int) -> str:
     return template.substitute(
         n_terms=n_terms,
         n_dictionaries=n_dictionaries,
+        n_domains=n_domains,
         dictionaries_table=_dictionaries_table(connection),
+        domains_table=_domains_table(connection),
         exported_from=source,
         exported_on=date.today().isoformat(),
     )
@@ -214,15 +279,21 @@ def export() -> None:
         n_terms = _write_parquet(
             connection, TERM_SQL, TERM_SCHEMA, OUT_DIR / "data" / "terms.parquet"
         )
+        n_domains = _write_parquet(
+            connection, DOMAIN_SQL, DOMAIN_SCHEMA, OUT_DIR / "data" / "domains.parquet"
+        )
         expected = (_count(connection, "dictionary"), _count(connection, "term"))
         if (n_dictionaries, n_terms) != expected:
             raise SystemExit(
                 f"row count mismatch: wrote {n_dictionaries} dictionaries and "
                 f"{n_terms} terms, the database has {expected[0]} and {expected[1]}"
             )
-        card = _render_card(connection, n_terms, n_dictionaries)
+        card = _render_card(connection, n_terms, n_dictionaries, n_domains)
     (OUT_DIR / "README.md").write_text(card, encoding="utf-8")
-    print(f"Wrote {n_dictionaries} dictionaries and {n_terms} terms to {OUT_DIR}")
+    print(
+        f"Wrote {n_dictionaries} dictionaries, {n_domains} domains and "
+        f"{n_terms} terms to {OUT_DIR}"
+    )
 
 
 def push(repo: str, message: str) -> None:

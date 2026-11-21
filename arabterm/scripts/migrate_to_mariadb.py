@@ -6,9 +6,13 @@ from sqlalchemy import Row, func, insert, null, select, text
 from sqlalchemy.orm import Session
 
 from arabterm.mariadb_models import Dictionary as DictionaryMariaDB
+from arabterm.mariadb_models import DictionaryDomain as DictionaryDomainMariaDB
+from arabterm.mariadb_models import Domain as DomainMariaDB
 from arabterm.mariadb_models import Term as TermMariaDB
 from arabterm.mariadb_models import get_mariadb_connection
 from arabterm.sqlite_models import Dictionary as DictionarySQLite
+from arabterm.sqlite_models import DictionaryDomain as DictionaryDomainSQLite
+from arabterm.sqlite_models import Domain as DomainSQLite
 from arabterm.sqlite_models import Term as TermSQLite
 from arabterm.sqlite_models import get_sqlite_connection
 
@@ -69,6 +73,26 @@ def migrate_data(sqlite_session: Session, mariadb_session: Session):
         # Commit dictionaries first to avoid foreign key issues
         mariadb_session.commit()
         print(f"Successfully migrated {len(sqlite_dicts)} dictionaries")
+
+        # Domains, then their links to the dictionaries (the links reference
+        # both). The two tables have the same columns on both sides and hold a
+        # few dozen rows, so they are copied as plain rows in one go.
+        print("Migrating domains...")
+        for sqlite_model, mariadb_model in (
+            (DomainSQLite, DomainMariaDB),
+            (DictionaryDomainSQLite, DictionaryDomainMariaDB),
+        ):
+            rows = (
+                sqlite_session.execute(select(sqlite_model.__table__)).mappings().all()
+            )
+            if rows:
+                mariadb_session.execute(
+                    insert(mariadb_model.__table__), [dict(row) for row in rows]
+                )
+            mariadb_session.commit()
+            print(
+                f"Successfully migrated {len(rows)} rows of {sqlite_model.__tablename__}"
+            )
 
         # Migrate terms
         print("Migrating terms...")

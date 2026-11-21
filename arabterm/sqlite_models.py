@@ -38,6 +38,43 @@ class Dictionary(Base):
     )
 
     term: Mapped[List["Term"]] = relationship("Term", back_populates="dictionary")
+    domains: Mapped[List["Domain"]] = relationship(
+        "Domain",
+        secondary="dictionary_domain",
+        back_populates="dictionaries",
+        order_by="Domain.id",
+    )
+
+
+class Domain(Base):
+    """A subject a dictionary is about: one value of "main subject" (P921) on
+    the dictionaries' Wikidata items, under a short name fit for a tag
+    («رياضيات», where the Wikidata item is «مصطلحات الرياضيات»)."""
+
+    __tablename__ = "domain"
+
+    id: Mapped[int] = mapped_column(Integer, primary_key=True)
+    name_tech: Mapped[str] = mapped_column(String, unique=True, nullable=False)
+    name_arabic: Mapped[str] = mapped_column(String, nullable=False)
+    name_english: Mapped[Optional[str]] = mapped_column(String)
+    name_french: Mapped[Optional[str]] = mapped_column(String)
+    # The Wikidata item used as the P921 value, e.g. Q66785817.
+    wikidata_id: Mapped[Optional[str]] = mapped_column(String)
+
+    dictionaries: Mapped[List["Dictionary"]] = relationship(
+        "Dictionary", secondary="dictionary_domain", back_populates="domains"
+    )
+
+
+class DictionaryDomain(Base):
+    """A dictionary has one domain or several (mathematics and astronomy)."""
+
+    __tablename__ = "dictionary_domain"
+
+    dictionary_id: Mapped[int] = mapped_column(
+        ForeignKey("dictionary.id"), primary_key=True
+    )
+    domain_id: Mapped[int] = mapped_column(ForeignKey("domain.id"), primary_key=True)
 
 
 class Term(Base):
