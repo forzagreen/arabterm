@@ -183,7 +183,7 @@ The dataset card describes the columns and lists the dictionaries and their doma
 | معجم مصطلحات المعلوماتية (2000) | Dictionary of Information Technology Terms | Computing | 7031 | [Q108408025](https://www.wikidata.org/wiki/Q108408025) |
 | موسوعة الكهرباء (IEC 60050) | Electropedia | Electrical engineering | 20611 | [Q1667710](https://www.wikidata.org/wiki/Q1667710) |
 | مسرد الجغرافيا والتاريخ (الألكسو) | Geography and History (ALECSO)<br />Géographie et Histoire (ALECSO) | Geography | 5724 | [Q141044804](https://www.wikidata.org/wiki/Q141044804) |
-| مسرد اللغة والأدب (الألكسو) | Language and Literature (ALECSO)<br />Langue et Littérature (ALECSO) | Language, Literature | 1494 | [Q141505412](https://www.wikidata.org/wiki/Q141505412) |
+| مسرد اللغة والأدب (الألكسو) | Language and Literature (ALECSO)<br />Langue et Littérature (ALECSO) | Literature | 1494 | [Q141505412](https://www.wikidata.org/wiki/Q141505412) |
 | مسرد الفن، التسلية والرياضة (الألكسو) | Arts, Recreation and Sports (ALECSO)<br />Art, Divertissement et sports (ALECSO) | Arts | 5269 | [Q141104930](https://www.wikidata.org/wiki/Q141104930) |
 | مسرد الفلسفة وعلم النفس (الألكسو) | Philosophy and Psychology (ALECSO)<br />Philosophie et Psychologie (ALECSO) | Philosophy | 1350 | [Q141104937](https://www.wikidata.org/wiki/Q141104937) |
 | مسرد الإعلام والتواصل (الألكسو) | Information and Communication (ALECSO)<br />Information et Communication (ALECSO) | Information | 6081 | [Q141104936](https://www.wikidata.org/wiki/Q141104936) |

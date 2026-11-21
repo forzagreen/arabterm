@@ -13,7 +13,7 @@ const { dictionaries, domains, base } = Astro.props;
 <!-- The list can be narrowed to one domain: from the menu, from a tag of the
      table, or from `?domain=<slug>` (the tags of a dictionary page link here). -->
 <div class="domain-filter" id="domain-filter">
-  <label for="domain-select">المجال</label>
+  <label for="domain-select">الحقول الدلالية</label>
   <select id="domain-select">
     <option value="">كلّ المجالات ({dictionaries.length})</option>
     {domains.map((d) => (
