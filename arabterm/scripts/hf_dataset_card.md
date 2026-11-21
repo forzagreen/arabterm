@@ -22,6 +22,8 @@ configs:
   data_files: data/terms.parquet
 - config_name: dictionaries
   data_files: data/dictionaries.parquet
+- config_name: domains
+  data_files: data/domains.parquet
 ---
 
 # arabterm — Arabic/English/French terminology dictionaries
@@ -45,6 +47,7 @@ terms = load_dataset("forzagreen/arabterm")  # $n_terms rows
 dictionaries = load_dataset(
     "forzagreen/arabterm", "dictionaries"
 )  # $n_dictionaries rows
+domains = load_dataset("forzagreen/arabterm", "domains")  # $n_domains rows
 
 water = terms["train"].filter(lambda t: t["dictionary"] == "at_water_engineering")
 ```
@@ -92,12 +95,38 @@ One row per dictionary.
 | `dict_type` | string | `terminology` (a specialised dictionary), `thesaurus` (a term list or thesaurus: the ALECSO glossaries, AGROVOC, Electropedia, Arabeyes) or `language` (a general dictionary) |
 | `tier` | int64 | Editorial ranking, 1 (most authoritative) to 5 |
 | `wikidata_id` | string | Wikidata item of the dictionary, e.g. `Q141137252` |
+| `domains` | list of string | What the dictionary is about: the `name_tech` of its domains (see `domains` below), e.g. `["mathematics", "astronomy"]`. Every dictionary has at least one |
 | `archive_org_url` | string | Scan of the paper dictionary on archive.org (`https://archive.org/details/<item>`), as in Wikidata's P953 |
 | `page_offset` | int64 | Printed page `p` is page `p + page_offset` of the scan (Wikidata's P8330) |
 | `created_at` | timestamp | When the dictionary was added (UTC) |
 | `updated_at` | timestamp | When its row was last edited (UTC), null if never |
 
 For a term on printed page `p` of a dictionary with a scan, the page is at `<archive_org_url>/page/n<p + page_offset - 1>/mode/1up`; this is the link Wikitermbase and the Cite Q module on Arabic Wikipedia build.
+
+### `domains` (config `domains`, `data/domains.parquet`)
+
+One row per domain, $n_domains in all. A domain is a subject that dictionaries are about; they are the values of "main subject" ([P921](https://www.wikidata.org/wiki/Property:P921)) on the dictionaries' Wikidata items, under shorter names. To keep the terms of one domain, filter `dictionaries` on its `domains` column, then `terms` on `dictionary`:
+
+```python
+maths = [d["name_tech"] for d in dictionaries["train"] if "mathematics" in d["domains"]]
+maths_terms = terms["train"].filter(lambda t: t["dictionary"] in maths)
+```
+
+| Column | Type | Description |
+|:---|:---|:---|
+| `id` | int64 | Domain id |
+| `name_tech` | string | Slug, unique; the values of `dictionaries.domains` |
+| `name_arabic` | string | Name in Arabic, e.g. `رياضيات` |
+| `name_english` | string | Name in English, e.g. `Mathematics` |
+| `name_french` | string | Name in French, e.g. `Mathématiques` |
+| `wikidata_id` | string | The Wikidata item used as the P921 value, e.g. `Q66785817` (mathematical terminology) |
+| `nbr_dictionaries` | int64 | Number of dictionaries with this domain |
+
+## Domains
+
+Most used first. A dictionary on two subjects has two domains, so the counts add up to more than the number of dictionaries.
+
+$domains_table
 
 ## Dictionaries
 

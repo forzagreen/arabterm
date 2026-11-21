@@ -171,6 +171,10 @@
     "dictionary_wikidata_id_duplicate": [],
     "dictionary_archive_org_url_invalid": [],
     "dictionary_page_offset_without_url": [],
-    "dictionary_page_offset_missing": []
+    "dictionary_page_offset_missing": [],
+    "dictionary_without_domain": [],
+    "dictionary_domain_orphan": [],
+    "domain_invalid": [],
+    "domain_unused": []
   }
 }

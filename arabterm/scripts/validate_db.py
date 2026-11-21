@@ -17,7 +17,9 @@ of that file is then reviewed in the pull request like any other change.
 The checks only read arabterm.db: nothing is fetched from the network, so the
 result depends on the pull request alone. In particular, whether a QID is the
 *right* Wikidata item is not checked here — only that it is well formed and
-not shared by two dictionaries.
+not shared by two dictionaries. Likewise for the domains: every dictionary must
+have one, but whether they are the ones Wikidata gives it (P921) is the job of
+sync_domains.py, which does read the network and is run by hand.
 """
 
 from __future__ import annotations
@@ -35,6 +37,8 @@ DB = REPO_ROOT / "arabterm.db"
 BASELINE = Path(__file__).resolve().with_name("validation_baseline.json")
 
 QID_RE = re.compile(r"Q[1-9]\d*")
+# A domain's slug goes into URLs (`?domain=…`) and CSS classes as it is.
+SLUG_RE = re.compile(r"[a-z][a-z0-9_]*")
 # An archive.org item, or one file of a multi-volume item, as the page links
 # need it: no /page/ or /mode/ of its own, no query, no trailing slash.
 ARCHIVE_ORG_URL_RE = re.compile(
@@ -161,6 +165,81 @@ def check_page_offset_missing(con: sqlite3.Connection) -> Violations:
     }
 
 
+def check_dictionary_without_domain(con: sqlite3.Connection) -> Violations:
+    rows = con.execute(
+        """
+        SELECT name_tech FROM dictionary d
+        WHERE NOT EXISTS (
+            SELECT 1 FROM dictionary_domain dd WHERE dd.dictionary_id = d.id
+        )
+        """
+    )
+    return {slug: "no domain — run `make sync_domains`" for (slug,) in rows}
+
+
+def check_dictionary_domain_orphan(con: sqlite3.Connection) -> Violations:
+    rows = con.execute(
+        """
+        SELECT dd.dictionary_id, dd.domain_id, d.id IS NULL, dm.id IS NULL
+        FROM dictionary_domain dd
+        LEFT JOIN dictionary d ON d.id = dd.dictionary_id
+        LEFT JOIN domain dm ON dm.id = dd.domain_id
+        WHERE d.id IS NULL OR dm.id IS NULL
+        """
+    )
+    return {
+        f"dictionary_{dict_id}_domain_{domain_id}": " and ".join(
+            what
+            for what, missing in (
+                (f"dictionary_id={dict_id}", no_dict),
+                (f"domain_id={domain_id}", no_domain),
+            )
+            if missing
+        )
+        + " does not exist"
+        for dict_id, domain_id, no_dict, no_domain in rows
+    }
+
+
+def check_domain_invalid(con: sqlite3.Connection) -> Violations:
+    """Slug, names and QID of a domain; the key is its id, the one column
+    that cannot be wrong."""
+    rows = con.execute(
+        "SELECT id, name_tech, name_arabic, name_english, wikidata_id FROM domain"
+    ).fetchall()
+    qid_count: dict[str, int] = {}
+    for *_, qid in rows:
+        qid_count[qid] = qid_count.get(qid, 0) + 1
+    violations: Violations = {}
+    for domain_id, slug, arabic, english, qid in rows:
+        problems = []
+        if not SLUG_RE.fullmatch(slug or ""):
+            problems.append(f"name_tech={slug!r} is not a slug (a-z, 0-9, _)")
+        if not (arabic or "").strip():
+            problems.append("name_arabic is empty")
+        if not (english or "").strip():
+            problems.append("name_english is empty")
+        if not QID_RE.fullmatch(qid or ""):
+            problems.append(f"wikidata_id={qid!r} is not a QID")
+        elif qid_count[qid] > 1:
+            problems.append(f"{qid} is used by more than one domain")
+        if problems:
+            violations[f"domain_{domain_id}"] = "; ".join(problems)
+    return violations
+
+
+def check_domain_unused(con: sqlite3.Connection) -> Violations:
+    rows = con.execute(
+        """
+        SELECT name_tech FROM domain dm
+        WHERE NOT EXISTS (
+            SELECT 1 FROM dictionary_domain dd WHERE dd.domain_id = dm.id
+        )
+        """
+    )
+    return {slug: "no dictionary has this domain" for (slug,) in rows}
+
+
 def run_checks(
     con: sqlite3.Connection, exempt: dict[str, list[str]]
 ) -> dict[str, Violations]:
@@ -178,6 +257,10 @@ def run_checks(
         "dictionary_archive_org_url_invalid": check_archive_org_url_invalid(con),
         "dictionary_page_offset_without_url": check_page_offset_without_url(con),
         "dictionary_page_offset_missing": check_page_offset_missing(con),
+        "dictionary_without_domain": check_dictionary_without_domain(con),
+        "dictionary_domain_orphan": check_dictionary_domain_orphan(con),
+        "domain_invalid": check_domain_invalid(con),
+        "domain_unused": check_domain_unused(con),
     }
 
 

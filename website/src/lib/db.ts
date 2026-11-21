@@ -21,6 +21,20 @@ export interface TermColumns {
   uri: boolean;
 }
 
+/**
+ * A subject that dictionaries are about, shown as a tag: one value of "main
+ * subject" (P921) on the dictionaries' Wikidata items, under a short name
+ * («رياضيات» for the item «مصطلحات الرياضيات»).
+ */
+export interface Domain {
+  id: number;
+  name_tech: string;
+  name_arabic: string;
+  name_english: string | null;
+  name_french: string | null;
+  wikidata_id: string | null;
+}
+
 export interface Dictionary {
   id: number;
   name_tech: string;
@@ -33,6 +47,8 @@ export interface Dictionary {
   page_offset: number | null;
   term_count: number;
   cols: TermColumns;
+  // One or more; a dictionary on two subjects has both.
+  domains: Domain[];
 }
 
 export interface Term {
@@ -88,10 +104,53 @@ const DICT_SELECT = `
     FROM dictionary d
     LEFT JOIN term t ON t.dictionary_id = d.id`;
 
+// The domains of every dictionary, read once per build: two small tables
+// (a few dozen rows each), asked for by every dictionary of every page.
+let _domainsOf: Map<number, Domain[]> | null = null;
+function domainsOf(dictionaryId: number): Domain[] {
+  if (!_domainsOf) {
+    const rows = db()
+      .prepare(
+        `SELECT dd.dictionary_id, dm.id, dm.name_tech, dm.name_arabic, dm.name_english,
+                dm.name_french, dm.wikidata_id
+           FROM dictionary_domain dd
+           JOIN domain dm ON dm.id = dd.domain_id
+          ORDER BY dd.dictionary_id, dm.id`
+      )
+      .all() as (Domain & { dictionary_id: number })[];
+    _domainsOf = new Map();
+    for (const { dictionary_id, ...domain } of rows) {
+      const list = _domainsOf.get(dictionary_id) ?? [];
+      list.push(domain);
+      _domainsOf.set(dictionary_id, list);
+    }
+  }
+  return _domainsOf.get(dictionaryId) ?? [];
+}
+
+export interface DomainWithCount extends Domain {
+  dict_count: number;
+}
+
+/** Every domain with the number of its dictionaries, the largest first. */
+export function getAllDomains(): DomainWithCount[] {
+  return db()
+    .prepare(
+      `SELECT dm.id, dm.name_tech, dm.name_arabic, dm.name_english, dm.name_french,
+              dm.wikidata_id, COUNT(dd.dictionary_id) AS dict_count
+         FROM domain dm
+         JOIN dictionary_domain dd ON dd.domain_id = dm.id
+        GROUP BY dm.id
+        ORDER BY dict_count DESC, dm.id`
+    )
+    .all() as DomainWithCount[];
+}
+
 function toDictionary(row: DictionaryRow): Dictionary {
   const { has_arabic, has_english, has_french, has_description, has_page, has_uri, ...rest } = row;
   return {
     ...rest,
+    domains: domainsOf(row.id),
     cols: {
       arabic: !!has_arabic,
       english: !!has_english,

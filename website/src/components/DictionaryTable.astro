@@ -1,18 +1,40 @@
 ---
-import type { Dictionary } from '../lib/db';
+import type { Dictionary, DomainWithCount } from '../lib/db';
 
 interface Props {
   dictionaries: Dictionary[];
+  // Every domain with its number of dictionaries, the largest first.
+  domains: DomainWithCount[];
   base: string;
 }
 
-const { dictionaries, base } = Astro.props;
+const { dictionaries, domains, base } = Astro.props;
 ---
+<!-- The list can be narrowed to one domain: from the menu, from a tag of the
+     table, or from `?domain=<slug>` (the tags of a dictionary page link here). -->
+<div class="domain-filter" id="domain-filter">
+  <label for="domain-select">المجال</label>
+  <select id="domain-select">
+    <option value="">كلّ المجالات ({dictionaries.length})</option>
+    {domains.map((d) => (
+      <option value={d.name_tech}>{d.name_arabic} ({d.dict_count})</option>
+    ))}
+  </select>
+  <button type="button" class="domain-reset" id="domain-reset" hidden>عرض كلّ القواميس</button>
+  <span class="muted small" id="domain-count" role="status"></span>
+</div>
+
+<!-- Five columns do not fit a phone: the table scrolls inside its own box,
+     like the tables of terms, instead of stretching the page. -->
+<div class="table-wrap">
 <table class="dicts sortable" id="dicts-table">
   <thead>
     <tr>
       <th data-sort="ar" data-type="text" aria-sort="none">
         <button type="button" class="sort-btn">القاموس<span class="sort-ind" aria-hidden="true"></span></button>
+      </th>
+      <th data-sort="domain" data-type="text" aria-sort="none">
+        <button type="button" class="sort-btn">المجال<span class="sort-ind" aria-hidden="true"></span></button>
       </th>
       <th data-sort="en" data-type="text" aria-sort="none" lang="en" dir="ltr">
         <button type="button" class="sort-btn">English<span class="sort-ind" aria-hidden="true"></span></button>
@@ -32,9 +54,19 @@ const { dictionaries, base } = Astro.props;
         data-en={d.name_english ?? ''}
         data-fr={d.name_french ?? ''}
         data-count={d.term_count}
+        data-domain={d.domains.map((x) => x.name_arabic).join('، ')}
+        data-domains={d.domains.map((x) => x.name_tech).join(' ')}
       >
         <td>
           <a href={`${base}${d.name_tech}/`}>{d.name_arabic}</a>
+        </td>
+        <td>
+          <span class="tags">
+            {d.domains.map((x) => (
+              <button type="button" class="tag" data-domain={x.name_tech} aria-pressed="false"
+                title={`قواميس مجال «${x.name_arabic}»`}>{x.name_arabic}</button>
+            ))}
+          </span>
         </td>
         <td lang="en" dir="ltr">{d.name_english ?? ''}</td>
         <td lang="fr" dir="ltr">{d.name_french ?? ''}</td>
@@ -43,6 +75,7 @@ const { dictionaries, base } = Astro.props;
     ))}
   </tbody>
 </table>
+</div>
 
 <script>
   const table = document.getElementById('dicts-table') as HTMLTableElement | null;
@@ -50,25 +83,45 @@ const { dictionaries, base } = Astro.props;
     const tbody = table.tBodies[0];
     const originalRows = Array.from(tbody.rows);
     const headers = Array.from(table.tHead!.rows[0].cells) as HTMLTableCellElement[];
+    const select = document.getElementById('domain-select') as HTMLSelectElement;
+    const reset = document.getElementById('domain-reset') as HTMLButtonElement;
+    const count = document.getElementById('domain-count') as HTMLElement;
+    const known = new Set(Array.from(select.options, (o) => o.value));
 
     type Dir = 'asc' | 'desc' | 'none';
-    const state: { key: string | null; dir: Dir } = { key: null, dir: 'none' };
+    // `domain` is the slug the list is narrowed to, '' for every dictionary.
+    const state: { key: string | null; dir: Dir; domain: string } = {
+      key: null,
+      dir: 'none',
+      domain: '',
+    };
 
     const collators: Record<string, Intl.Collator> = {
       ar: new Intl.Collator('ar'),
+      domain: new Intl.Collator('ar'),
       en: new Intl.Collator('en'),
       fr: new Intl.Collator('fr'),
     };
 
-    function applySort() {
-      const { key, dir } = state;
-      if (!key || dir === 'none') {
-        tbody.replaceChildren(...originalRows);
-      } else {
+    // Arabic count agreement: 2 = dual, 3 to 10 = plural, else singular.
+    function countLabel(n: number): string {
+      if (n === 1) return 'قاموس واحد';
+      if (n === 2) return 'قاموسان';
+      return n <= 10 ? `${n} قواميس` : `${n} قاموسًا`;
+    }
+
+    // Rows are taken out of the table rather than hidden, so that the
+    // striping of every other row stays regular.
+    function render() {
+      const { key, dir, domain } = state;
+      let rows = domain
+        ? originalRows.filter((r) => (r.dataset.domains ?? '').split(' ').includes(domain))
+        : originalRows;
+      if (key && dir !== 'none') {
         const header = headers.find((h) => h.dataset.sort === key)!;
         const type = header.dataset.type ?? 'text';
         const sign = dir === 'asc' ? 1 : -1;
-        const sorted = [...originalRows].sort((a, b) => {
+        rows = [...rows].sort((a, b) => {
           const av = a.dataset[key] ?? '';
           const bv = b.dataset[key] ?? '';
           if (type === 'num') {
@@ -77,8 +130,9 @@ const { dictionaries, base } = Astro.props;
           const collator = collators[key] ?? collators.en;
           return collator.compare(av, bv) * sign;
         });
-        tbody.replaceChildren(...sorted);
       }
+      tbody.replaceChildren(...rows);
+
       headers.forEach((h) => {
         const hk = h.dataset.sort;
         if (hk === key && dir !== 'none') {
@@ -87,6 +141,21 @@ const { dictionaries, base } = Astro.props;
           h.setAttribute('aria-sort', 'none');
         }
       });
+      select.value = domain;
+      reset.hidden = !domain;
+      count.textContent = domain ? countLabel(rows.length) : '';
+      table!.querySelectorAll<HTMLButtonElement>('button.tag').forEach((b) => {
+        b.setAttribute('aria-pressed', String(!!domain && b.dataset.domain === domain));
+      });
+    }
+
+    function setDomain(domain: string) {
+      state.domain = known.has(domain) ? domain : '';
+      const url = new URL(location.href);
+      if (state.domain) url.searchParams.set('domain', state.domain);
+      else url.searchParams.delete('domain');
+      history.replaceState(null, '', url);
+      render();
     }
 
     headers.forEach((h) => {
@@ -104,13 +173,68 @@ const { dictionaries, base } = Astro.props;
           state.key = null;
           state.dir = 'none';
         }
-        applySort();
+        render();
       });
     });
+
+    select.addEventListener('change', () => setDomain(select.value));
+    reset.addEventListener('click', () => setDomain(''));
+    // A tag narrows the list to its domain; the tag of the current domain
+    // widens it again.
+    tbody.addEventListener('click', (e) => {
+      const tag = (e.target as HTMLElement).closest<HTMLButtonElement>('button.tag');
+      if (tag) setDomain(tag.dataset.domain === state.domain ? '' : (tag.dataset.domain ?? ''));
+    });
+
+    const initial = new URLSearchParams(location.search).get('domain') ?? '';
+    if (known.has(initial) && initial) {
+      state.domain = initial;
+      render();
+    }
   }
 </script>
 
 <style>
+  .domain-filter {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.5rem 0.75rem;
+    margin: 0.75rem 0 0.25rem;
+  }
+  .domain-filter label {
+    font-weight: 600;
+    font-size: 0.9rem;
+  }
+  .domain-filter select {
+    padding: 0.35rem 0.6rem;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    background: var(--bg);
+    color: var(--fg);
+    font: inherit;
+    font-size: 0.9rem;
+    max-width: 100%;
+  }
+  .domain-filter select:focus-visible,
+  .domain-reset:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 1px;
+  }
+  .domain-reset {
+    padding: 0.3rem 0.7rem;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    background: transparent;
+    color: var(--accent);
+    font: inherit;
+    font-size: 0.85rem;
+    cursor: pointer;
+  }
+  .domain-reset:hover {
+    border-color: var(--accent);
+  }
+
   table.sortable th {
     padding: 0;
   }

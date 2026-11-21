@@ -1,4 +1,4 @@
-.PHONY: init build format init_mariadb delete_mariadb migrate_to_mariadb search_mariadb db require_db dump_db dump_sqlite dump_mariadb dump readme validate validate_update_baseline regenerate_dumps hf_export hf_push website_init website_dev website_build website_preview
+.PHONY: init build format init_mariadb delete_mariadb migrate_to_mariadb search_mariadb db require_db dump_db dump_sqlite dump_mariadb dump readme validate validate_update_baseline check_domains sync_domains regenerate_dumps hf_export hf_push website_init website_dev website_build website_preview
 
 
 init:
@@ -86,6 +86,18 @@ validate: require_db
 # Record the current violations as accepted. Review the diff before committing.
 validate_update_baseline: require_db
 	python3 arabterm/scripts/validate_db.py --update-baseline
+
+# Domains of the dictionaries, read from "main subject" (P921) on their
+# Wikidata items (see arabterm/scripts/sync_domains.py). It needs the network,
+# so it is run by hand and never by CI: check_domains reports where arabterm.db
+# differs from Wikidata, sync_domains writes the differences to arabterm.db.
+# A P921 value met for the first time needs names, e.g.
+# `make sync_domains args='--domain Q25261 meteorology "أرصاد جوية" Meteorology Météorologie'`.
+check_domains: require_db
+	python3 arabterm/scripts/sync_domains.py $(args)
+
+sync_domains: require_db
+	python3 arabterm/scripts/sync_domains.py --apply $(args)
 
 regenerate_dumps:
 	$(MAKE) validate
