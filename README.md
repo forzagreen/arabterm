@@ -144,7 +144,7 @@ The dataset card describes the columns and lists the dictionaries and their doma
 | معجم مصطلحات الإعلام (مجمع الملك سلمان، 2024) | Dictionary of Media Terms (KSAA, 2024) | Sociology | 827 | [Q141442405](https://www.wikidata.org/wiki/Q141442405) |
 | معجم المصطلحات الإنمائية (مجمع الملك سلمان) | Dictionary of Development Terms (KSAA) | Economics, Sociology | 791 | [Q141442406](https://www.wikidata.org/wiki/Q141442406) |
 | معجم مصطلحات الخطوط الحديدية (مجمع الملك سلمان، 2026) | Dictionary of Railway Terms (KSAA, 2026) | Engineering | 854 | [Q141881807](https://www.wikidata.org/wiki/Q141881807) |
-| معجم المصطلحات الموسيقية (مجمع الملك سلمان، 2024) | Dictionary of Musical Terms (KSAA, 2024) | Music | 579 | [Q141442249](https://www.wikidata.org/wiki/Q141442249) |
+| معجم المصطلحات الموسيقية (مجمع الملك سلمان، 2024) | Dictionary of Musical Terms (KSAA, 2024) | Arts | 579 | [Q141442249](https://www.wikidata.org/wiki/Q141442249) |
 | معجم مصطلحات الرياضات الإلكترونية (مجمع الملك سلمان) | Dictionary of Esports Terms (KSAA) | Anthropology | 503 | [Q141442251](https://www.wikidata.org/wiki/Q141442251) |
 | معجم اللغة المسرحية (2017) | Dictionary of Theatre Language<br />Dictionnaire de la langue théâtrale | Arts | 741 | [Q123984738](https://www.wikidata.org/wiki/Q123984738) |
 | معجم مصطلحات علوم هندسة الطيران والفضاء (2024) | Dictionary of Aerospace Engineering Terms | Engineering | 14621 | [Q141442353](https://www.wikidata.org/wiki/Q141442353) |
@@ -155,7 +155,7 @@ The dataset card describes the columns and lists the dictionaries and their doma
 | قاموس العقود والمشتريات وسلاسل الإمداد (2022) | Dictionary of Contracts, Procurement and Supply Chains | Economics, Law | 2249 | [Q125692651](https://www.wikidata.org/wiki/Q125692651) |
 | معجم الاقتصاد المعاصر (2009) | Dictionary of Modern Economics | Economics | 6107 | [Q141443387](https://www.wikidata.org/wiki/Q141443387) |
 | معجم مصطلحات العلم والتكنولوجيا (ج.1) | Dictionary of Science and Technology Terms (Vol. 1) | Science | 24028 | [Q130298866](https://www.wikidata.org/wiki/Q130298866) |
-| معجم مصطلحات الإعلام (مجمع دمشق، 2022) | Dictionary of Media Terms (Damascus Academy)<br />Dictionnaire des termes des médias | Sociology | 2525 | [Q135471933](https://www.wikidata.org/wiki/Q135471933) |
+| معجم مصطلحات الإعلام (مجمع دمشق، 2022) | Dictionary of Media Terms (Damascus Academy)<br />Dictionnaire des termes des médias | Sociology, Information | 2525 | [Q135471933](https://www.wikidata.org/wiki/Q135471933) |
 | دليل المصطلحات الحاسوبية العربية (المجمع الأردني، 2026) | Guide to Arabic Computing Terminology (Jordan Academy of Arabic, 2026) | Computing | 688 | [Q139719120](https://www.wikidata.org/wiki/Q139719120) |
 | معجم مصطلحات الكيمياء (مجمع دمشق، 2014) | Dictionary of Chemistry Terms (Damascus Academy)<br />Dictionnaire des termes de chimie | Chemistry | 5609 | [Q113378673](https://www.wikidata.org/wiki/Q113378673) |
 | معجم مصطلحات الفيزياء (مجمع دمشق، 2015) | Dictionary of Physics Terms (Damascus Academy)<br />Dictionnaire des termes de physique | Physics | 5928 | [Q113016239](https://www.wikidata.org/wiki/Q113016239) |
@@ -181,8 +181,8 @@ The dataset card describes the columns and lists the dictionaries and their doma
 | المورد الحديث (2008) | Al-Mawrid Al-Hadeeth | English language | 62265 | [Q112315598](https://www.wikidata.org/wiki/Q112315598) |
 | المعجم الطبي الموحد (2009) | The Unified Medical Dictionary<br />Le dictionnaire médical unifié | Medicine | 132975 | [Q113466993](https://www.wikidata.org/wiki/Q113466993) |
 | معجم مصطلحات المعلوماتية (2000) | Dictionary of Information Technology Terms | Computing | 7031 | [Q108408025](https://www.wikidata.org/wiki/Q108408025) |
-| موسوعة الكهرباء (IEC 60050) | Electropedia | Electrical engineering | 20611 | [Q1667710](https://www.wikidata.org/wiki/Q1667710) |
-| مسرد الجغرافيا والتاريخ (الألكسو) | Geography and History (ALECSO)<br />Géographie et Histoire (ALECSO) | Geography | 5724 | [Q141044804](https://www.wikidata.org/wiki/Q141044804) |
+| موسوعة الكهرباء (IEC 60050) | Electropedia | Engineering | 20611 | [Q1667710](https://www.wikidata.org/wiki/Q1667710) |
+| مسرد الجغرافيا والتاريخ (الألكسو) | Geography and History (ALECSO)<br />Géographie et Histoire (ALECSO) | Sociology, Geology | 5724 | [Q141044804](https://www.wikidata.org/wiki/Q141044804) |
 | مسرد اللغة والأدب (الألكسو) | Language and Literature (ALECSO)<br />Langue et Littérature (ALECSO) | Literature | 1494 | [Q141505412](https://www.wikidata.org/wiki/Q141505412) |
 | مسرد الفن، التسلية والرياضة (الألكسو) | Arts, Recreation and Sports (ALECSO)<br />Art, Divertissement et sports (ALECSO) | Arts | 5269 | [Q141104930](https://www.wikidata.org/wiki/Q141104930) |
 | مسرد الفلسفة وعلم النفس (الألكسو) | Philosophy and Psychology (ALECSO)<br />Philosophie et Psychologie (ALECSO) | Philosophy | 1350 | [Q141104937](https://www.wikidata.org/wiki/Q141104937) |
@@ -201,7 +201,7 @@ The dataset card describes the columns and lists the dictionaries and their doma
 | المعجم الموحد لمصطلحات النفط (1999) | Petroleum<br />Pétrole | Engineering | 6089 | [Q115957618](https://www.wikidata.org/wiki/Q115957618) |
 | المعجم الموحد لمصطلحات علوم البحار (2000) | Oceanology<br />Océanographie | Biology | 3913 | [Q116174633](https://www.wikidata.org/wiki/Q116174633) |
 | المعجم الموحد لمصطلحات الأرصاد الجوية (1999) | Meteorology<br />Météorologie | Geology | 2031 | [Q116153637](https://www.wikidata.org/wiki/Q116153637) |
-| مسرد علوم الزلازل (الألكسو) | Seismology (ALECSO)<br />Séismologie (ALECSO) | Seismology | 4722 | [Q141105349](https://www.wikidata.org/wiki/Q141105349) |
+| مسرد علوم الزلازل (الألكسو) | Seismology (ALECSO)<br />Séismologie (ALECSO) | Geology | 4722 | [Q141105349](https://www.wikidata.org/wiki/Q141105349) |
 | المعجم الموحد لمصطلحات الجيولوجيا (2000) | Geology<br />Géologie | Geology | 4623 | [Q115944157](https://www.wikidata.org/wiki/Q115944157) |
 | المعجم الموحد لمصطلحات الكيمياء (1992) | Chemistry<br />Chimie | Chemistry | 4532 | [Q114804479](https://www.wikidata.org/wiki/Q114804479) |
 | المعجم الموحد لمصطلحات الفيزياء العامة والنووية (1989) | Physics<br />Physique | Physics | 6315 | [Q113987323](https://www.wikidata.org/wiki/Q113987323) |
@@ -212,15 +212,15 @@ The dataset card describes the columns and lists the dictionaries and their doma
 | مسرد علم الاجتماع والأنثروبولوجيا (الألكسو) | Sociology and Anthropology (ALECSO)<br />Sociologie et Anthropologie (ALECSO) | Sociology | 1261 | [Q141104938](https://www.wikidata.org/wiki/Q141104938) |
 | مسرد التربية (الألكسو) | Education (ALECSO) | Education | 2988 | [Q141104933](https://www.wikidata.org/wiki/Q141104933) |
 | المعجم الموحد لمصطلحات التقنيات التربوية (1999) | Educational and Computer Techniques<br />Techniques Pédagogiques et Informatiques | Education | 1524 | [Q116036314](https://www.wikidata.org/wiki/Q116036314) |
-| مسرد المناخ والبيئة وإدارة النفايات الصلبة (الألكسو) | Climate, Environment and Solid Waste management (ALECSO)<br />Climat, l’Environment, et la Gestion des déchets solides (ALECSO) | Climate | 7040 | [Q141104932](https://www.wikidata.org/wiki/Q141104932) |
+| مسرد المناخ والبيئة وإدارة النفايات الصلبة (الألكسو) | Climate, Environment and Solid Waste management (ALECSO)<br />Climat, l’Environment, et la Gestion des déchets solides (ALECSO) | Geology | 7040 | [Q141104932](https://www.wikidata.org/wiki/Q141104932) |
 | المعجم الموحد لمصطلحات تقانة (تكنولوجيا) المعلومات (2011) | Information and Communication<br />Technologie de l’Information | Computing | 1369 | [Q111267300](https://www.wikidata.org/wiki/Q111267300) |
 | المعجم الموحد لمصطلحات الهندسة المدنية (2012) | Civil Engineering<br />Génie Civil | Engineering | 3943 | [Q116255030](https://www.wikidata.org/wiki/Q116255030) |
-| مسرد صناعة النسيج (الألكسو) | Textiles Industries (ALECSO)<br />l’Industrie Textile (ALECSO) | Textiles | 4513 | [Q141104939](https://www.wikidata.org/wiki/Q141104939) |
+| مسرد صناعة النسيج (الألكسو) | Textiles Industries (ALECSO)<br />l’Industrie Textile (ALECSO) | Engineering | 4513 | [Q141104939](https://www.wikidata.org/wiki/Q141104939) |
 | مسرد النقل والبنية التحتية (الألكسو) | Transport and Infrastructure (ALECSO)<br />Transport et Infrastructure (ALECSO) | Engineering | 5558 | [Q141215921](https://www.wikidata.org/wiki/Q141215921) |
-| مسرد الهندسة الكهربائية (الألكسو) | Electrical Engineering (ALECSO)<br />Génie Electrique (ALECSO) | Electrical engineering | 2569 | [Q141104934](https://www.wikidata.org/wiki/Q141104934) |
-| مسرد الطاقات المتجددة (الألكسو) | Renewable Energy (ALECSO)<br />Energies Renouvelables (ALECSO) | Renewable energy | 7289 | [Q141105348](https://www.wikidata.org/wiki/Q141105348) |
-| مسرد هندسة المياه (الألكسو) | Water Engineering (ALECSO)<br />Technologie de l’eau (ALECSO) | Hydraulic engineering | 8644 | [Q141137252](https://www.wikidata.org/wiki/Q141137252) |
-| مسرد هندسة وتكنولوجيا السيارات (الألكسو) | Automotive Engineering (ALECSO)<br />Technique automobile (ALECSO) | Automotive | 4605 | [Q141104931](https://www.wikidata.org/wiki/Q141104931) |
+| مسرد الهندسة الكهربائية (الألكسو) | Electrical Engineering (ALECSO)<br />Génie Electrique (ALECSO) | Engineering | 2569 | [Q141104934](https://www.wikidata.org/wiki/Q141104934) |
+| مسرد الطاقات المتجددة (الألكسو) | Renewable Energy (ALECSO)<br />Energies Renouvelables (ALECSO) | Engineering | 7289 | [Q141105348](https://www.wikidata.org/wiki/Q141105348) |
+| مسرد هندسة المياه (الألكسو) | Water Engineering (ALECSO)<br />Technologie de l’eau (ALECSO) | Engineering, Geology | 8644 | [Q141137252](https://www.wikidata.org/wiki/Q141137252) |
+| مسرد هندسة وتكنولوجيا السيارات (الألكسو) | Automotive Engineering (ALECSO)<br />Technique automobile (ALECSO) | Engineering | 4605 | [Q141104931](https://www.wikidata.org/wiki/Q141104931) |
 <!-- DICTIONARIES_TABLE_END -->
 
 
