@@ -191,12 +191,20 @@ h3 {
   margin-bottom: 0.15rem;
 }
 .banner a.btn-primary {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
   background: #fff;
   color: var(--accent);
   padding: 0.55rem 1.1rem;
   border-radius: 6px;
   font-weight: 600;
   white-space: nowrap;
+}
+.banner a.btn-primary svg {
+  width: 1.05em;
+  height: 1.05em;
+  flex: none;
 }
 .banner a.btn-primary:hover {
   background: #f3f4f6;
