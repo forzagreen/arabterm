@@ -367,13 +367,20 @@ a.ext:hover {
   margin: 1rem 0 1.5rem;
 }
 .actions a {
-  display: inline-block;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
   padding: 0.5rem 0.9rem;
   background: var(--accent);
   color: var(--on-accent);
   border-radius: 6px;
   font-weight: 500;
   font-size: 0.95rem;
+}
+.actions a svg {
+  width: 1.05em;
+  height: 1.05em;
+  flex: none;
 }
 .actions a:hover {
   background: var(--accent-hover);
