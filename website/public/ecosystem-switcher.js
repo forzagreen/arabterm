@@ -5,7 +5,7 @@
 // build step, ES2015 syntax, shadow DOM so the host page's CSS does not leak
 // in and ours does not leak out). The SAME file is copied verbatim into each
 // site (wikitermbase, farahidi-js, mazini-js, ar-plurals, arabterm,
-// ar-senses, gen-ar); when the list of tools changes, update it here and
+// ar-senses, gen-ar, ocr-dicts); when the list of tools changes, update it here and
 // copy the file over. The canonical copy lives in the wikitermbase repo.
 //
 // Usage on a plain site:
@@ -59,6 +59,7 @@
         { id: 'wikitermbase', name: 'مسرد الويكي', latin: 'wikitermbase', tag: 'بحث في المعاجم المصطلحية', url: 'https://wikitermbase.toolforge.org/' },
         { id: 'gen-ar', name: 'توليد الكلمات العربية', latin: 'gen-ar', tag: 'اقتراح ألفاظ لمصطلح', url: 'https://genar.waeltellat.com/' },
         { id: 'arabterm', name: 'قاعدة معطيات المعاجم', latin: 'arabterm', tag: 'الملفات المصدرية للمداخل المعجمية', url: 'https://forzagreen.github.io/arabterm/' },
+        { id: 'ocr-dicts', name: 'مراجعة المعاجم', latin: 'ocr-dicts', tag: 'تدقيق المعاجم المقروءة آلياً', url: 'https://review.waeltellat.com/' },
       ],
     },
   ];
