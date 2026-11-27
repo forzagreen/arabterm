@@ -73,7 +73,7 @@ if (props.kind === 'redirect') {
   </html>
 ) : (
   <BaseLayout title={dict!.name_arabic} description={description}>
-    <p class="small muted"><a href={base}>← كلّ القواميس</a></p>
+    <p class="small muted"><a href={base}>← مُجمَل المعاجم</a></p>
     <h1>{dict!.name_arabic}</h1>
 
     <dl class="meta-grid">
@@ -91,7 +91,7 @@ if (props.kind === 'redirect') {
       )}
       {dict!.domains.length > 0 && (
         <div class="compact">
-          <dt>المجال</dt>
+          <dt>الحقول الدلالية</dt>
           <dd class="tags">
             {dict!.domains.map((d) => (
               <a class="tag" href={`${base}?domain=${d.name_tech}`} title={`قواميس مجال «${d.name_arabic}»`}>
